@@ -1,4 +1,2 @@
-/hibernate/
-/hibernate.cfg.xml
-/resources/
 /com/
+/hibernate.cfg.xml

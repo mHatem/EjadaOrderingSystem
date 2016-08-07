@@ -14,7 +14,7 @@ public class Place {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "PLACES_SEQUENCE", allocationSize = 1)
-	@Column(name = "ID")
+	@Column(name = "ID" )
 	public long getId() {
 		return id;
 	}
