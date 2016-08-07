@@ -43,10 +43,10 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Names the annotated entity class -->
-		<mapping class="com.code.dal.orm.Order" />
-		<mapping class="com.code.dal.orm.OrderItem" />
-		<mapping class="com.code.dal.orm.Place" />
-		<mapping class="com.code.dal.orm.PlacesItem" />
+		<!--<mapping class="com.code.dal.orm.Order" />-->
+		<!--<mapping class="com.code.dal.orm.OrderItem" />-->
+		<!--<mapping class="com.code.dal.orm.Place" />-->
+		<!--<mapping class="com.code.dal.orm.PlacesItem" />-->
 		<mapping class="com.code.dal.orm.User" />
 		
 
