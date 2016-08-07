@@ -13,14 +13,18 @@
 
 <body>
 <ui:composition>
-	<div class="text-right" id="header">
+	<div class="text-left col-lg-8">
+		<a href="/index.xhtml"><img src="http://placehold.it/150x50"/></a>
+	</div>
+
+	<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4" id="header">
 		<p>
 			<h:form>
-				#{msg.you_are_logged_as} <strong>#{login.username}</strong> |
-				<h:commandLink value="#{msg.sign_out}" action="#{login.signout}"/>
+				#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
+				<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}"/>
 			</h:form>
 		</p>
-	</div>
+	</h:panelGroup>
 </ui:composition>
 </body>
 </html>

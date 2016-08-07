@@ -20,7 +20,7 @@
 <h:body>
 	<div id="header" class="col-xs-12 navbar">
 		<ui:insert name="header">
-			<ui:include src="sections/header_logged.xhtml"/>
+			<ui:include src="sections/header.xhtml"/>
 		</ui:insert>
 	</div>
 
@@ -35,7 +35,9 @@
 	</div>
 
 	<div id="footer" class="col-xs-12 panel-footer">
-		<ui:insert name="footer"/>
+		<ui:insert name="footer">
+			<p>Ejada Ordering System</p>
+		</ui:insert>
 	</div>
 </h:body>
 </html>

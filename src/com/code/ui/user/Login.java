@@ -25,6 +25,8 @@ public class Login implements Serializable {
 	private UIComponent usernameField;
 	private UIComponent passwordField;
 
+	private boolean loggedIn = false;
+
 	public SessionFactoryBean getSessionFactoryBean() {
 		return sessionFactoryBean;
 	}
@@ -91,12 +93,26 @@ public class Login implements Serializable {
 		if (!authenticated)
 			context.addMessage(passwordField.getClientId(context), new FacesMessage("Wrong password!"));
 
-		return (authenticated ? "index?faces-redirect=true" : null);
+//		return (authenticated ? "index?faces-redirect=true" : null);
+		if (authenticated) {
+			loggedIn = true;
+		}
+
+		password = null;
+		return null;
 	}
 
 	public String signout() {
+		loggedIn = false;
 		username = null;
 		return "login?faces-redirect=true";
 	}
 
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
 }
