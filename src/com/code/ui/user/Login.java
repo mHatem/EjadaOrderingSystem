@@ -1,9 +1,12 @@
 package com.code.ui.user;
 
+import com.code.dal.orm.User;
 import com.code.services.SessionFactoryBean;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -22,10 +25,16 @@ public class Login implements Serializable {
 	private String username;
 	private String password;
 
+	private String name;
+	private String passwordConfirm;
+	private String phoneNo;
+
+
 	private UIComponent usernameField;
 	private UIComponent passwordField;
 
 	private boolean loggedIn = false;
+	private boolean signingUp = false;
 
 	public SessionFactoryBean getSessionFactoryBean() {
 		return sessionFactoryBean;
@@ -38,9 +47,6 @@ public class Login implements Serializable {
 	public Login() {
 	}
 
-	public String getUsername() {
-		return username;
-	}
 
 	public void setUsername(String username) {
 		this.username = username.toLowerCase();
@@ -70,7 +76,7 @@ public class Login implements Serializable {
 		this.passwordField = passwordField;
 	}
 
-	public String submitAction() {
+	public String loginAction() {
 		if (password == null || password.length() == 0)
 			return null;
 
@@ -102,6 +108,49 @@ public class Login implements Serializable {
 		return null;
 	}
 
+	public String signupButton() {
+		signingUp = true;
+		password = null;
+		return null;
+	}
+
+	public String loginButton() {
+		signingUp = false;
+		password = null;
+		return null;
+	}
+
+	public String signupAction() {
+		if (!password.equals(passwordConfirm))
+			return null;
+
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setName(name);
+		user.setPhoneNo(phoneNo);
+
+		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(user);
+			session.getTransaction().commit();
+			session.close();
+		} catch (ConstraintViolationException e) {
+			if (session != null)
+				session.close();
+			return null;
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+
+		signingUp = false;
+		return null;
+	}
+
+
 	public String signout() {
 		loggedIn = false;
 		username = null;
@@ -114,5 +163,41 @@ public class Login implements Serializable {
 
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	public boolean isSigningUp() {
+		return signingUp;
+	}
+
+	public void setSigningUp(boolean signingUp) {
+		this.signingUp = signingUp;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 }

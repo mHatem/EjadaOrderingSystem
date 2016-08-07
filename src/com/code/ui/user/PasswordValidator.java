@@ -14,7 +14,7 @@ public class PasswordValidator implements Validator {
 	public void validate(FacesContext facesContext, UIComponent uiComponent, Object value) throws ValidatorException {
 		String passwordFieldId;
 //		passwordFieldId = (String) facesContext.getViewRoot().getAttributes().get("passwordFieldId");
-		passwordFieldId = uiComponent.getParent().getClientId(facesContext) + ":password";
+		passwordFieldId = uiComponent.getParent().getClientId(facesContext) + ":signup_password";
 
 		UIInput passwordInput = (UIInput) facesContext.getViewRoot().findComponent(passwordFieldId);
 
