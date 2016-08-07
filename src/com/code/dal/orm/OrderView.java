@@ -5,9 +5,9 @@ import java.util.Date;
 
 @Entity(name ="VW_ORDER")
 public class OrderView {
-	private long id;
-	private long ownerId;
-	private long placeId;
+	private Long id;
+	private Long ownerId;
+	private Long placeId;
 	private String name;
 	private String ownerName;
 	private String status;
@@ -16,29 +16,29 @@ public class OrderView {
 
 	@Id
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	@Column(name = "OWNER_ID")
-	public long getOwnerId() {
+	public Long getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwnerId(long ownerId) {
+	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
 
 	@Column(name = "PLACE_ID")
-	public long getPlaceId() {
+	public Long getPlaceId() {
 		return placeId;
 	}
 
-	public void setPlaceId(long placeId) {
+	public void setPlaceId(Long placeId) {
 		this.placeId = placeId;
 	}
 

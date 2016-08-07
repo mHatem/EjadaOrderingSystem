@@ -7,24 +7,24 @@ import java.util.Date;
 
 @Entity(name = "ORDERS")
 public class Order {
-	private long id;
+	private Long id;
 	private String name;
 	private User owner;
 	private String status;
 	private Place place;
 	private Date date;
-	private float totalPrice;
+	private Float totalPrice;
 	private Collection<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "ORDERS_SEQUENCE", allocationSize = 1)
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -85,8 +85,8 @@ public class Order {
 	}
 
 	@Transient
-	public float getTotalPrice() {
-		totalPrice = 0;
+	public Float getTotalPrice() {
+		totalPrice = 0.0F;
 		for (OrderItem orderItem : getOrderItems())
 			totalPrice += orderItem.getItem().getPrice() * orderItem.getCount();
 

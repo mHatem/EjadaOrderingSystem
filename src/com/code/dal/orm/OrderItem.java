@@ -4,21 +4,21 @@ import javax.persistence.*;
 
 @Entity(name = "ORDER_ITEMS")
 public class OrderItem {
-	private long id;
+	private Long id;
 	private Order order;
 	private PlacesItem item;
 	private User user;
-	private int count;
+	private Integer count;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "ORDER_ITEMSSEQUENCE", allocationSize = 1)
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -53,11 +53,11 @@ public class OrderItem {
 	}
 
 	@Column(name = "COUNT")
-	public int getCount() {
+	public Integer getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 

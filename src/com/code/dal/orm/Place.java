@@ -6,7 +6,7 @@ import java.util.Collection;
 
 @Entity(name = "PLACES")
 public class Place {
-	private long id;
+	private Long id;
 	private String name;
 	private String phoneNo;
 	private Collection<PlacesItem> items = new ArrayList<PlacesItem>();
@@ -15,11 +15,11 @@ public class Place {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "PLACES_SEQUENCE", allocationSize = 1)
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

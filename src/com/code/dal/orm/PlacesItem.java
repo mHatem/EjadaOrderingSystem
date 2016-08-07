@@ -13,21 +13,21 @@ import javax.persistence.SequenceGenerator;
 
 @Entity(name = "PLACE_ITEM")
 public class PlacesItem {
-	private long id;
+	private Long id;
 	private Place place;
 	private String name;
 	private String description;
-	private float price;
+	private Float price;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "PLACE_ITEMS_SEQUENCE", allocationSize = 1)
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -61,11 +61,11 @@ public class PlacesItem {
 	}
 
 	@Column(name = "PRICE")
-	public float getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 }
