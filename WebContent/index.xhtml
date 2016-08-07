@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
->
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<h:outputStylesheet library="css" name="bootstrap.css"/>
 </h:head>
@@ -20,7 +20,7 @@
 		<ui:define name="pageTitle">#{msgs.login}</ui:define>
 
 		<ui:define name="content">
-			<h:panelGroup layout="block" rendered="#{not login.loggedIn}">
+			<h:panelGroup id="login_form" layout="block" rendered="#{not login.loggedIn}">
 				<div class="col-lg-3">
 					<h1>#{msgs.login}</h1>
 
@@ -51,7 +51,11 @@
 
 						<div class="col-lg-12 form-group center-block">
 							<h:commandLink value="#{msgs.login}" action="#{login.submitAction}"
-							               styleClass="btn btn-primary btn-sm "/>
+							               styleClass="btn btn-primary btn-sm ">
+								<ui:remove>
+									<f:ajax execute="username password" render="@all"/>
+								</ui:remove>
+							</h:commandLink>
 							<h:link value="#{msgs.not_a_user_signup}" outcome="signup" styleClass="btn btn-sm"/>
 						</div>
 					</h:form>

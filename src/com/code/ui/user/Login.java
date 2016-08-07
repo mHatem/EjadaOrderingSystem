@@ -105,7 +105,7 @@ public class Login implements Serializable {
 	public String signout() {
 		loggedIn = false;
 		username = null;
-		return "login?faces-redirect=true";
+		return "index?faces-redirect=true";
 	}
 
 	public boolean isLoggedIn() {
