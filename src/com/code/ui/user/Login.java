@@ -200,4 +200,24 @@ public class Login implements Serializable {
 	public String getUsername() {
 		return username;
 	}
+
+	public String getPageTitle() {
+		String titleExpression;
+		if (loggedIn)
+			titleExpression = "#{msgs.welcomeHeading}";
+		else {
+			if (signingUp)
+				titleExpression = "#{msgs.signup}";
+			else
+				titleExpression = "#{msgs.login}";
+		}
+
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		String title = (String) facesContext.getApplication().evaluateExpressionGet(
+			facesContext,
+			titleExpression,
+			String.class
+		);
+		return title;
+	}
 }
