@@ -1,12 +1,17 @@
 package com.code.dal.orm;
 
-import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
-@NamedQuery ( name = "Place.byName", query = "from Place where name = ? and  phoneNo =  ?" )
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@NamedQuery ( name = "Place_all", query = "SELECT p FROM Place p"  )
 @Entity
 @Table (name = "PLACES")
 public class Place implements Serializable {

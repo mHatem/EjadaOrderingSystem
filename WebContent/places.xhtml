@@ -21,8 +21,17 @@
 					<h:inputText value="#{place.name}"  style="color: white;background: blue ;border: thin solid blue;font-family:Good Times"/>
 					<h:inputText value="#{place.phoneNo}"/>
 				<div>
-					<h:commandButton value="try" action="#{place.addPlace}"/>	
+					<h:commandButton value="try" action="#{place.addPlace}"/>
+						
 				</div>
+				<h:dataTable value="#{}" var="">
+  					  <h:column>
+        					<h:link value="#{.title}" outcome="">
+            				<f:param name="id" value="#{.id}" />
+       					 	</h:link>
+  					  </h:column>
+				</h:dataTable>
+				
 			</div>
 		</h:form>
 	</h:body>
