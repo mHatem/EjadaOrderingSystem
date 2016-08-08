@@ -2,9 +2,9 @@ package com.code.dal.orm;
 
 import javax.persistence.*;
 
-//@Entity(name ="VW_ORDER_ITEM")
+@Entity(name ="VW_ORDER_ITEM")
 public class OrderItemView {
-/*	private long id;
+	private long id;
 	private long orderId;
 	private long userId;
 	private long placeId;
@@ -95,5 +95,5 @@ public class OrderItemView {
 	public void setTotal(float total) {
 		this.total = total;
 	}
-	*/
+	
 }

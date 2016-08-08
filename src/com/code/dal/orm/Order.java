@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-//@Entity(name = "ORDERS")
+@Entity(name = "ORDERS")
 public class Order {
-/*	private long id;
+	private long id;
 	private String name;
 	private User owner;
 	private String status;
@@ -98,5 +98,5 @@ public class Order {
 		return "Order:" + "\n\tID: " + id + "\n\tName: " + name + "\n\tOwner Name: " + owner.getName() + "\n\tStatus: "
 				+ status + "\n\tPlace Name: " + place.getName() + "\n\tDate: " + date;
 	}
-*/
+
 }
