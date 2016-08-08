@@ -2,9 +2,9 @@ package com.code.dal.orm;
 
 import javax.persistence.*;
 
-@Entity(name = "ORDER_ITEMS")
+//@Entity(name = "ORDER_ITEMS")
 public class OrderItem {
-	private long id;
+/*	private long id;
 	private Order order;
 	private PlacesItem item;
 	private User user;
@@ -22,8 +22,8 @@ public class OrderItem {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ORDER_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "ORDER_ID")
 	public Order getOrder() {
 		return order;
 	}
@@ -32,8 +32,8 @@ public class OrderItem {
 		this.order = order;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PLACE_ITEM_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "PLACE_ITEM_ID")
 	public PlacesItem getItem() {
 		return item;
 	}
@@ -42,8 +42,8 @@ public class OrderItem {
 		this.item = item;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "USER_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "USER_ID")
 	public User getUser() {
 		return user;
 	}
@@ -66,5 +66,5 @@ public class OrderItem {
 		return "Order Item:" + "\n\tID: " + id + "\n\tOrder ID: " + order.getId() + "\n\tItem Name: " + item.getName()
 				+ "\n\tUser Name: " + user.getName() + "\n\tCount: " + count;
 	}
-
+*/
 }

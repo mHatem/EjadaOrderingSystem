@@ -11,9 +11,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-@Entity(name = "PLACE_ITEM")
+//@Entity(name = "PLACE_ITEM")
 public class PlacesItem {
-	private long id;
+	/*private long id;
 	private Place place;
 	private String name;
 	private String description;
@@ -31,8 +31,8 @@ public class PlacesItem {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PLACE_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "PLACE_ID")
 	public Place getPlace() {
 		return place;
 	}
@@ -68,4 +68,5 @@ public class PlacesItem {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-}
+*/
+	}

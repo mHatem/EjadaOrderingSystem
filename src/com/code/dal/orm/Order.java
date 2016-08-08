@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity(name = "ORDERS")
+//@Entity(name = "ORDERS")
 public class Order {
-	private long id;
+/*	private long id;
 	private String name;
 	private User owner;
 	private String status;
@@ -37,8 +37,8 @@ public class Order {
 		this.name = name;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "OWNER_USER_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "OWNER_USER_ID")
 	public User getOwner() {
 		return owner;
 	}
@@ -56,8 +56,8 @@ public class Order {
 		this.status = status;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PLACE_ID")
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "PLACE_ID")
 	public Place getPlace() {
 		return place;
 	}
@@ -75,7 +75,7 @@ public class Order {
 		this.date = date;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	public Collection<OrderItem> getOrderItems() {
 		return orderItems;
 	}
@@ -98,5 +98,5 @@ public class Order {
 		return "Order:" + "\n\tID: " + id + "\n\tName: " + name + "\n\tOwner Name: " + owner.getName() + "\n\tStatus: "
 				+ status + "\n\tPlace Name: " + place.getName() + "\n\tDate: " + date;
 	}
-
+*/
 }
