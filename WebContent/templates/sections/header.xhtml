@@ -2,7 +2,7 @@
 <!DOCTYPE html
 	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
       xml:lang="en" lang="en"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
@@ -13,17 +13,23 @@
 
 <body>
 <ui:composition>
-	<div class="text-left col-lg-8">
-		<a href="/index.xhtml"><img src="http://placehold.it/150x50"/></a>
-	</div>
+	<h:panelGroup id="header">
+		<div class="col-lg-12">
+			<div class="text-left col-lg-8">
+				<a href="/index.xhtml"><img src="http://placehold.it/150x50"/></a>
+			</div>
 
-	<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4" id="header">
-		<p>
-			<h:form>
-				#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
-				<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}"/>
-			</h:form>
-		</p>
+			<h:panelGroup id="header_signout_form">
+				<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
+					<p>
+						#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
+						<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
+							<f:ajax render="@all"/>
+						</h:commandLink>
+					</p>
+				</h:panelGroup>
+			</h:panelGroup>
+		</div>
 	</h:panelGroup>
 </ui:composition>
 </body>

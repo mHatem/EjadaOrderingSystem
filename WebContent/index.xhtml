@@ -5,27 +5,46 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
+	<title>#{login.pageTitle}</title>
 	<h:outputStylesheet library="css" name="bootstrap.css"/>
 </h:head>
 
 <h:body>
-	<ui:composition template="templates/master_template.xhtml">
-		<!--Don't require login (empty content)-->
-		<ui:define name="requireLogin"/>
+	<h:form id="formId">
+		<!--Debug Section-->
+		<div class="col-lg-12">
+			<h:panelGroup id="dbg" styleClass="help-block">
+				<h:panelGroup rendered="false">
+					Forms: #{not login.loggedIn or login.signingUp}
+					<br/>
+					Login: #{not login.loggedIn and not login.signingUp}
+					<br/>
+					Signup: #{not login.loggedIn and login.signingUp}
+					<br/>
+					Sign out: #{login.loggedIn}
 
-		<!-- Empty -->
-		<ui:define name="leftSidePane"/>
+				</h:panelGroup>
+			</h:panelGroup>
+		</div>
 
-		<ui:define name="pageTitle">#{login.pageTitle}</ui:define>
+		<!--Header-->
+		<ui:decorate template="templates/sections/header.xhtml"/>
 
-		<ui:define name="content">
+		<!--Empty left side pane-->
+		<div class="col-lg-2">
+
+		</div>
+
+		<!--Login/Signup Section-->
+		<div class="col-lg-3">
 			<!--Login Form-->
-			<h:panelGroup id="login_form" layout="block" rendered="#{not login.loggedIn and not login.signingUp}">
-				<div class="col-lg-3">
+			<h:panelGroup id="login_form">
+				<h:panelGroup layout="block" rendered="#{not login.loggedIn and not login.signingUp}">
+
 					<h1>#{msgs.login}</h1>
 
-					<h:form>
-						<div class="col-lg-12">
+					<div class="col-lg-12">
+						<div>
 							<div class="form-group">
 								<h:outputLabel for="username" value="#{msgs.username}:"/>
 								<h:inputText id="username"
@@ -48,28 +67,28 @@
 								<h:message for="password" styleClass="alert-warning"/>
 							</div>
 						</div>
-
 						<div class="col-lg-12 form-group center-block">
 							<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
-							               styleClass="btn btn-primary btn-sm "/>
+							               styleClass="btn btn-primary btn-sm ">
+								<f:ajax execute="login_form" render="dbg login_form signup_form welcome header_signout_form"/>
+							</h:commandLink>
+							<h:commandLink value="#{msgs.not_a_user_signup}"
+							               action="#{login.signupButton}"
+							               styleClass="btn btn-sm ">
+								<f:ajax execute="" render="dbg login_form signup_form"/>
+							</h:commandLink>
 						</div>
-					</h:form>
-					<h:form>
-						<h:commandLink value="#{msgs.not_a_user_signup}"
-						               action="#{login.signupButton}"
-						               styleClass="btn btn-sm "/>
-					</h:form>
-				</div>
+					</div>
+				</h:panelGroup>
 			</h:panelGroup>
-			<!--/Login Form-->
 
 			<!--Signup Form-->
-			<h:panelGroup id="signup_form" layout="block" rendered="#{not login.loggedIn and login.signingUp}">
-				<div class="col-lg-3">
+			<h:panelGroup id="signup_form">
+				<h:panelGroup layout="block" rendered="#{not login.loggedIn and login.signingUp}">
 					<h1>#{msgs.signup}</h1>
 
-					<h:form>
-						<div class="col-lg-12">
+					<div class="col-lg-12">
+						<div>
 							<div class="form-group">
 								<h:outputLabel for="signup_username" value="#{msgs.username}:"/>
 								<h:inputText id="signup_username"
@@ -79,7 +98,6 @@
 								             requiredMessage="Required"/>
 								<h:message for="signup_username" styleClass="alert-warning"/>
 							</div>
-
 							<div class="form-group">
 								<h:outputLabel for="signup_password" value="#{msgs.password}:"/>
 								<h:inputSecret id="signup_password"
@@ -89,7 +107,6 @@
 								               requiredMessage="Required"/>
 								<h:message for="signup_password" styleClass="alert-warning"/>
 							</div>
-
 							<div class="form-group">
 								<h:outputLabel for="passwordConfirm" value="#{msgs.confirm_password}:"/>
 								<h:inputSecret id="passwordConfirm"
@@ -98,19 +115,17 @@
 								               required="true"
 								               requiredMessage="Required">
 									<f:attribute name="passwordFieldId"
-									             value="#{component.parent.parent.clientId}:signup_password"/>
+									             value="#{component.parent.parent.parent.clientId}:signup_password"/>
 									<f:validator validatorId="passwordValidator"/>
 								</h:inputSecret>
 								<h:message for="passwordConfirm" value="Required" styleClass="alert-warning"/>
 							</div>
-
 							<div class="form-group">
 								<h:outputLabel for="name" value="#{msgs.name}:"/>
 								<h:inputText id="name"
 								             value="#{login.name}"
 								             styleClass="form-control"/>
 							</div>
-
 							<div class="form-group">
 								<h:outputLabel for="phone_no" value="#{msgs.phone_no}:"/>
 								<h:inputText id="phone_no"
@@ -118,27 +133,31 @@
 								             styleClass="form-control"/>
 							</div>
 						</div>
-
 						<div class="col-lg-12 form-group center-block">
 							<h:commandLink value="#{msgs.signup}"
 							               action="#{login.signupAction}"
-							               styleClass="btn btn-primary btn-sm "/>
+							               styleClass="btn btn-primary btn-sm ">
+								<f:ajax execute="signup_form"
+								        render="dbg login_form signup_form"/>
+							</h:commandLink>
+							<h:commandLink value="#{msgs.login}"
+							               action="#{login.loginButton}"
+							               styleClass="btn btn-sm ">
+								<f:ajax render="dbg login_form signup_form"/>
+							</h:commandLink>
 						</div>
-					</h:form>
-
-					<h:form>
-						<h:commandLink value="#{msgs.login}"
-						               action="#{login.loginButton}"
-						               styleClass="btn btn-sm "/>
-					</h:form>
-				</div>
+					</div>
+				</h:panelGroup>
 			</h:panelGroup>
-			<!--/Signup Form-->
+		</div>
 
-			<div class="col-lg-9">
+		<!--Welcome Section-->
+		<div class="col-lg-7">
+			<!--Welcome-->
+			<h:panelGroup id="welcome">
 				<h2>Welcome #{login.username} to Ejada awesome Ordering-System</h2>
-			</div>
-		</ui:define>
-	</ui:composition>
+			</h:panelGroup>
+		</div>
+	</h:form>
 </h:body>
 </html>

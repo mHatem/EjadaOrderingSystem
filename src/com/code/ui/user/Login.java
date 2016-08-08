@@ -11,13 +11,13 @@ import org.hibernate.exception.ConstraintViolationException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class Login implements Serializable {
 	@ManagedProperty(value = "#{sessionFactoryBean}")
 	private SessionFactoryBean sessionFactoryBean;
@@ -36,44 +36,7 @@ public class Login implements Serializable {
 	private boolean loggedIn = false;
 	private boolean signingUp = false;
 
-	public SessionFactoryBean getSessionFactoryBean() {
-		return sessionFactoryBean;
-	}
-
-	public void setSessionFactoryBean(SessionFactoryBean sessionFactoryBean) {
-		this.sessionFactoryBean = sessionFactoryBean;
-	}
-
 	public Login() {
-	}
-
-
-	public void setUsername(String username) {
-		this.username = username.toLowerCase();
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public UIComponent getUsernameField() {
-		return usernameField;
-	}
-
-	public void setUsernameField(UIComponent usernameField) {
-		this.usernameField = usernameField;
-	}
-
-	public UIComponent getPasswordField() {
-		return passwordField;
-	}
-
-	public void setPasswordField(UIComponent passwordField) {
-		this.passwordField = passwordField;
 	}
 
 	public String loginAction() {
@@ -150,19 +113,54 @@ public class Login implements Serializable {
 		return null;
 	}
 
-
 	public String signout() {
 		loggedIn = false;
 		username = null;
-		return "index?faces-redirect=true";
+		return null;
 	}
 
-	public boolean isLoggedIn() {
-		return loggedIn;
+	public String getPageTitle() {
+		String titleExpression;
+		if (loggedIn)
+			titleExpression = "#{msgs.welcomeHeading}";
+		else {
+			if (signingUp)
+				titleExpression = "#{msgs.signup}";
+			else
+				titleExpression = "#{msgs.login}";
+		}
+
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		String title = (String) facesContext.getApplication().evaluateExpressionGet(
+			facesContext,
+			titleExpression,
+			String.class
+		);
+		return title;
 	}
 
-	public void setLoggedIn(boolean loggedIn) {
-		this.loggedIn = loggedIn;
+	public SessionFactoryBean getSessionFactoryBean() {
+		return sessionFactoryBean;
+	}
+
+	public void setSessionFactoryBean(SessionFactoryBean sessionFactoryBean) {
+		this.sessionFactoryBean = sessionFactoryBean;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getName() {
@@ -189,35 +187,35 @@ public class Login implements Serializable {
 		this.phoneNo = phoneNo;
 	}
 
+	public UIComponent getUsernameField() {
+		return usernameField;
+	}
+
+	public void setUsernameField(UIComponent usernameField) {
+		this.usernameField = usernameField;
+	}
+
+	public UIComponent getPasswordField() {
+		return passwordField;
+	}
+
+	public void setPasswordField(UIComponent passwordField) {
+		this.passwordField = passwordField;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
 	public boolean isSigningUp() {
 		return signingUp;
 	}
 
 	public void setSigningUp(boolean signingUp) {
 		this.signingUp = signingUp;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPageTitle() {
-		String titleExpression;
-		if (loggedIn)
-			titleExpression = "#{msgs.welcomeHeading}";
-		else {
-			if (signingUp)
-				titleExpression = "#{msgs.signup}";
-			else
-				titleExpression = "#{msgs.login}";
-		}
-
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		String title = (String) facesContext.getApplication().evaluateExpressionGet(
-			facesContext,
-			titleExpression,
-			String.class
-		);
-		return title;
 	}
 }
