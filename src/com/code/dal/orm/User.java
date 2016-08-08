@@ -12,15 +12,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "USERS")
+//@Entity
+//@Table(name = "USERS")
 public class User {
-	private long id;
+	/*private long id;
 	private String username;
 	private String password;
 	private String name;
 	private String phoneNo;
-	private Collection<Order> orders;
+//	private Collection<Order> orders;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -69,7 +69,7 @@ public class User {
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-
+/*
 	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
 	public Collection<Order> getOrders() {
 		return orders;
@@ -78,5 +78,5 @@ public class User {
 	public void setOrders(Collection<Order> orders) {
 		this.orders = orders;
 	}
-
+*/
 }

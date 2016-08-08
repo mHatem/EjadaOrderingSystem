@@ -3,9 +3,9 @@ package com.code.dal.orm;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity(name ="VW_ORDER")
+//@Entity(name ="VW_ORDER")
 public class OrderView {
-	private long id;
+/*	private long id;
 	private long ownerId;
 	private long placeId;
 	private String name;
@@ -87,5 +87,5 @@ public class OrderView {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
-
+*/
 }

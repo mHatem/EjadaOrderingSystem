@@ -25,8 +25,12 @@ import com.code.services.PlaceService;
 public class PlaceBean implements Serializable{
 	private String name;
 	private String phoneNo;
-	private Collection<PlaceService>placeSer= new ArrayList<PlaceService>();
+	private List<Place> places;
 	
+	
+	public PlaceBean() {
+	showAll();	
+	}
 	public String getName() {
 		return name;
 	}
@@ -40,21 +44,25 @@ public class PlaceBean implements Serializable{
 		this.phoneNo = phoneNo;
 	}
 	
-	public Collection<PlaceService> getPlaceSer() {
-		return placeSer;
-	}
-	public void setPlaceSer(Collection<PlaceService> placeSer) {
-		this.placeSer = placeSer;
-	}
+	
 	public String addPlace(){
 		PlaceService place = new PlaceService(); 
 		place.insert(name, phoneNo);
 		return "index";
 	}
+	
+	public List<Place> getPlaces() {
+		return places;
+	}
+	public void setPlaces(List<Place> places) {
+		this.places = places;
+	}
 	public List<Place> showAll (){
 		PlaceService placeSer=new PlaceService();
-		List<Place> places= placeSer.retrieve();
+		places= placeSer.retrieve();
 		return places ;
 
 	}
+	
+	
 }
