@@ -1,9 +1,17 @@
 package com.code.dal.orm;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 @Entity(name = "ORDERS")
 public class Order {
@@ -11,10 +19,9 @@ public class Order {
 	private String name;
 	private User owner;
 	private String status;
-	private Place place;
+	private Long placeId;
 	private Date date;
 	private float totalPrice;
-	private Collection<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -56,14 +63,13 @@ public class Order {
 		this.status = status;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PLACE_ID")
-	public Place getPlace() {
-		return place;
+	@Column(name = "PLACE_ID")
+	public Long getPlaceId() {
+		return placeId;
 	}
 
-	public void setPlace(Place place) {
-		this.place = place;
+	public void setPlaceId(Long placeId) {
+		this.placeId = placeId;
 	}
 
 	@Column(name = "ORDER_DATE")
@@ -75,28 +81,11 @@ public class Order {
 		this.date = date;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-	public Collection<OrderItem> getOrderItems() {
-		return orderItems;
-	}
-
-	public void setOrderItems(Collection<OrderItem> orderItems) {
-		this.orderItems = orderItems;
-	}
-
-	@Transient
+		@Transient
 	public float getTotalPrice() {
 		totalPrice = 0;
-		for (OrderItem orderItem : getOrderItems())
-			totalPrice += orderItem.getItem().getPrice() * orderItem.getCount();
-
+		
 		return totalPrice;
-	}
-
-	@Override
-	public String toString() {
-		return "Order:" + "\n\tID: " + id + "\n\tName: " + name + "\n\tOwner Name: " + owner.getName() + "\n\tStatus: "
-				+ status + "\n\tPlace Name: " + place.getName() + "\n\tDate: " + date;
 	}
 
 }
