@@ -12,39 +12,51 @@
 			<h3 style="text-align: left">Order page</h3>
 		</div>
 		<h:form role="form" class="form-group">
-			<table class=" col-lg-12" border="0" cellpadding="0" cellspacing="0"
+			<table class=" col-md-12" border="0" cellpadding="0" cellspacing="0"
 				width="100%">
+				<tr class="form-group col-md-12" style="width: inherit;">
 
-				<tr class="form-group">
 					<th><label for="Owner">Owner:</label></th>
-					<td><h:inputText type="Owner" class="form-control" id="Owner">
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="Owner" class="form-control" id="Owner">
 						</h:inputText></td>
 					<th><label for="pwd">PlaceName:</label></th>
-					<td><h:inputText type="PlaceName" class="form-control"
-							id="pwd"></h:inputText></td>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="PlaceName" class="form-control" id="pwd"></h:inputText></td>
+
 				</tr>
 
-				<tr class="form-group">
+				<tr class="form-group col-md-12" style="width: inherit;">
 					<th><label for="status">Status:</label></th>
-					<td><h:inputText type="status" class="form-control"
-							id="status">
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="status" class="form-control" id="status">
 						</h:inputText></td>
 					<th><label for="num">Order Num:</label></th>
-					<td><h:inputText type="num" class="form-control" id="num"></h:inputText></td>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="num" class="form-control" id="num"></h:inputText></td>
 				</tr>
 
-				<tr>
+				<tr class="form-group col-md-12" style="width: inherit;">
 					<th><label for="from">Date From:</label></th>
-					<td><h:inputText type="form" class="form-control" id="form">
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="form" class="form-control" id="form">
 						</h:inputText></td>
 					<th><label for="to">Date To:</label></th>
-					<td><h:inputText type="to" class="form-control" id="to"></h:inputText></td>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="to" class="form-control" id="to"></h:inputText></td>
 				</tr>
-
 				<tr>
-					<td><h:commandButton value="Search" class="btn btn-primary"></h:commandButton></td>
-					<td><h:commandButton value="Pre-Search"
-							class="btn btn-primary"></h:commandButton></td>
+					<td><br></br></td>
+				</tr>
+				<tr class="form-group col-md-12" style="width: inherit;">
+					<td class="col-md-3" style="width: inherit;"><h:commandButton
+							value="Search" class="btn btn-primary"></h:commandButton></td>
+					<td class="col-md-3" style="width: inherit;"><h:commandButton
+							value="Pre-Search" class="btn btn-primary"></h:commandButton></td>
+					<td class="col-md-3" style="width: inherit;"><h:commandButton
+							value="Add Order" class="btn btn-primary" action="#{order.add}">
+							<f:ajax render="@form"></f:ajax>
+						</h:commandButton></td>
 				</tr>
 
 				<tr>
@@ -52,41 +64,48 @@
 				</tr>
 
 				<tr>
-					<td><h:dataTable value="#{order.orders}" var="ord"
-							class="table table-bordered">
-							<h:column>
-								<f:facet name="header">ID</f:facet>    				
+					<td>
+						<table>
+							<h:dataTable value="#{order.orders}" var="ord"
+								class="table table-bordered">
+								<h:column>
+									<f:facet name="header">ID</f:facet>    				
                 				#{ord.id}
  					  	</h:column>
-							<h:column style="margin:25px">
+								<h:column style="margin:25px">
 
-								<f:facet name="header">Owner</f:facet>    				
+									<f:facet name="header">Owner</f:facet>    				
                 				#{ord.ownerName}
    						</h:column>
-							<h:column>
-								<f:facet name="header">Place</f:facet>    				
+								<h:column>
+									<f:facet name="header">Place</f:facet>    				
                 				#{ord.placeName}
    						</h:column>
-							<h:column>
-								<f:facet name="header">Add</f:facet>
-								<h:commandButton value="Add Items" class="btn btn-primary"></h:commandButton>
-							</h:column>
-							<h:column>
-								<f:facet name="header">Edit</f:facet>
-								<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
-							</h:column>
-							<h:column>
-								<f:facet name="header">Delete</f:facet>
-								<h:commandButton value="Delete" class="btn btn-primary"></h:commandButton>
-							</h:column>
-							<h:column>
-								<f:facet name="header">Cancel</f:facet>
-								<h:commandButton value="Cancel" class="btn btn-primary"></h:commandButton>
-							</h:column>
-						</h:dataTable></td>
+								<h:column>
+									<f:facet name="header">Add</f:facet>
+									<h:commandButton value="Add Items" class="btn btn-primary">
+									</h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Edit</f:facet>
+									<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Delete</f:facet>
+									<h:commandButton value="Delete" class="btn btn-primary"></h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Cancel</f:facet>
+									<h:commandButton value="Cancel" class="btn btn-primary"></h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</table>
+
+					</td>
 				</tr>
 
 			</table>
+
 		</h:form>
 	</div>
 </body>

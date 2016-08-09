@@ -29,6 +29,10 @@ public class order implements Serializable {
 		setOrders(orderService.getALL());
 	}
 
+	public void add()
+	{
+		orders.add(null);
+	}
 	public order()
 	{
 		displayAllOrders();
