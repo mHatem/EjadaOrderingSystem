@@ -1,15 +1,18 @@
 package com.code.dal.orm;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity(name = "PLACES")
 public class Place {
 	private long id;
 	private String name;
 	private String phoneNo;
-	private Collection<PlacesItem> items = new ArrayList<PlacesItem>();
+	//private Collection<PlacesItem> items = new ArrayList<PlacesItem>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -41,14 +44,14 @@ public class Place {
 		this.phoneNo = phoneNo;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "place")
-	public Collection<PlacesItem> getItems() {
-		return items;
-	}
-
-	public void setItems(Collection<PlacesItem> items) {
-		this.items = items;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "place")
+//	public Collection<PlacesItem> getItems() {
+//		return items;
+//	}
+//
+//	public void setItems(Collection<PlacesItem> items) {
+//		this.items = items;
+//	}
 
 	@Override
 	public String toString() {

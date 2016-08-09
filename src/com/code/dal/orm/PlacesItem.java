@@ -1,20 +1,17 @@
 package com.code.dal.orm;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity(name = "PLACE_ITEM")
 public class PlacesItem {
 	private long id;
-	private Place place;
+	//private Place place;
 	private String name;
 	private String description;
 	private float price;
@@ -31,15 +28,15 @@ public class PlacesItem {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PLACE_ID")
-	public Place getPlace() {
-		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
-	}
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "PLACE_ID")
+//	public Place getPlace() {
+//		return place;
+//	}
+//
+//	public void setPlace(Place place) {
+//		this.place = place;
+//	}
 
 	@Column(name = "NAME")
 	public String getName() {

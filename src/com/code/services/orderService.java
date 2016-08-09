@@ -1,5 +1,25 @@
 package com.code.services;
 
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.classic.Session;
+
+import com.code.dal.orm.OrderView;
+
 public class orderService {
+	
+	public static List<OrderView> getALL()
+	{
+		SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
+		Session session =sessionFactory.openSession();
+		session.beginTransaction();
+		Query query = session.getNamedQuery("Order.all");
+		@SuppressWarnings("unchecked")
+		List<OrderView> orders = (List<OrderView>)query.list();
+		return orders;
+	}
 
 }

@@ -1,14 +1,10 @@
 package com.code.dal.orm;
 
-import java.util.Collection;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,7 +16,7 @@ public class User {
 	private String password;
 	private String name;
 	private String phoneNo;
-	private Collection<Order> orders;
+  // private Collection<Order> orders;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -70,12 +66,12 @@ public class User {
 		this.phoneNo = phoneNo;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-	public Collection<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Collection<Order> orders) {
-		this.orders = orders;
-	}
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+//	public Collection<Order> getOrders() {
+//		return orders;
+//	}
+//
+//	public void setOrders(Collection<Order> orders) {
+//		this.orders = orders;
+//	}
 }
