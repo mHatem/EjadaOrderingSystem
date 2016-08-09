@@ -12,10 +12,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name = "USERS")
+@Entity
+@Table(name = "USERS")
 public class User {
-	/*private long id;
+	private long id;
 	private String username;
 	private String password;
 	private String name;
@@ -69,7 +69,5 @@ public class User {
 		this.phoneNo = phoneNo;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
 	
-*/
 }

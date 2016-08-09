@@ -2,9 +2,9 @@ package com.code.dal.orm;
 
 import javax.persistence.*;
 
-//@Entity(name = "ORDER_ITEMS")
+@Entity(name = "ORDER_ITEMS")
 public class OrderItem {
-	/*private long id;
+	private long id;
 	private Order order;
 	private PlacesItem item;
 	private User user;
@@ -66,5 +66,5 @@ public class OrderItem {
 		return "Order Item:" + "\n\tID: " + id + "\n\tOrder ID: " + order.getId() + "\n\tItem Name: " + item.getName()
 				+ "\n\tUser Name: " + user.getName() + "\n\tCount: " + count;
 	}
-*/
+
 }

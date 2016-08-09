@@ -10,35 +10,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.NamedQuery;
 
-//@Entity(name = "PLACE_ITEM")
+@Entity
+@Table(name = "PLACE_ITEM")
+@NamedQuery(name="getItems",query="from PlacesItem pt where pt.placeId =?")
 public class PlacesItem {
-	/*private long id;
-	private Place place;
+	private Long id;
+	private Long placeId;
 	private String name;
 	private String description;
-	private float price;
+	private Float price;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "PLACE_ITEMS_SEQUENCE", allocationSize = 1)
 	@Column(name = "ID")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	//@ManyToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "PLACE_ID")
-	public Place getPlace() {
-		return place;
+@Column(name="place_id")
+	public Long getPlaceId() {
+		return placeId;
 	}
 
-	public void setPlace(Place place) {
-		this.place = place;
+	public void setPlaceId(Long placeId) {
+		this.placeId = placeId;
 	}
 
 	@Column(name = "NAME")
@@ -61,12 +64,11 @@ public class PlacesItem {
 	}
 
 	@Column(name = "PRICE")
-	public float getPrice() {
+	public Float getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(Float price) {
 		this.price = price;
 	}
-*/
 }
