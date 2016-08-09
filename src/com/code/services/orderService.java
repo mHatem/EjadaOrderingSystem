@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
+import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 
 public class orderService {
@@ -21,5 +22,16 @@ public class orderService {
 		List<OrderView> orders = (List<OrderView>)query.list();
 		return orders;
 	}
+	
+	public static void insert(Order r)
+	{
+		SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
+		Session session =sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(r);
+		session.getTransaction().commit();
+
+	}
+	
 
 }

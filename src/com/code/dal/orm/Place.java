@@ -5,9 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-@Entity(name = "PLACES")
+@Entity
+@Table(name = "PLACES")
+@NamedQuery ( name = "Place_all", query = "SELECT p FROM Place p"  )
 public class Place {
 	private long id;
 	private String name;

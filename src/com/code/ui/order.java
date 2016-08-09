@@ -5,15 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import com.code.dal.orm.OrderView;
+import com.code.dal.orm.Place;
 import com.code.services.orderService;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "order")
 // don't forget to change it
-@SessionScoped
+@ViewScoped
 public class order implements Serializable {
 	private long id;
 	private String name;
@@ -23,6 +24,7 @@ public class order implements Serializable {
 	private Date date;
 	private float totalPrice;
 	private List<OrderView> orders;
+	private List<Place> places;
 	
 	public void displayAllOrders()
 	{
@@ -38,6 +40,14 @@ public class order implements Serializable {
 		displayAllOrders();
 	}
 	
+	public List<Place> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(List<Place> places) {
+		this.places = places;
+	}
+
 	public long getOwnerID() {
 		return ownerID;
 	}
