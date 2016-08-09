@@ -5,7 +5,7 @@ import java.util.Date;
 
 //@Entity(name ="VW_ORDER")
 public class OrderView {
-/*	private long id;
+	/*private long id;
 	private long ownerId;
 	private long placeId;
 	private String name;
