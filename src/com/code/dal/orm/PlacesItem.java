@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 //@Entity(name = "PLACE_ITEM")
-public class PlacesItem {/*
-	private long id;
+public class PlacesItem {
+	/*private long id;
 	private Place place;
 	private String name;
 	private String description;

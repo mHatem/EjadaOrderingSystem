@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core">
+
 <h:head>
 	<title>places</title>
 	<h:outputStylesheet library="css" name="bootstrap.css"></h:outputStylesheet>
@@ -11,23 +12,34 @@
 </h:head>
 <h:body>
 	<h:form>
+		<!-- the container -->
 		<div class="container">
+			<!-- bar -->
 			<div class="navbar navbar-inverse">
 				<div class="navbar-brand">Sba7 Elfol Ya Kbeer :D</div>
 			</div>
+			<!-- place -->
 			<div>
 				<h:outputText value="Places "
 					style="color: blue;font-family:Good Times" />
 			</div>
+			
+			<!-- insert trial -->
 			<div>
 			<h:inputText value="#{place.name}"
 				style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
 			<h:inputText value="#{place.phoneNo}" />
 			</div>
+			
 			<div>
-				<h:commandButton value="add place" class="btn btn-primary" action="#{place.addPlace}" style="color: blue;font-family:Good Times" />
+				<h:commandButton value="add place" 
+				class="btn btn-primary" 
+				action="#{place.addPlace}" 
+				style="color: blue;font-family:Good Times" />
 
 			</div>
+			
+			<!-- the table  -->
 			<h:dataTable value="#{place.places}" var="places"
 				captionStyle="font-size: 0.95em; font-style:italic"
 				style="width: 250px;">
@@ -43,9 +55,17 @@
 						<f:facet name="header">Phone</f:facet>
 						#{places.phoneNo}
 				</h:column>
+				<h:column headerClass="columnHeader" footerClass="columnFooter">
+						<f:facet name="header">delete</f:facet>
+						<h:commandButton value="delete" 
+										 action="#{place.deletePlace(places)}" 
+										 class="btn btn-success" 
+										 style="color: blue;font-family:Good Times" />
+				</h:column>
 			</h:dataTable>
-
+			
 		</div>
+		
 	</h:form>
 </h:body>
 </html>

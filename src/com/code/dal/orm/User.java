@@ -20,7 +20,6 @@ public class User {
 	private String password;
 	private String name;
 	private String phoneNo;
-//	private Collection<Order> orders;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -69,14 +68,8 @@ public class User {
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
-/*
-	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-	public Collection<Order> getOrders() {
-		return orders;
-	}
 
-	public void setOrders(Collection<Order> orders) {
-		this.orders = orders;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+	
 */
 }
