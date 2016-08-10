@@ -53,11 +53,11 @@ public class Order {
 
 	@Column(name = "PLACE_ID")
 	public Long getPlaceId() {
-		return placeId;
+		return placeID;
 	}
 
 	public void setPlaceId(Long placeId) {
-		this.placeId = placeId;
+		this.placeID = placeId;
 	}
 
 	@Column(name = "ORDER_DATE")
