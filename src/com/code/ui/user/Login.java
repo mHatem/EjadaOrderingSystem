@@ -35,8 +35,8 @@ public class Login implements Serializable {
 	private boolean loggedIn = false;
 	private boolean signingUp = false;
 
-	public final String SESSION_KEY_USER_ID = "user_id";
-	public final String SESSION_KEY_USER_ROLE = "user_role";
+	public static final String SESSION_KEY_USER_ID = "user_id";
+	public static final String SESSION_KEY_USER_ROLE = "user_role";
 
 
 	public Login() {
