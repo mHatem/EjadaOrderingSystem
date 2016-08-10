@@ -9,14 +9,26 @@ import javax.faces.bean.SessionScoped;
 import com.code.dal.orm.Place;
 import com.code.services.PlaceService;
 
+@SuppressWarnings("serial")
 @ManagedBean(name = "place")
 @SessionScoped
 
 public class PlaceBean implements Serializable {
 	private String name;
 	private String phoneNo;
+	
 	private List<Place> places;
+	///////////////////////////////////////////////////////// edit 
+	public void editPlace(Place place) {
+		place.setSelected(true);
+	}
 
+	public void savePlace(Place place) {
+	    PlaceService.updatePlace(place);
+	    place.setSelected(false);
+	}
+	//////////////////////////////////////////////////////////////////
+	
 	public PlaceBean() {
 		places = null;
 		showAll();
@@ -38,12 +50,17 @@ public class PlaceBean implements Serializable {
 		return places;
 
 	}
+	
+	public List<Place> searchPlaceName() {
+		places = PlaceService.searchPlaces(name);
+		return places;
+	}
 
 	public void deletePlace(Place deletedPlace) {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -67,5 +84,4 @@ public class PlaceBean implements Serializable {
 	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
-
 }

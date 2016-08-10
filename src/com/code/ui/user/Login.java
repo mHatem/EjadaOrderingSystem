@@ -1,14 +1,12 @@
 package com.code.ui.user;
 
 import com.code.dal.orm.User;
-import com.code.services.SessionFactoryBean;
 import com.code.services.UserService;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;

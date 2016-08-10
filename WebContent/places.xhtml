@@ -16,7 +16,7 @@
 
 </h:head>
 <h:body>
-	<h:form>
+	<h:form id="palcesForm">
 		<!-- the container -->
 		<div class="container">
 			<!-- bar -->
@@ -29,68 +29,70 @@
 					style="color: blue;font-family:Good Times" />
 			</div>
 			
-			<!-- insert trial -->
+			
+			<!-- input text > insert name and phone -->
 			<div>
-			<h:inputText value="#{place.name}"
-				style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
-			<h:inputText value="#{place.phoneNo}" />
+				<h:outputLabel value="PlaceName: " />
+				<h:inputText id="placeNameId" value="#{place.name}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
+			</div>
+			<div>	
+				<h:outputLabel value="PlacePhone"/>
+				<h:inputText id="placePhoneId" value="#{place.phoneNo}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times"  />
 			</div>
 			
+			<!-- insert -->
 			<div>
-				<h:commandButton value="add place" 
-				class="btn btn-primary" 
-				action="#{place.addPlace}" 
-				style="color: blue;font-family:Good Times" />
-
+				<h:commandButton value="add place" class="btn btn-primary" action="#{place.addPlace}" style="color: blue;font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
+				</h:commandButton>
 			</div>
+			
+			<!-- search by name only -->
+				<div>
+				<h:commandButton value="serach" 
+				class="btn btn-primary" 
+				action="#{place.searchPlaceName}" 
+				style="color: blue;font-family:Good Times" />
+			</div>
+							
 			
 			<!-- the table  -->
-			<h:dataTable value="#{place.places}" var="places"
+			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
 				style="width: 250px;">
 
 				<f:facet name="caption">places</f:facet>
-
+				
+				<!-- name -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
-						<f:facet name="header">Name</f:facet>
-						 #{places.name}
+					<f:facet name="header">Name</f:facet>
+						<h:outputText value="#{row.name}" rendered="#{not row.selected}" />
+						<h:inputText value="#{row.name}" rendered="#{row.selected}" />
 				</h:column>
-
+				
+				<!-- phone -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Phone</f:facet>
-						#{places.phoneNo}
+						<h:outputText value="#{row.phoneNo}" rendered="#{not row.selected}"/>
+						<h:inputText value="#{row.phoneNo}" rendered="#{row.selected}" />
 				</h:column>
+				
+				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">delete</f:facet>
-						<h:commandButton value="delete" 
-										 action="#{place.deletePlace(places)}" 
-										 class="btn btn-default btn-xs" 
-										 style="color: blue;font-family:Good Times" />
+						<h:commandButton value="delete" action="#{place.deletePlace(row)}" class="btn btn-primary btn-xs" /> 
 				</h:column>
+				
+				<!-- Update -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
-						<f:facet name="header">edit</f:facet>
-						<button type="button" class="btn btn-primary " data-toggle="modal"
-							data-target="#myModal">edit</button>
-						<div class="modal fade" id="myModal" role="dialog">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4 class="modal-title">Edit</h4>
-									</div>
-									<div class="modal-body">
-										<h:outputLabel value="PlaceName:" />
-										<h:inputText value="#{place.name}" />
-									</div>
-									<div class="modal-footer">
-										<h:commandLink type="button" class="btn btn-default"
-											data-dismiss="modal">Save</h:commandLink>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
+						<f:facet name="header">update</f:facet>
+						<h:commandButton value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default " >
+							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>			 
+						</h:commandButton>
+						
+						<h:commandButton value="edit" action="#{place.editPlace(row)}" rendered="#{not row.selected}" class="btn btn-default " >
+							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>
+						</h:commandButton>
 				</h:column>
 			</h:dataTable>
 			

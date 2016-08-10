@@ -11,6 +11,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @NamedQueries({
@@ -24,6 +25,7 @@ public class Place implements Serializable {
 	private long id;
 	private String name;
 	private String phoneNo;
+	private Boolean selected;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -58,5 +60,14 @@ public class Place implements Serializable {
 	@Override
 	public String toString() {
 		return "Place:" + "\n\tID: " + id + "\n\tName: " + name + "\n\tPhone No.: " + phoneNo;
+	}
+
+	@Transient
+	public Boolean getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Boolean selected) {
+		this.selected = selected;
 	}
 }
