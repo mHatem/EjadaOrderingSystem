@@ -1,15 +1,23 @@
 package com.code.dal.orm;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "USERS")
+@NamedQueries({
+	@NamedQuery(
+		name = "User.byUsernameAndPassword",
+		query = "SELECT u FROM User u WHERE u.username = :username AND (u.password = :password OR :password IS NULL)"
+	),
+	@NamedQuery(
+		name = "User.all",
+		query = "SELECT u FROM User u"
+	),
+	@NamedQuery(
+		name = "User.byId",
+		query = "SELECT u FROM User u WHERE u.id = :id"
+	)
+})
 public class User {
 	private long id;
 	private String username;

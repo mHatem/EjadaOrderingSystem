@@ -37,7 +37,7 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
-  
+
 	 <mime-mapping>
         <extension>docx</extension>
         <mime-type>application/vnd.openxmlformats-officedocument.wordprocessingml.document</mime-type>
