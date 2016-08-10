@@ -30,11 +30,7 @@
 			</div>
 			
 			<!-- insert trial -->
-			<div>
-			<h:inputText value="#{place.name}"
-				style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
-			<h:inputText value="#{place.phoneNo}" />
-			</div>
+			
 			
 			<div>
 				<h:commandButton value="add place" 
@@ -60,37 +56,21 @@
 						<f:facet name="header">Phone</f:facet>
 						#{places.phoneNo}
 				</h:column>
+				
+				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">delete</f:facet>
 						<h:commandButton value="delete" 
 										 action="#{place.deletePlace(places)}" 
-										 class="btn btn-default btn-xs" 
-										 style="color: blue;font-family:Good Times" />
+										 class="btn btn-default btn-xs" /> 
 				</h:column>
+				
+				<!-- Update -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
-						<f:facet name="header">edit</f:facet>
-						<button type="button" class="btn btn-primary " data-toggle="modal"
-							data-target="#myModal">edit</button>
-						<div class="modal fade" id="myModal" role="dialog">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h4 class="modal-title">Edit</h4>
-									</div>
-									<div class="modal-body">
-										<h:outputLabel value="PlaceName:" />
-										<h:inputText value="#{place.name}" />
-									</div>
-									<div class="modal-footer">
-										<h:commandLink type="button" class="btn btn-default"
-											data-dismiss="modal">Save</h:commandLink>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
+						<f:facet name="header">update</f:facet>
+						<h:commandButton value="edit" 
+										 action="#{place.deletePlace(places)}" 
+										 class="btn btn-default " />
 				</h:column>
 			</h:dataTable>
 			

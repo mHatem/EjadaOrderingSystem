@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 import com.code.dal.orm.Place;
 public class PlaceService implements Serializable {
+	
 	public static void insertPlace(Place place ) {
 			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 			Session session = sessionFactory.openSession();
@@ -22,6 +23,20 @@ public class PlaceService implements Serializable {
 			
 
 	}
+	
+	public static void updatePlace(Place place ) {
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		session.update(place);
+
+		session.getTransaction().commit();
+		session.close();
+		
+
+	}
+
 	public static List<Place> retrievePlaces (){
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
@@ -40,6 +55,7 @@ public class PlaceService implements Serializable {
 		session.beginTransaction();
 		
 		session.delete(place);
+		
 		session.getTransaction().commit();
 		session.close();
 	}

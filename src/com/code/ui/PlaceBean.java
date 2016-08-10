@@ -43,7 +43,15 @@ public class PlaceBean implements Serializable {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
 	}
-
+	public String updatePlace(Place updatedPlace){
+		
+		updatedPlace.setName(name);
+		updatedPlace.setPhoneNo(phoneNo);
+		PlaceService.updatePlace(updatedPlace);
+		return null;
+	}
+	
+	
 	public String getName() {
 		return name;
 	}
