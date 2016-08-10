@@ -9,11 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
@@ -32,17 +30,15 @@ public class Login implements Serializable {
 	private String passwordConfirm;
 	private String phoneNo;
 
-
-	private UIComponent usernameField;
-	private UIComponent passwordField;
+	private String invalidPasswordMessage;
+	private String unmatchedPasswordMessage;
 
 	private boolean loggedIn = false;
 	private boolean signingUp = false;
+	private boolean editing = false;
 
-	private Map<String, Object> sessionMap;
-
-	public final String SESSION_KEY_USER_ID = "user_id";
-	public final String SESSION_KEY_USER_ROLE = "user_role";
+	public static final String SESSION_KEY_USER_ID = "user_id";
+	public static final String SESSION_KEY_USER_ROLE = "user_role";
 
 
 	public Login() {
@@ -50,7 +46,7 @@ public class Login implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 
 		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
 			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
@@ -75,6 +71,9 @@ public class Login implements Serializable {
 	}
 
 	public String loginAction() {
+
+		invalidPasswordMessage = null;
+
 		if (password == null || password.length() == 0)
 			return null;
 
@@ -93,6 +92,8 @@ public class Login implements Serializable {
 			loggedIn = true;
 			User user = usersList.get(0);
 			String userRole = UserRole.NORMAL; //TODO get role from database
+
+			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			sessionMap.put(SESSION_KEY_USER_ID, user.getId());
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
 		}
@@ -100,13 +101,9 @@ public class Login implements Serializable {
 		session.getTransaction().commit();
 		session.close();
 
-		if (!loggedIn) {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			facesContext.addMessage(
-				passwordField.getClientId(facesContext),
-				new FacesMessage("Wrong password!")
-			);
-		}
+		if (!loggedIn)
+			invalidPasswordMessage = "Wrong password!";
+
 
 		password = null;
 		return null;
@@ -154,12 +151,92 @@ public class Login implements Serializable {
 		return null;
 	}
 
+
+	public String updateAction() {
+		unmatchedPasswordMessage = null;
+		if (!password.equals(passwordConfirm)) {
+			unmatchedPasswordMessage = "Passwords do not match";
+			return null;
+		}
+
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
+
+		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			Query query = session.getNamedQuery("User.byId");
+			query.setLong("id", userId);
+
+			User user = (User) query.list().get(0);
+			user.setUsername(username);
+			user.setPassword(password);
+			user.setName(name);
+			user.setPhoneNo(phoneNo);
+
+			session.update(user);
+			session.getTransaction().commit();
+			session.close();
+		} catch (ConstraintViolationException e) {
+			if (session != null)
+				session.close();
+			return null;
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+
+		editing = false;
+		return null;
+	}
+
 	public String signout() {
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 		sessionMap.remove(SESSION_KEY_USER_ID);
+
 		loggedIn = false;
 		username = null;
 		return null;
 	}
+
+	public String editButton() {
+		editing = true;
+
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+
+		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
+			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
+
+			Session session = sessionFactoryBean.getSessionFactory().openSession();
+			session.beginTransaction();
+
+			Query query = session.getNamedQuery("User.byId");
+			query.setLong("id", userId);
+
+			List list = query.list();
+			if (list.size() == 1) {
+				User user = (User) list.get(0);
+				username = user.getUsername();
+				password = user.getPassword();
+				passwordConfirm = password;
+				name = user.getName();
+				phoneNo = user.getPhoneNo();
+			}
+
+			session.getTransaction().commit();
+			session.close();
+		}
+
+		return null;
+	}
+
+	public String editCancelButton() {
+		editing = false;
+		return null;
+	}
+
 
 	public String getPageTitle() {
 		String titleExpression;
@@ -179,6 +256,13 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
+	}
+
+	public static class UserRole {
+		public static final String NORMAL = "normal";
+		public static final String ADMIN = "admin";
+		public static final String ADMIN_PLACES = "admin_places";
+		public static final String ADMIN_ITEMS = "admin_items";
 	}
 
 	public SessionFactoryBean getSessionFactoryBean() {
@@ -229,20 +313,12 @@ public class Login implements Serializable {
 		this.phoneNo = phoneNo;
 	}
 
-	public UIComponent getUsernameField() {
-		return usernameField;
+	public String getInvalidPasswordMessage() {
+		return invalidPasswordMessage;
 	}
 
-	public void setUsernameField(UIComponent usernameField) {
-		this.usernameField = usernameField;
-	}
-
-	public UIComponent getPasswordField() {
-		return passwordField;
-	}
-
-	public void setPasswordField(UIComponent passwordField) {
-		this.passwordField = passwordField;
+	public void setInvalidPasswordMessage(String invalidPasswordMessage) {
+		this.invalidPasswordMessage = invalidPasswordMessage;
 	}
 
 	public boolean isLoggedIn() {
@@ -261,10 +337,19 @@ public class Login implements Serializable {
 		this.signingUp = signingUp;
 	}
 
-	public static class UserRole {
-		public static final String NORMAL = "normal";
-		public static final String ADMIN = "admin";
-		public static final String ADMIN_PLACES = "admin_places";
-		public static final String ADMIN_ITEMS = "admin_items";
+	public boolean isEditing() {
+		return editing;
+	}
+
+	public void setEditing(boolean editing) {
+		this.editing = editing;
+	}
+
+	public String getUnmatchedPasswordMessage() {
+		return unmatchedPasswordMessage;
+	}
+
+	public void setUnmatchedPasswordMessage(String unmatchedPasswordMessage) {
+		this.unmatchedPasswordMessage = unmatchedPasswordMessage;
 	}
 }
