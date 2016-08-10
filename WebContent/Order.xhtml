@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script
+		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+
+</h:head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<h3 style="text-align: left">Order page</h3>
+		</div>
+		<h:form role="form" class="form-group">
+			<table class=" col-md-12" border="0" cellpadding="0" cellspacing="0"
+				width="100%">
+				<tr class="form-group col-md-12" style="width: inherit;">
+
+					<th><label for="Owner">Owner:</label></th>
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="Owner" class="form-control" id="Owner">
+						</h:inputText></td>
+					<th><label for="pwd">PlaceName:</label></th>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="PlaceName" class="form-control" id="pwd"></h:inputText></td>
+
+				</tr>
+
+				<tr class="form-group col-md-12" style="width: inherit;">
+					<th><label for="status">Status:</label></th>
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="status" class="form-control" id="status">
+						</h:inputText></td>
+					<th><label for="num">Order Num:</label></th>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="num" class="form-control" id="num"></h:inputText></td>
+				</tr>
+
+				<tr class="form-group col-md-12" style="width: inherit;">
+					<th><label for="from">Date From:</label></th>
+					<td class="col-md-3" style="width: inherit;"><h:inputText
+							type="form" class="form-control" id="form">
+						</h:inputText></td>
+					<th><label for="to">Date To:</label></th>
+					<td class="col-md-3" style="width: initial;"><h:inputText
+							type="to" class="form-control" id="to"></h:inputText></td>
+				</tr>
+				<tr>
+					<td><br></br></td>
+				</tr>
+				<tr class="form-group col-md-12" style="width: inherit;">
+					<td class="col-md-3" style="width: inherit;">
+						<h:commandButton value="Search" styleClass="btn-primary">
+						</h:commandButton>
+					</td>
+					<td class="col-md-3" style="width: inherit;">
+						<h:commandButton
+							value="Pre-Search" styleClass="btn btn-primary"></h:commandButton></td>
+					<td>
+						<button type="button" class="btn btn-primary " data-toggle="modal"
+							data-target="#myModal">Add Order</button>
+						<div class="modal fade" id="myModal" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">New Order</h4>
+									</div>
+									<div class="modal-body">
+										<h:outputLabel value="OrderName:" />
+										<h:inputText value="#{order.name}" />
+										<h:selectOneMenu value="#{order}">
+											<f:selectItems value="#{order.places}" />
+										</h:selectOneMenu>
+									</div>
+									<div class="modal-footer">
+										<h:commandLink type="button" class="btn btn-default"
+											data-dismiss="modal" action="#{order.add}">Save</h:commandLink>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</td>
+				</tr>
+
+				<tr>
+					<td><br></br></td>
+				</tr>
+
+				<tr>
+					<td>
+						<table>
+							<h:dataTable value="#{order.orders}" var="ord"
+								class="table table-bordered">
+								<h:column>
+									<f:facet name="header">ID</f:facet>    				
+                				#{ord.id}
+ 					  	</h:column>
+								<h:column style="margin:25px">
+
+									<f:facet name="header">Owner</f:facet>    				
+                				#{ord.ownerName}
+   						</h:column>
+								<h:column>
+									<f:facet name="header">Place</f:facet>    				
+                				#{ord.placeName}
+   						</h:column>
+								<h:column>
+									<f:facet name="header">Add</f:facet>
+									<h:commandButton value="Add Items" class="btn btn-primary">
+									</h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Edit</f:facet>
+									<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Delete</f:facet>
+									<h:commandButton value="Delete" class="btn btn-primary"></h:commandButton>
+								</h:column>
+								<h:column>
+									<f:facet name="header">Cancel</f:facet>
+									<h:commandButton value="Cancel" class="btn btn-primary"></h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</table>
+
+					</td>
+				</tr>
+
+			</table>
+
+		</h:form>
+	</div>
+</body>
+</html>
+

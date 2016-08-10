@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Table(name = "PLACE_ITEM")
 @NamedQuery(name="getItems",query="from PlacesItem pt where pt.placeId =?")
 public class PlacesItem {
+
 	private Long id;
 	private Long placeId;
 	private String name;
