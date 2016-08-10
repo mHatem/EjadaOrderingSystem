@@ -48,7 +48,7 @@
 		<mapping class="com.code.dal.orm.Place" />
 		<mapping class="com.code.dal.orm.PlacesItem" />
 		<mapping class="com.code.dal.orm.User" />
-		
+				<mapping class="com.code.dal.orm.OrderView" />
 
 	</session-factory>
 

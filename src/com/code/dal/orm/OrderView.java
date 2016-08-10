@@ -3,7 +3,9 @@ package com.code.dal.orm;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity(name ="VW_ORDER")
+@Entity
+@Table(name ="VW_ORDER")
+@NamedQuery(name="Order.all" ,query="FROM OrderView ")
 public class OrderView {
 	private long id;
 	private long ownerId;
