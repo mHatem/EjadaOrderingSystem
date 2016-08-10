@@ -51,15 +51,7 @@ public class Order {
 		this.status = status;
 	}
 
-	@Column(name = "PLACE_ID")
-	public Long getPlaceId() {
-		return placeID;
-	}
-
-	public void setPlaceId(Long placeId) {
-		this.placeID = placeId;
-	}
-
+	
 	@Column(name = "ORDER_DATE")
 	public Date getDate() {
 		return date;
