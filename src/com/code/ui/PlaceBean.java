@@ -54,7 +54,6 @@ public class PlaceBean implements Serializable {
 	public List<Place> searchPlaceName() {
 		places = PlaceService.searchPlaces(name);
 		return places;
-
 	}
 
 	public void deletePlace(Place deletedPlace) {

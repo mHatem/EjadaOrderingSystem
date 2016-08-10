@@ -29,12 +29,18 @@
 					style="color: blue;font-family:Good Times" />
 			</div>
 			
-			<!-- insert -->
 			
+			<!-- input text > insert name and phone -->
 			<div>
-			<h:inputText id="placeNameId" value="#{place.name}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
-			<h:inputText id="placePhoneId" value="#{place.phoneNo}" />
+				<h:outputLabel value="PlaceName: " />
+				<h:inputText id="placeNameId" value="#{place.name}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
 			</div>
+			<div>	
+				<h:outputLabel value="PlacePhone"/>
+				<h:inputText id="placePhoneId" value="#{place.phoneNo}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times"  />
+			</div>
+			
+			<!-- insert -->
 			<div>
 				<h:commandButton value="add place" class="btn btn-primary" action="#{place.addPlace}" style="color: blue;font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
