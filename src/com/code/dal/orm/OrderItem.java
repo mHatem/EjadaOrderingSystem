@@ -5,9 +5,9 @@ import javax.persistence.*;
 @Entity(name = "ORDER_ITEMS")
 public class OrderItem {
 	private long id;
-	//private Order order;
-	//private PlacesItem item;
-	//private User user;
+	private Long orderId;
+	private Long placeItemId;
+	private Long userId;
 	private int count;
 
 	@Id
@@ -22,35 +22,32 @@ public class OrderItem {
 		this.id = id;
 	}
 
-	//@ManyToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "ORDER_ID")
-//	public Order getOrder() {
-//		return order;
-//	}
-//
-//	public void setOrder(Order order) {
-//		this.order = order;
-//	}
-//
-//	//@ManyToOne(cascade = CascadeType.ALL)
-//	//@JoinColumn(name = "PLACE_ITEM_ID")
-//	public PlacesItem getItem() {
-//		return item;
-//	}
-//
-//	public void setItem(PlacesItem item) {
-//		this.item = item;
-//	}
-//
-	//@ManyToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "USER_ID")
-//	public User getUser() {
-//		return user;
-//	}
-//
-//	public void setUser(User user) {
-//		this.user = user;
-//	}
+	@Column(name = "ORDER_ID")
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	@Column(name = "PLACE_ITEM_ID")
+	public Long getPlaceItemId() {
+		return placeItemId;
+	}
+
+	public void setPlaceItemId(Long placeItemId) {
+		this.placeItemId = placeItemId;
+	}
+
+	@Column(name = "USER_ID")
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	@Column(name = "COUNT")
 	public int getCount() {
@@ -60,11 +57,5 @@ public class OrderItem {
 	public void setCount(int count) {
 		this.count = count;
 	}
-
-//	@Override
-//	public String toString() {
-//		return "Order Item:" + "\n\tID: " + id + "\n\tOrder ID: " + order.getId() + "\n\tItem Name: " + item.getName()
-//				+ "\n\tUser Name: " + user.getName() + "\n\tCount: " + count;
-//	}
 
 }

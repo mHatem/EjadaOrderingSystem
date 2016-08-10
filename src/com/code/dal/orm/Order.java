@@ -1,7 +1,6 @@
 package com.code.dal.orm;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +18,8 @@ public class Order {
 	private String status;
 	private Long placeID;
 	private Date date;
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "ORDERS_SEQUENCE", allocationSize = 1)
@@ -50,7 +51,15 @@ public class Order {
 		this.status = status;
 	}
 
-	
+	@Column(name = "PLACE_ID")
+	public Long getPlaceId() {
+		return placeId;
+	}
+
+	public void setPlaceId(Long placeId) {
+		this.placeId = placeId;
+	}
+
 	@Column(name = "ORDER_DATE")
 	public Date getDate() {
 		return date;
@@ -95,4 +104,5 @@ public class Order {
 //				+ status + "\n\tPlace Name: " + place.getName() + "\n\tDate: " + date;
 //	}
 
+	
 }

@@ -6,9 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.NamedQuery;
 
 @Entity
 @Table(name = "PLACE_ITEM")
@@ -33,7 +33,7 @@ public class PlacesItem {
 		this.id = id;
 	}
 
-@Column(name="place_id")
+	@Column(name="place_id")
 	public Long getPlaceId() {
 		return placeId;
 	}
