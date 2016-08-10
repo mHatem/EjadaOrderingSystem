@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en" lang="en"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<ui:insert name="requireLogin">
+		<f:event type="preRenderView" listener="#{loginCheckBean.checkLoggedIn}"/>
+	</ui:insert>
+	<title><ui:insert name="pageTitle"/></title>
+	<h:outputStylesheet library="css" name="bootstrap.css"/>
+</h:head>
+
+<h:body>
+	<div id="header" class="col-xs-12 navbar">
+		<ui:insert name="header">
+			<ui:include src="sections/header.xhtml"/>
+		</ui:insert>
+	</div>
+
+	<div id="leftSidePane" class="col-xs-2">
+		<ui:insert name="leftSidePane">
+			<ui:include src="sections/side_pane.xhtml"/>
+		</ui:insert>
+	</div>
+
+	<div id="content" class="col-xs-10" style="margin-bottom: 25px;margin-top: 25px;">
+		<ui:insert name="content"/>
+	</div>
+
+	<div id="footer" class="col-xs-12 panel-footer">
+		<ui:insert name="footer">
+			<p>Ejada Ordering System</p>
+		</ui:insert>
+	</div>
+</h:body>
+</html>
