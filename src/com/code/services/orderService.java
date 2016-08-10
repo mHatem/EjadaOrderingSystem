@@ -3,9 +3,9 @@ package com.code.services;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 
 import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;

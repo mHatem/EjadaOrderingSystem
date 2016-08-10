@@ -1,4 +1,4 @@
-package Controller;
+package com.code.services;
 import java.util.List;
 
 import org.hibernate.*;
