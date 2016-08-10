@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.code.dal.orm.Place;
+@SuppressWarnings("serial")
 public class PlaceService implements Serializable {
 	
 	public static void insertPlace(Place place ) {

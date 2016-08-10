@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import com.code.dal.orm.Place;
 import com.code.services.PlaceService;
 
+@SuppressWarnings("serial")
 @ManagedBean(name = "place")
 @SessionScoped
 
@@ -17,21 +18,14 @@ public class PlaceBean implements Serializable {
 	private String phoneNo;
 	private List<Place> places;
 	///////////////////////////////////////////////////////// edit 
-	private boolean editmode;
-
-	public void edit() {
-	    editmode = true;
+	public void editPlace(Place place) {
+		place.setSelected(true);
 	}
 
-	public void save() {
-	    //entityService.save(entity);
-	    editmode = false;
+	public void savePlace(Place place) {
+	    PlaceService.updatePlace(place);
+	    place.setSelected(false);
 	}
-
-	public boolean isEditmode() {
-	    return editmode;
-	}
-	
 	//////////////////////////////////////////////////////////////////
 	
 	public PlaceBean() {
@@ -66,14 +60,6 @@ public class PlaceBean implements Serializable {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
 	}
-	public String updatePlace(Place updatedPlace){
-		
-		updatedPlace.setName(name);
-		updatedPlace.setPhoneNo(phoneNo);
-		PlaceService.updatePlace(updatedPlace);
-		return null;
-	}
-	
 	
 	public String getName() {
 		return name;
@@ -98,5 +84,4 @@ public class PlaceBean implements Serializable {
 	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
-
 }
