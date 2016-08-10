@@ -3,18 +3,23 @@ package com.code.ui;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.html.HtmlDataTable;
+import javax.faces.context.FacesContext;
 
+import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 import com.code.dal.orm.Place;
 import com.code.services.orderService;
+import com.code.ui.user.Login;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "order")
 // don't forget to change it
-@ViewScoped
+@SessionScoped
 public class order implements Serializable {
 	private long id;
 	private String name;
@@ -24,28 +29,54 @@ public class order implements Serializable {
 	private Date date;
 	private float totalPrice;
 	private List<OrderView> orders;
-	private List<Place> places;
-	
-	public void displayAllOrders()
-	{
+	private String selectedPlace;
+
+	public long extractPlaceID(String n) {
+		PlaceBean bean = new PlaceBean();
+		for (Place p : bean.getPlaces()) {
+			if (p.getName() != null && p.getName().equals(n)) {
+				return p.getId();
+			}
+		}
+		return 0;
+	}
+
+	public void displayAllOrders() {
 		setOrders(orderService.getALL());
 	}
 
-	public void add()
-	{
-		orders.add(null);
-	}
-	public order()
-	{
-		displayAllOrders();
-	}
-	
-	public List<Place> getPlaces() {
-		return places;
+	public void add() {
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Date dat = new Date();
+		Order order = new Order();
+		order.setName(this.name);
+		order.setPlaceID(extractPlaceID(selectedPlace));
+		order.setStatus(this.status);
+		order.setOwnerID((Long) sessionMap.get(Login.SESSION_KEY_USER_ID));
+		order.setDate(dat);
+		orderService.insert(order);
+
 	}
 
-	public void setPlaces(List<Place> places) {
-		this.places = places;
+	public void delete (Order r)
+	{
+		orderService.delete(r);
+		displayAllOrders();
+		
+	}
+	
+	public order() {
+		displayAllOrders();
+	}
+
+	
+
+	public String getSelectedPlace() {
+		return selectedPlace;
+	}
+
+	public void setSelectedPlace(String selectedPlace) {
+		this.selectedPlace = selectedPlace;
 	}
 
 	public long getOwnerID() {
@@ -80,7 +111,6 @@ public class order implements Serializable {
 		this.name = name;
 	}
 
-	
 	public String getStatus() {
 		return status;
 	}
@@ -89,7 +119,6 @@ public class order implements Serializable {
 		this.status = status;
 	}
 
-	
 	public Date getDate() {
 		return date;
 	}
@@ -113,6 +142,5 @@ public class order implements Serializable {
 	public void setOrders(List<OrderView> orders) {
 		this.orders = orders;
 	}
-	
-	
+
 }

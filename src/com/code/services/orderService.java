@@ -11,27 +11,35 @@ import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 
 public class orderService {
-	
-	public static List<OrderView> getALL()
-	{
-		SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
-		Session session =sessionFactory.openSession();
+
+	public static List<OrderView> getALL() {
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("Order.all");
 		@SuppressWarnings("unchecked")
-		List<OrderView> orders = (List<OrderView>)query.list();
+		List<OrderView> orders = (List<OrderView>) query.list();
 		return orders;
 	}
-	
-	public static void insert(Order r)
-	{
-		SessionFactory sessionFactory =new Configuration().configure().buildSessionFactory();
-		Session session =sessionFactory.openSession();
+
+	public static void insert(Order r) {
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save(r);
+
 		session.getTransaction().commit();
 
 	}
 	
+	public static void delete(Order r)
+	{
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.delete(r);
+		session.getTransaction().commit();
+		
+	}
 
 }

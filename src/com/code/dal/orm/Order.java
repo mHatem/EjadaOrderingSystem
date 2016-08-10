@@ -18,7 +18,6 @@ public class Order {
 	private String status;
 	private Long placeID;
 	private Date date;
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")

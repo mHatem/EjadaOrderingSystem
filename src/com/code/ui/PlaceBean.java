@@ -16,6 +16,7 @@ import com.code.services.PlaceService;
 public class PlaceBean implements Serializable {
 	private String name;
 	private String phoneNo;
+	
 	private List<Place> places;
 	///////////////////////////////////////////////////////// edit 
 	public void editPlace(Place place) {
