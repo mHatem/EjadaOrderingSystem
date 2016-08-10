@@ -29,7 +29,7 @@
 					style="color: blue;font-family:Good Times" />
 			</div>
 			
-			<!-- insert trial -->
+			<!-- insert -->
 			
 			
 			<div>
@@ -40,21 +40,35 @@
 
 			</div>
 			
+			<!-- search by name only -->
+				<div>
+				<h:commandButton value="serach" 
+				class="btn btn-primary" 
+				action="#{place.searchPlaceName}" 
+				style="color: blue;font-family:Good Times" />
+			</div>
+							
+			
 			<!-- the table  -->
 			<h:dataTable value="#{place.places}" var="places"
 				captionStyle="font-size: 0.95em; font-style:italic"
 				style="width: 250px;">
 
 				<f:facet name="caption">places</f:facet>
-
+				
+				<!-- name -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Name</f:facet>
-						 #{places.name}
+						<h:outputText value="#{places.name}"
+						  		rendered="#{not place.editmode}" />
+						<h:inputText value="#{place.name}"
+							 	rendered="#{place.editmode}" />
 				</h:column>
-
+				
+				<!-- phone -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Phone</f:facet>
-						#{places.phoneNo}
+						<h:outputText value="#{places.phoneNo}" />
 				</h:column>
 				
 				<!-- delete -->
@@ -62,14 +76,15 @@
 						<f:facet name="header">delete</f:facet>
 						<h:commandButton value="delete" 
 										 action="#{place.deletePlace(places)}" 
-										 class="btn btn-default btn-xs" /> 
+										 class="btn btn-primary btn-xs" /> 
 				</h:column>
 				
 				<!-- Update -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">update</f:facet>
 						<h:commandButton value="edit" 
-										 action="#{place.deletePlace(places)}" 
+										 action="#{place.updatePlace(places)}" 
+										 rendered="#{not place.editmode}"
 										 class="btn btn-default " />
 				</h:column>
 			</h:dataTable>

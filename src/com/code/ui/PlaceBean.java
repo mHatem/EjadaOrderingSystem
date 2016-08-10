@@ -16,7 +16,24 @@ public class PlaceBean implements Serializable {
 	private String name;
 	private String phoneNo;
 	private List<Place> places;
+	///////////////////////////////////////////////////////// edit 
+	private boolean editmode;
 
+	public void edit() {
+	    editmode = true;
+	}
+
+	public void save() {
+	    //entityService.save(entity);
+	    editmode = false;
+	}
+
+	public boolean isEditmode() {
+	    return editmode;
+	}
+	
+	//////////////////////////////////////////////////////////////////
+	
 	public PlaceBean() {
 		places = null;
 		showAll();
@@ -35,6 +52,12 @@ public class PlaceBean implements Serializable {
 
 	public List<Place> showAll() {
 		places = PlaceService.retrievePlaces();
+		return places;
+
+	}
+	
+	public List<Place> searchPlaceName() {
+		places = PlaceService.searchPlaces(name);
 		return places;
 
 	}

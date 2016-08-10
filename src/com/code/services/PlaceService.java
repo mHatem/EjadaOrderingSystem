@@ -49,6 +49,20 @@ public class PlaceService implements Serializable {
 		session.close();
 		return places;
 	}
+	
+	public static List<Place> searchPlaces (String name){
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		Query query = session.getNamedQuery("Place.name");
+		query.setString(0,name );
+		List<Place> places = (List<Place>) query.list();
+
+		session.getTransaction().commit();
+		session.close();
+		return places;
+	}
 	public static void deletePlace(Place place){
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
