@@ -1,21 +1,23 @@
 package com.code.ui.user;
 
-import com.code.dal.orm.User;
-import com.code.services.SessionFactoryBean;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
+
+import com.code.dal.orm.User;
+import com.code.services.SessionFactoryBean;
 
 @ManagedBean
 @ViewScoped

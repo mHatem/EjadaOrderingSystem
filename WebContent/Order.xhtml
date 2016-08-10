@@ -54,12 +54,10 @@
 					<td><br></br></td>
 				</tr>
 				<tr class="form-group col-md-12" style="width: inherit;">
-					<td class="col-md-3" style="width: inherit;">
-						<h:commandButton value="Search" styleClass="btn btn-primary">
-						</h:commandButton>
-					</td>
-					<td class="col-md-3" style="width: inherit;">
-						<h:commandButton
+					<td class="col-md-3" style="width: inherit;"><h:commandButton
+							value="Search" styleClass="btn btn-primary">
+						</h:commandButton></td>
+					<td class="col-md-3" style="width: inherit;"><h:commandButton
 							value="Pre-Search" styleClass="btn btn-primary"></h:commandButton></td>
 					<td>
 						<button type="button" class="btn btn-primary " data-toggle="modal"
@@ -74,13 +72,15 @@
 									<div class="modal-body">
 										<h:outputLabel value="OrderName:" />
 										<h:inputText value="#{order.name}" />
-										<h:selectOneMenu value="#{order}">
-											<f:selectItems value="#{order.places}" />
+										<h:selectOneMenu value="#{order.selectedPlace}">
+											<f:selectItems value="#{place.places}" var="plac"
+												itemValue="#{plac.name}" />
 										</h:selectOneMenu>
 									</div>
 									<div class="modal-footer">
-										<h:commandLink type="button" class="btn btn-default"
-											data-dismiss="modal" action="#{order.add}">Save</h:commandLink>
+										<h:commandButton update="data" action="#{order.add}"
+											value="Save">
+										</h:commandButton>
 									</div>
 								</div>
 
@@ -98,7 +98,7 @@
 					<td>
 						<table>
 							<h:dataTable value="#{order.orders}" var="ord"
-								class="table table-bordered">
+								class="table table-bordered" id="data">
 								<h:column>
 									<f:facet name="header">ID</f:facet>    				
                 				#{ord.id}
@@ -119,11 +119,12 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">Edit</f:facet>
-									<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
+									<h:commandButton value="Edit" class="btn btn-primary"
+										></h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary"></h:commandButton>
+									<h:commandButton value="Delete" class="btn btn-primary" action="#{order.delete(ord.order)}"></h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Cancel</f:facet>
@@ -131,7 +132,6 @@
 								</h:column>
 							</h:dataTable>
 						</table>
-
 					</td>
 				</tr>
 
