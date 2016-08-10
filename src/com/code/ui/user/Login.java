@@ -2,6 +2,7 @@ package com.code.ui.user;
 
 import com.code.dal.orm.User;
 import com.code.services.SessionFactoryBean;
+import com.code.services.UserService;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -131,17 +132,10 @@ public class Login implements Serializable {
 		user.setName(name);
 		user.setPhoneNo(phoneNo);
 
-		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
-		Session session = null;
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(user);
-			session.getTransaction().commit();
-			session.close();
+			UserService.getSingleton().saveUser(user);
 		} catch (ConstraintViolationException e) {
-			if (session != null)
-				session.close();
+			e.printStackTrace();
 			return null;
 		} catch (HibernateException e) {
 			e.printStackTrace();
