@@ -74,13 +74,13 @@
 									<div class="modal-body">
 										<h:outputLabel value="OrderName:" />
 										<h:inputText value="#{order.name}" />
-										<h:selectOneMenu value="#{order}">
-											<f:selectItems value="#{order.places}" />
+										<h:selectOneMenu value="#{order.selectedPlace}" >
+											<f:selectItems value="#{place.places}" var="plac" itemValue="#{plac.name}" />
 										</h:selectOneMenu>
 									</div>
 									<div class="modal-footer">
-										<h:commandLink type="button" class="btn btn-default"
-											data-dismiss="modal" action="#{order.add}">Save</h:commandLink>
+										<h:commandButton action="#{order.add}" value="Save" >
+																</h:commandButton>		
 									</div>
 								</div>
 
