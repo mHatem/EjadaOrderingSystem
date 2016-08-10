@@ -9,11 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
@@ -32,14 +30,10 @@ public class Login implements Serializable {
 	private String passwordConfirm;
 	private String phoneNo;
 
-
-	private UIComponent usernameField;
-	private UIComponent passwordField;
+	private String invalidPasswordMessage;
 
 	private boolean loggedIn = false;
 	private boolean signingUp = false;
-
-	private Map<String, Object> sessionMap;
 
 	public final String SESSION_KEY_USER_ID = "user_id";
 	public final String SESSION_KEY_USER_ROLE = "user_role";
@@ -50,7 +44,7 @@ public class Login implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 
 		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
 			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
@@ -75,6 +69,9 @@ public class Login implements Serializable {
 	}
 
 	public String loginAction() {
+
+		invalidPasswordMessage = null;
+
 		if (password == null || password.length() == 0)
 			return null;
 
@@ -93,6 +90,8 @@ public class Login implements Serializable {
 			loggedIn = true;
 			User user = usersList.get(0);
 			String userRole = UserRole.NORMAL; //TODO get role from database
+
+			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			sessionMap.put(SESSION_KEY_USER_ID, user.getId());
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
 		}
@@ -100,13 +99,9 @@ public class Login implements Serializable {
 		session.getTransaction().commit();
 		session.close();
 
-		if (!loggedIn) {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			facesContext.addMessage(
-				passwordField.getClientId(facesContext),
-				new FacesMessage("Wrong password!")
-			);
-		}
+		if (!loggedIn)
+			invalidPasswordMessage = "Wrong password!";
+
 
 		password = null;
 		return null;
@@ -155,7 +150,9 @@ public class Login implements Serializable {
 	}
 
 	public String signout() {
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 		sessionMap.remove(SESSION_KEY_USER_ID);
+
 		loggedIn = false;
 		username = null;
 		return null;
@@ -179,6 +176,13 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
+	}
+
+	public static class UserRole {
+		public static final String NORMAL = "normal";
+		public static final String ADMIN = "admin";
+		public static final String ADMIN_PLACES = "admin_places";
+		public static final String ADMIN_ITEMS = "admin_items";
 	}
 
 	public SessionFactoryBean getSessionFactoryBean() {
@@ -229,20 +233,12 @@ public class Login implements Serializable {
 		this.phoneNo = phoneNo;
 	}
 
-	public UIComponent getUsernameField() {
-		return usernameField;
+	public String getInvalidPasswordMessage() {
+		return invalidPasswordMessage;
 	}
 
-	public void setUsernameField(UIComponent usernameField) {
-		this.usernameField = usernameField;
-	}
-
-	public UIComponent getPasswordField() {
-		return passwordField;
-	}
-
-	public void setPasswordField(UIComponent passwordField) {
-		this.passwordField = passwordField;
+	public void setInvalidPasswordMessage(String invalidPasswordMessage) {
+		this.invalidPasswordMessage = invalidPasswordMessage;
 	}
 
 	public boolean isLoggedIn() {
@@ -259,12 +255,5 @@ public class Login implements Serializable {
 
 	public void setSigningUp(boolean signingUp) {
 		this.signingUp = signingUp;
-	}
-
-	public static class UserRole {
-		public static final String NORMAL = "normal";
-		public static final String ADMIN = "admin";
-		public static final String ADMIN_PLACES = "admin_places";
-		public static final String ADMIN_ITEMS = "admin_items";
 	}
 }

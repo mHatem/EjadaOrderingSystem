@@ -5,7 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-	<title>#{login.pageTitle}</title>
+	<h:panelGroup id="pageTitle">
+		<title>#{login.pageTitle}</title>
+	</h:panelGroup>
 	<h:outputStylesheet library="css" name="bootstrap.css"/>
 </h:head>
 
@@ -28,6 +30,9 @@
 		</div>
 
 		<!--Header-->
+		<ui:remove>
+			<ui:decorate template="templates/sections/header.xhtml"/>
+		</ui:remove>
 		<h:panelGroup id="header">
 			<div class="col-lg-12">
 				<div class="text-left col-lg-8">
@@ -38,25 +43,17 @@
 					<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 						<p>
 							#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
-							<ui:remove>
-								<!--TODO-->
-								<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
-									<f:ajax render="@all"/>
-								</h:commandLink>
-							</ui:remove>
+							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
+								<f:ajax render="pageTitle login_form welcome welcome_message header_signout_form"/>
+							</h:commandLink>
 						</p>
 					</h:panelGroup>
 				</h:panelGroup>
 			</div>
 		</h:panelGroup>
 
-		<ui:remove>
-			<ui:decorate template="templates/sections/header.xhtml"/>
-		</ui:remove>
-
 		<!--Empty left side pane-->
 		<div class="col-lg-2">
-
 		</div>
 
 		<!--Login/Signup Section-->
@@ -64,7 +61,6 @@
 			<!--Login Form-->
 			<h:panelGroup id="login_form">
 				<h:panelGroup layout="block" rendered="#{not login.loggedIn and not login.signingUp}">
-
 					<h1>#{msgs.login}</h1>
 
 					<div class="col-lg-12">
@@ -73,7 +69,6 @@
 								<h:outputLabel for="username" value="#{msgs.username}:"/>
 								<h:inputText id="username"
 								             value="#{login.username}"
-								             binding="#{login.usernameField}"
 								             styleClass="form-control"
 								             required="true"
 								             requiredMessage="Username can't be blank!"/>
@@ -84,23 +79,23 @@
 								<h:outputLabel for="password" value="#{msgs.password}:"/>
 								<h:inputSecret id="password"
 								               value="#{login.password}"
-								               binding="#{login.passwordField}"
 								               styleClass="form-control"
 								               required="true"
 								               requiredMessage="Password can't be blank!"/>
 								<h:message for="password" styleClass="alert-warning"/>
+								<h:outputText styleClass="alert-warning">#{login.invalidPasswordMessage}</h:outputText>
 							</div>
 						</div>
 						<div class="col-lg-12 form-group center-block">
 							<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
 							               styleClass="btn btn-primary btn-sm ">
 								<f:ajax execute="login_form"
-								        render="dbg login_form signup_form welcome header_signout_form welcome_message"/>
+								        render="dbg login_form signup_form welcome header_signout_form welcome_message pageTitle"/>
 							</h:commandLink>
 							<h:commandLink value="#{msgs.not_a_user_signup}"
 							               action="#{login.signupButton}"
 							               styleClass="btn btn-sm ">
-								<f:ajax execute="" render="dbg login_form signup_form"/>
+								<f:ajax render="dbg login_form signup_form welcome header_signout_form welcome_message pageTitle"/>
 							</h:commandLink>
 						</div>
 					</div>
@@ -163,12 +158,12 @@
 							               action="#{login.signupAction}"
 							               styleClass="btn btn-primary btn-sm ">
 								<f:ajax execute="signup_form"
-								        render="dbg login_form signup_form"/>
+								        render="dbg login_form signup_form pageTitle"/>
 							</h:commandLink>
 							<h:commandLink value="#{msgs.login}"
 							               action="#{login.loginButton}"
 							               styleClass="btn btn-sm ">
-								<f:ajax render="dbg login_form signup_form"/>
+								<f:ajax render="dbg login_form signup_form pageTitle"/>
 							</h:commandLink>
 						</div>
 					</div>
