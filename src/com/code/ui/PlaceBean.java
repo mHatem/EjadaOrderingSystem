@@ -2,7 +2,7 @@ package com.code.ui;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -10,8 +10,8 @@ import javax.faces.context.FacesContext;
 
 import com.code.dal.orm.Place;
 import com.code.services.PlaceService;
-import com.code.services.UserService;
-import com.code.ui.user.Login;
+//import com.code.services.UserService;
+//import com.code.ui.user.Login;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "place")
@@ -21,9 +21,15 @@ public class PlaceBean implements Serializable {
 	private String name;
 	private String phoneNo;
 	private List<Place> places;
-	private String userName;
+	//private String userName;
 	
-	///////////////////////////////////////////////////////// edit 
+	public PlaceBean() {
+		
+		places = null;
+		showAll();
+	}
+
+	// edit 
 	public void editPlace(Place place) {
 		place.setSelected(true);
 	}
@@ -34,12 +40,7 @@ public class PlaceBean implements Serializable {
 	}
 	//////////////////////////////////////////////////////////////////
 	
-	public PlaceBean() {
-		
-		places = null;
-		showAll();
-	}
-
+	
 	public String addPlace() {
 		Place insertedPlace = new Place();
 		insertedPlace.setName(name);
@@ -59,9 +60,16 @@ public class PlaceBean implements Serializable {
 	
 	public List<Place> searchPlaceName() {
 		places = PlaceService.searchPlaces(name);
+		name = null;
+		phoneNo = null;
 		return places;
 	}
-
+	public List<Place> searchPlace() {
+			places = PlaceService.searchPlaceNPh(name, phoneNo);
+			return places;
+			}
+		
+	
 	public void deletePlace(Place deletedPlace) {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
@@ -72,9 +80,8 @@ public class PlaceBean implements Serializable {
 	{	
 		Long placeId=place.getId();
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
-		return "Items";
+		return "Items?faces-redirct=true";
 	}
-	
 	
 	public String getName() {
 		return name;
@@ -99,7 +106,7 @@ public class PlaceBean implements Serializable {
 	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
-
+	/*
 	public String getUserName() {
 		Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 		Long userId=(Long) sessionMap.get(Login.SESSION_KEY_USER_ID);
@@ -109,5 +116,5 @@ public class PlaceBean implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
+	}*/
 }

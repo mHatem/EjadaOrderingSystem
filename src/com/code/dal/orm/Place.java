@@ -16,8 +16,10 @@ import javax.persistence.Transient;
 @SuppressWarnings("serial")
 @NamedQueries({
 		@NamedQuery ( name = "Place_all", query = "SELECT p FROM Place p"  ),
-		@NamedQuery ( name = "place.name",query="from Place where name = ? ")
-		})
+		@NamedQuery ( name = "Place.name",query="from Place where name = ? ")
+		//@NamedQuery (name = "place",
+			//	query="SELECT p FROM Place p WHERE p.name = :name or :name is null AND (p.phoneNo = :phoneNo OR :phoneNo IS NULL")
+			})
 
 @Entity
 @Table (name = "PLACES")
