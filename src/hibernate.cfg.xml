@@ -50,7 +50,6 @@
 		<mapping class="com.code.dal.orm.User"/>
 		<mapping class="com.code.dal.orm.OrderView"/>
 		<mapping class="com.code.dal.orm.UserRole"/>
-		<mapping class="com.code.dal.orm.OrderItemView" />
 
 	</session-factory>
 
