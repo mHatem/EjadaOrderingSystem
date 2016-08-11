@@ -41,21 +41,6 @@ public class OrderView {
 	private Order order;
 	private boolean editable;
 
-	@Transient
-	public static void edit(OrderView o)
-	{
-		o.setEditable(!(o.isEditable()));
-	}
-	
-	@Transient
-	public boolean isEditable() {
-		return editable;
-	}
-
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-
 	public OrderView() {
 		order = new Order();
 	}
@@ -64,14 +49,6 @@ public class OrderView {
 	@Column(name = "ID")
 	public Long getId() {
 		return id;
-	}
-@Transient
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
 	}
 
 	public void setId(Long id) {
@@ -106,6 +83,7 @@ public class OrderView {
 
 	public void setName(String name) {
 		this.name = name;
+		this.order.setName(name);
 	}
 
 	@Column(name = "OWNER_NAME")
@@ -144,5 +122,29 @@ public class OrderView {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 		this.order.setDate(orderDate);
+	}
+	
+	@Transient
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	@Transient
+	public static void edit(OrderView o)
+	{
+		o.setEditable(!(o.isEditable()));
+	}
+	
+	@Transient
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

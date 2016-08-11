@@ -16,7 +16,7 @@
 		<div class="page-header">
 			<h3 style="text-align: left">Order page</h3>
 		</div>
-		<h:form role="form" class="form-group">
+		<h:form id="formId" role="form" class="form-group">
 			<table class=" col-md-12" border="0" cellpadding="0" cellspacing="0"
 				width="100%">
 				<tr class="form-group col-md-12" style="width: inherit;"
@@ -56,10 +56,9 @@
 
 							<f:ajax execute="Owner  pName status num" render="data"></f:ajax>
 						</h:commandButton></td>
-					<td class="col-md-3" style="width: inherit;"><h:commandButton
-							value="Pre-Search" styleClass="btn btn-primary"
-							action="#{order.displayAllOrders()}">
-							<f:ajax render="data">
+					<td class="col-md-3" style="width: inherit;"
+					><h:commandButton value="Pre-Search" styleClass="btn btn-primary" action="#{order.displayAllOrders()}">
+							<f:ajax render="@form">
 							</f:ajax>
 						</h:commandButton></td>
 					<td>
@@ -109,20 +108,34 @@
 								</h:column>
 								<h:column style="margin:25px">
 
+									<f:facet name="header">OrderName</f:facet>
+									<h:outputText value="#{ord.name}" rendered="#{not ord.editable}" />
+									<h:inputText value="#{ord.name}" rendered="#{ord.editable}" />
+								</h:column>
+								<h:column style="margin:25px">
+
 									<f:facet name="header">OwnerName</f:facet>
 									<h:outputText value="#{ord.ownerName}"
 										rendered="#{not ord.editable}" />
-									<h:inputText value="#{order.ownerName}"
+									<h:inputText value="#{ord.ownerName}"
 										rendered="#{ord.editable}" />
 								</h:column>
 								<h:column>
 									<f:facet name="header">Place</f:facet>
-									<h:outputText value="#{ord.placeName}"
-										rendered="#{not ord.editable}" />
-									<h:inputText value="#{order.selectedPlace}"
-										rendered="#{ord.editable}" />
-
+									<h:outputText value="#{ord.placeName}" rendered="#{not ord.editable}" />
+									<h:selectOneMenu value="#{ord.placeId}" rendered="#{ord.editable}">
+										<f:selectItems value="#{place.places}" var="plac" itemValue="#{plac.id}" itemLabel="#{plac.name}" id="placeNAME" />
+										</h:selectOneMenu>
 								</h:column>
+								<h:column style="margin:25px">
+
+									<f:facet name="header">Status</f:facet>
+									<h:outputText value="#{ord.status}"
+										rendered="#{not ord.editable}" />
+									<h:inputText value="#{ord.order.status}"
+										rendered="#{ord.editable}" />
+								</h:column>
+								
 								<h:column>
 									<f:facet name="header">Add</f:facet>
 									<h:commandButton value="Add Items" class="btn btn-primary">
@@ -141,16 +154,23 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary"
-										action="#{order.delete(ord.order)}">
+									<h:commandButton value="Delete" class="btn btn-primary" action="#{order.delete(ord.order)}">
+										<f:ajax execute="data" render="data formId:errorMsgId"></f:ajax>
 									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Cancel</f:facet>
-									<h:commandButton value="Cancel" class="btn btn-primary"></h:commandButton>
+									<h:commandButton value="Cancel" class="btn btn-primary" action="#{order.cancel(ord.order)}" rendered="#{ord.status == order.openedEnum}">
+										<f:ajax execute="data" render="data "></f:ajax>
+									</h:commandButton>
 								</h:column>
 							</h:dataTable>
 						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h:outputText value="#{order.errorMsg}" id="errorMsgId"/>
 					</td>
 				</tr>
 

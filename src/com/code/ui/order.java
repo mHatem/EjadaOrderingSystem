@@ -36,12 +36,16 @@ public class order implements Serializable {
 	private String SPName;
 	private String SNAme;
 	private Long SID;
+	private String errorMsg;
 
-	public void edit(OrderView o)
-	{
-     OrderView.edit(o);
+	public order() {
+		displayAllOrders();
 	}
-	
+
+	public void edit(OrderView o) {
+		OrderView.edit(o);
+	}
+
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
 		for (Place p : bean.getPlaces()) {
@@ -53,11 +57,15 @@ public class order implements Serializable {
 	}
 
 	public void search() {
-		setOrders(orderService.find(SUName, SPName,SNAme,SID,null,null));
+		setOrders(orderService.find(SUName, SPName, SNAme, SID, null, null));
 
 	}
 
 	public void displayAllOrders() {
+		SUName = null;
+		SPName = null;
+		SNAme = null;
+		SID = null;
 		setOrders(orderService.getALL());
 	}
 
@@ -71,34 +79,33 @@ public class order implements Serializable {
 		order.setOwnerID((Long) sessionMap.get(Login.SESSION_KEY_USER_ID));
 		order.setDate(dat);
 		orderService.insert(order);
+		displayAllOrders();
 
 	}
-	
-	public void save(OrderView Toupdate)
-	{
-		Order order = new Order();
-		order.setDate(Toupdate.getOrderDate());
-		order.setId(Toupdate.getId());
-		order.setName(Toupdate.getName());
-		order.setOwnerID(Toupdate.getOwnerId());
-		order.setPlaceID(extractPlaceID(selectedPlace));
-	  	order.setStatus(Toupdate.getStatus());
-		orderService.update(order);
-	     OrderView.edit(Toupdate);
 
-  	}
+	public void cancel(Order ToCancel) {
+		ToCancel.setStatus(OrderStatusEnum.CANCELED.getCode());
+		orderService.update(ToCancel);
+		displayAllOrders();
+	}
+
+	public void save(OrderView Toupdate) {
+
+		orderService.update(Toupdate.getOrder());
+		OrderView.edit(Toupdate);
+		displayAllOrders();
+
+	}
 
 	public void delete(Order r) {
-		orderService.delete(r);
-		displayAllOrders();
-
+		try {
+			errorMsg="";
+			orderService.delete(r);
+			orders.remove(r);
+		} catch (Exception e) {
+			errorMsg="cant delete this order it has open items";
+		}
 	}
-
-	public order() {
-		displayAllOrders();
-	}
-
-	
 
 	public String getSNAme() {
 		return SNAme;
@@ -115,7 +122,6 @@ public class order implements Serializable {
 	public void setSID(Long sID) {
 		SID = sID;
 	}
-
 
 	public String getSelectedPlace() {
 		return selectedPlace;
@@ -156,6 +162,7 @@ public class order implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getOwnerName() {
 		return ownerName;
 	}
@@ -212,4 +219,11 @@ public class order implements Serializable {
 		SPName = sPName;
 	}
 
+	public String getOpenedEnum() {
+		return OrderStatusEnum.OPENED.getCode();
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
 }
