@@ -53,7 +53,7 @@ public class order implements Serializable {
 	}
 
 	public void search() {
-		setOrders(orderService.find(SUName, SPName,SNAme,SID,null));
+		setOrders(orderService.find(SUName, SPName,SNAme,SID,null,null));
 
 	}
 

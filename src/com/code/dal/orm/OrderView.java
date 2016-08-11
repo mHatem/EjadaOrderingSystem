@@ -22,6 +22,8 @@ import com.code.ui.order;
 		+ "AND (:status = '-1' or o.status = :status )"
 		+"AND ( :id  = -1 or o.id = :id )"
 		+"AND ( :placeId = -1 or o.placeId = :placeId)"
+		+"AND ( :ownerId = -1 or o.ownerId = :ownerId)"
+
 		)
 
 })
