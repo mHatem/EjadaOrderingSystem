@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.code.OrderStatusEnum;
+
 @Entity
 @Table(name = "ORDERS")
 public class Order {
@@ -18,7 +20,7 @@ public class Order {
 	private String status;
 	private Long placeID;
 	private Date date;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "ORDERS_SEQUENCE", allocationSize = 1)

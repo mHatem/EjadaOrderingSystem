@@ -5,13 +5,19 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "VW_ORDER")
-@NamedQuery(name = "Order.all", query = "FROM OrderView ")
+
+@NamedQueries({
+@NamedQuery(name = "Order.all", query = "FROM OrderView "),
+@NamedQuery(name = "search", query = "FROM OrderView  WHERE (ownerName=? OR ownerName IS NULL) AND (placeName =? OR placeName IS NULL)")
+
+})
 public class OrderView {
 	private Long id;
 	private Long ownerId;

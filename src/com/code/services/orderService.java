@@ -41,5 +41,17 @@ public class orderService {
 		session.getTransaction().commit();
 		
 	}
+	
+	public static List<OrderView> find(String userNAME , String placeNAME)
+	{
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query query = session.getNamedQuery("search");
+		query.setString(0,userNAME);
+		query.setString(1,placeNAME);
+		List<OrderView> orders = (List<OrderView>) query.list();
+		return orders;
+	}
 
 }
