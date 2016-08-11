@@ -54,7 +54,7 @@ public class Login implements Serializable {
 		Long userId = getUserIdFromSessionMap();
 		if (userId != null) {
 			User user = UserService.getSingleton().getUserById(userId);
-			updateLoginStatus(user);
+			updateLoggedUser(user);
 
 			updateListsAndTables();
 		}
@@ -67,7 +67,7 @@ public class Login implements Serializable {
 			return null;
 
 		User user = UserService.getSingleton().authenticateUser(username, password);
-		updateLoginStatus(user);
+		updateLoggedUser(user);
 
 		if (user != null) {
 			updateListsAndTables();
@@ -84,7 +84,7 @@ public class Login implements Serializable {
 			return null;
 
 		User user = new User();
-		user.setUsername(username);
+		user.setUsername(username.toLowerCase());
 		user.setPassword(password);
 		user.setName(name);
 		user.setPhoneNo(phoneNo);
@@ -107,11 +107,9 @@ public class Login implements Serializable {
 	}
 
 	public String signoutAction() {
-		clearAllFieldsErrorMessages();
-		resetFilters();
+		updateLoggedUser(null);
 
-		updateLoginStatus(null);
-
+		resetAll();
 		return null;
 	}
 
@@ -131,7 +129,7 @@ public class Login implements Serializable {
 
 		try {
 			User user = UserService.getSingleton().getUserById(userId);
-			user.setUsername(username);
+			user.setUsername(username.toLowerCase());
 			if (password != null)
 				user.setPassword(password);
 			user.setName(name);
@@ -139,7 +137,7 @@ public class Login implements Serializable {
 
 			UserService.getSingleton().updateUser(user);
 
-			updateLoginStatus(user);
+			updateLoggedUser(user);
 		} catch (ConstraintViolationException e) {
 			if (e.getConstraintName().equals(UserService.UNIQUE_USERNAME_CONSTRAINT_NAME)) {
 				usernameFieldMessage = "Username already taken";
@@ -219,7 +217,7 @@ public class Login implements Serializable {
 		orders = updateOrders();
 	}
 
-	private void updateLoginStatus(User user) {
+	private void updateLoggedUser(User user) {
 		loggedUser = user;
 
 		Long userId = loggedUser != null ? loggedUser.getId() : null;
@@ -299,6 +297,24 @@ public class Login implements Serializable {
 
 	public boolean isLoggedIn() {
 		return loggedUser != null && getUserIdFromSessionMap() != null;
+	}
+
+
+	private void resetAll() {
+		editing = false;
+		signingUp = false;
+		admin = false;
+		clearAllFieldsErrorMessages();
+		resetFilters();
+		resetDataFields();
+	}
+
+	private void resetDataFields() {
+		username = null;
+		password = null;
+		name = null;
+		passwordConfirm = null;
+		phoneNo = null;
 	}
 
 
