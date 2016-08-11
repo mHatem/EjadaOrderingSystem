@@ -1,8 +1,11 @@
 package com.code.ui.user;
 
+import com.code.dal.orm.OrderView;
+import com.code.dal.orm.Place;
 import com.code.dal.orm.User;
-import com.code.dal.orm.UserRole;
+import com.code.services.PlaceService;
 import com.code.services.UserService;
+import com.code.services.orderService;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -11,6 +14,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @ManagedBean
@@ -37,6 +42,9 @@ public class Login implements Serializable {
 	public static final String SESSION_KEY_USER_ID = "user_id";
 	public static final String SESSION_KEY_USER_ROLE = "user_role";
 
+	private Collection<Place> places;
+	private Long selectedPlaceId;
+
 	public Login() {
 	}
 
@@ -52,6 +60,8 @@ public class Login implements Serializable {
 				updateViewLoginData(user);
 
 		}
+
+		places = PlaceService.retrievePlaces();
 	}
 
 	private void updateViewLoginData(User user) {
@@ -229,7 +239,11 @@ public class Login implements Serializable {
 		invalidPasswordMessage = null;
 		unmatchedPasswordMessage = null;
 	}
-	
+
+	public List<OrderView> getOrders() {
+		return orderService.getALL();
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -332,5 +346,21 @@ public class Login implements Serializable {
 
 	public void setLoggedUsername(String loggedUsername) {
 		this.loggedUsername = loggedUsername;
+	}
+
+	public Collection<Place> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(Collection<Place> places) {
+		this.places = places;
+	}
+
+	public Long getSelectedPlaceId() {
+		return selectedPlaceId;
+	}
+
+	public void setSelectedPlaceId(Long selectedPlaceId) {
+		this.selectedPlaceId = selectedPlaceId;
 	}
 }

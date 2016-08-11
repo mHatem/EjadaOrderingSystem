@@ -28,7 +28,7 @@
 						<p>
 							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
 							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
-								<f:ajax render="pageTitle login_form welcome welcome_message header_signout_form"/>
+								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form"/>
 							</h:commandLink>
 						</p>
 					</h:panelGroup>
@@ -40,6 +40,7 @@
 		<div class="col-lg-2">
 		</div>
 
+		<!--Content-->
 		<div class="col-lg-10">
 			<h:panelGroup id="content">
 				<!--Login/Signup Section-->
@@ -75,12 +76,12 @@
 									<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
 									               styleClass="btn btn-primary btn-sm ">
 										<f:ajax execute="login_form"
-										        render="login_form signup_form welcome header_signout_form welcome_message pageTitle"/>
+										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.not_a_user_signup}"
 									               action="#{login.signupButton}"
 									               styleClass="btn btn-sm ">
-										<f:ajax render="login_form signup_form welcome header_signout_form welcome_message pageTitle"/>
+										<f:ajax render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
 									</h:commandLink>
 								</div>
 							</div>
@@ -165,93 +166,163 @@
 					</h:panelGroup>
 				</div>
 
-				<!--Welcome User-->
-				<h:panelGroup id="welcome_message">
+				<!--Loggged in content-->
+				<h:panelGroup id="logged_in_content">
 					<h:panelGroup rendered="#{login.loggedIn}">
+						<!--Welcome/Edit panel-->
 						<div class="col-lg-12">
 							<h2>Welcome, #{login.loggedUserName}! | <h:commandLink value="#{msgs.edit_profile}"
 							                                                       action="#{login.editButton}"
 							                                                       disabled="#{login.editing}">
-								<f:ajax render="welcome_message edit_form"/>
+								<f:ajax render="logged_in_content edit_form"/>
 							</h:commandLink>
 							</h2>
 						</div>
-					</h:panelGroup>
-				</h:panelGroup>
 
-				<!--Edit Form-->
-				<h:panelGroup id="edit_form">
-					<h:panelGroup layout="block" rendered="#{login.loggedIn and login.editing}">
-						<div class="col-lg-12">
-							<h1>#{msgs.edit}</h1>
+						<!--Edit Form-->
+						<h:panelGroup id="edit_form">
+							<h:panelGroup layout="block" rendered="#{login.loggedIn and login.editing}">
+								<div class="col-lg-12">
+									<h1>#{msgs.edit}</h1>
+									<div>
+										<div class="form-group">
+											<h:outputLabel for="edit_username" value="#{msgs.username}:"/>
+											<h:inputText id="edit_username"
+											             value="#{login.username}"
+											             styleClass="form-control"
+											             required="true"
+											             requiredMessage="Required"/>
+											<h:message for="edit_username" styleClass="alert-warning"/>
+											<h:outputText value="#{login.usernameFieldMessage}" styleClass="alert-warning"/>
+										</div>
+										<div class="form-group">
+											<h:outputLabel for="edit_password" value="#{msgs.password}:"/>
+											<h:inputSecret id="edit_password"
+											               value="#{login.password}"
+											               styleClass="form-control"/>
+											<h:message for="edit_password" styleClass="alert-warning"/>
+										</div>
+										<div class="form-group">
+											<h:outputLabel for="edit_passwordConfirm" value="#{msgs.confirm_password}:"/>
+											<h:inputSecret id="edit_passwordConfirm"
+											               value="#{login.passwordConfirm}"
+											               styleClass="form-control">
+												<f:attribute name="passwordFieldId"
+												             value="#{component.parent.parent.parent.parent.clientId}:edit_password"/>
+												<f:validator validatorId="passwordValidator"/>
+											</h:inputSecret>
+											<h:message for="edit_passwordConfirm" value="Required" styleClass="alert-warning"/>
+											<h:outputText value="#{login.unmatchedPasswordMessage}" styleClass="alert-warning"/>
+										</div>
+										<div class="form-group">
+											<h:outputLabel for="edit_name" value="#{msgs.name}:"/>
+											<h:inputText id="edit_name"
+											             value="#{login.name}"
+											             styleClass="form-control"/>
+										</div>
+										<div class="form-group">
+											<h:outputLabel for="edit_phone_no" value="#{msgs.phone_no}:"/>
+											<h:inputText id="edit_phone_no"
+											             value="#{login.phoneNo}"
+											             styleClass="form-control"/>
+										</div>
+									</div>
+									<div class="col-lg-12 form-group center-block">
+										<h:commandLink value="#{msgs.save}"
+										               action="#{login.updateAction}"
+										               styleClass="btn btn-primary btn-sm ">
+											<f:ajax execute="edit_form"
+											        render="edit_form logged_in_content header_signout_form"/>
+										</h:commandLink>
+										<h:commandLink value="#{msgs.cancel}"
+										               action="#{login.editCancelButton}"
+										               styleClass="btn btn-sm ">
+											<f:ajax render="edit_form logged_in_content"/>
+										</h:commandLink>
+									</div>
+								</div>
+							</h:panelGroup>
+						</h:panelGroup>
+
+						<!--Search filter controls-->
+						<h:panelGroup id="filter_orders_form">
 							<div>
-								<div class="form-group">
-									<h:outputLabel for="edit_username" value="#{msgs.username}:"/>
-									<h:inputText id="edit_username"
-									             value="#{login.username}"
-									             styleClass="form-control"
-									             required="true"
-									             requiredMessage="Required"/>
-									<h:message for="edit_username" styleClass="alert-warning"/>
-									<h:outputText value="#{login.usernameFieldMessage}" styleClass="alert-warning"/>
+								<div class="col-lg-12">
+									<div class="form-group col-lg-4">
+										<h:outputLabel for="place_combobox" value="Place:"/>
+										<h:selectOneMenu id="place_combobox"
+										                 value="#{login.selectedPlaceId}"
+										                 styleClass="form-control dropdown">
+											<f:selectItems value="#{login.places}"
+											               var="place"
+											               itemLabel="#{place.name}"
+											               itemValue="#{place.id}"/>
+										</h:selectOneMenu>
+
+										<!--TODO-->
+										<h:outputLabel for="item_combobox" value="Item:"/>
+										<h:selectOneMenu id="item_combobox"
+										                 value="{login.selectedItemId}"
+										                 styleClass="form-control dropdown">
+											<f:selectItems value="{login.items}"
+											               var="item"
+											               itemLabel="#{item.name}"
+											               itemValue="#{item.id}"/>
+										</h:selectOneMenu>
+									</div>
 								</div>
-								<div class="form-group">
-									<h:outputLabel for="edit_password" value="#{msgs.password}:"/>
-									<h:inputSecret id="edit_password"
-									               value="#{login.password}"
-									               styleClass="form-control"/>
-									<h:message for="edit_password" styleClass="alert-warning"/>
-								</div>
-								<div class="form-group">
-									<h:outputLabel for="edit_passwordConfirm" value="#{msgs.confirm_password}:"/>
-									<h:inputSecret id="edit_passwordConfirm"
-									               value="#{login.passwordConfirm}"
-									               styleClass="form-control">
-										<f:attribute name="passwordFieldId"
-										             value="#{component.parent.parent.parent.parent.clientId}:edit_password"/>
-										<f:validator validatorId="passwordValidator"/>
-									</h:inputSecret>
-									<h:message for="edit_passwordConfirm" value="Required" styleClass="alert-warning"/>
-									<h:outputText value="#{login.unmatchedPasswordMessage}" styleClass="alert-warning"/>
-								</div>
-								<div class="form-group">
-									<h:outputLabel for="edit_name" value="#{msgs.name}:"/>
-									<h:inputText id="edit_name"
-									             value="#{login.name}"
-									             styleClass="form-control"/>
-								</div>
-								<div class="form-group">
-									<h:outputLabel for="edit_phone_no" value="#{msgs.phone_no}:"/>
-									<h:inputText id="edit_phone_no"
-									             value="#{login.phoneNo}"
-									             styleClass="form-control"/>
+								<div class="form-group col-lg-12">
+									<!--TODO-->
+									<h:commandLink styleClass="btn btn-primary"
+									               value="Filter"
+									               action="#{login.filterAction}">
+										<f:ajax execute="filter_orders_form" render="orders_table"/>
+									</h:commandLink>
+									<!--TODO-->
+									<h:commandLink styleClass="btn"
+									               value="Reset"
+									               action="#{login.resetFilterAction}">
+										<f:ajax execute="filter_orders_form" render="orders_table"/>
+									</h:commandLink>
 								</div>
 							</div>
-							<div class="col-lg-12 form-group center-block">
-								<h:commandLink value="#{msgs.save}"
-								               action="#{login.updateAction}"
-								               styleClass="btn btn-primary btn-sm ">
-									<f:ajax execute="edit_form"
-									        render="edit_form welcome_message header_signout_form"/>
-								</h:commandLink>
-								<h:commandLink value="#{msgs.cancel}"
-								               action="#{login.editCancelButton}"
-								               styleClass="btn btn-sm ">
-									<f:ajax render="edit_form welcome_message"/>
-								</h:commandLink>
-							</div>
-						</div>
+						</h:panelGroup>
+
+						<!--Orders Table-->
+						<!--TODO-->
+						<h:panelGroup id="orders_table">
+							<h:dataTable value="#{login.orders}" var="order"
+							             styleClass="table table-bordered">
+								<h:column>
+									<f:facet name="header">ID</f:facet>
+									#{order.id}
+								</h:column>
+								<h:column>
+									<f:facet name="header">Status</f:facet>
+									#{order.status}
+								</h:column>
+								<h:column>
+									<f:facet name="header">Owner</f:facet>
+									#{order.ownerName}
+								</h:column>
+								<h:column>
+									<f:facet name="header">Place</f:facet>
+									#{order.placeName}
+								</h:column>
+								<h:column>
+									<f:facet name="header">Delete</f:facet>
+									<h:commandButton value="Delete" class="btn btn-primary"
+									                 action="{order.delete(order.order)}"/>
+								</h:column>
+							</h:dataTable>
+						</h:panelGroup>
+
+						<!--Items Table-->
+						<!--TODO-->
+
 					</h:panelGroup>
 				</h:panelGroup>
 
-				<!--Search filter controls-->
-				<!--TODO-->
-
-				<!--Orders Table-->
-				<!--TODO-->
-
-				<!--Items Table-->
-				<!--TODO-->
 			</h:panelGroup>
 		</div>
 
