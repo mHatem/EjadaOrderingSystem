@@ -27,7 +27,7 @@
 					<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 						<p>
 							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
-							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
+							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}">
 								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
 						</p>

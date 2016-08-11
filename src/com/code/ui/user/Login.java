@@ -19,9 +19,11 @@ import java.util.Map;
 @ManagedBean
 @ViewScoped
 public class Login implements Serializable {
+	public static final String SESSION_KEY_USER_ID = "user_id";
+	public static final String SESSION_KEY_USER_ROLE = "user_role";
+
 	private String username;
 	private String password;
-
 	private String name;
 	private String passwordConfirm;
 	private String phoneNo;
@@ -38,13 +40,9 @@ public class Login implements Serializable {
 	private boolean signingUp = false;
 	private boolean editing = false;
 
-	public static final String SESSION_KEY_USER_ID = "user_id";
-	public static final String SESSION_KEY_USER_ROLE = "user_role";
-
 	private Collection<Place> places;
-	private Long selectedPlaceId;
-
 	private Collection<PlacesItem> placeItems;
+	private Long selectedPlaceId;
 	private Long selectedPlaceItemId;
 
 	private Collection<OrderView> orders;
@@ -56,10 +54,9 @@ public class Login implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Long userId = getUserIdFromSessionMap();
 
-		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
-			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
+		if (userId != null) {
 			User user = UserService.getSingleton().getUserById(userId);
 
 			if (user != null) {
@@ -69,20 +66,6 @@ public class Login implements Serializable {
 
 			updateListsAndTables();
 		}
-	}
-
-	private void updateListsAndTables() {
-		places = PlaceService.retrievePlaces();
-		placeItems = new ArrayList<PlacesItem>();
-
-		orders = updateOrders();
-	}
-
-	private void updateViewLoginData(User user) {
-		loggedIn = true;
-		loggedUserId = user.getId();
-		loggedUserName = user.getName();
-		loggedUsername = user.getUsername();
 	}
 
 	public String loginAction() {
@@ -101,9 +84,8 @@ public class Login implements Serializable {
 			Long userId = user.getId();
 			String userRole = UserService.getSingleton().getUserRole(userId);
 
-			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-			sessionMap.put(SESSION_KEY_USER_ID, userId);
-			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
+			putUserIdIntoSessionMap(userId);
+			putUserRoleIntoSessionMap(userRole);
 
 			checkAdmin();
 			updateListsAndTables();
@@ -111,30 +93,6 @@ public class Login implements Serializable {
 			invalidPasswordMessage = "Wrong password!";
 		}
 
-		password = null;
-		return null;
-	}
-
-	private void checkAdmin() {
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		if (sessionMap.containsKey(SESSION_KEY_USER_ROLE)) {
-			String userRole = (String) sessionMap.get(SESSION_KEY_USER_ROLE);
-			if (userRole.equals(UserRole.ADMIN)) {
-				admin = true;
-			} else {
-				admin = false;
-			}
-		}
-	}
-
-	public String signupButton() {
-		signingUp = true;
-		password = null;
-		return null;
-	}
-
-	public String loginButton() {
-		signingUp = false;
 		password = null;
 		return null;
 	}
@@ -166,6 +124,18 @@ public class Login implements Serializable {
 		return null;
 	}
 
+	public String signoutAction() {
+		putUserIdIntoSessionMap(null);
+		putUserRoleIntoSessionMap(null);
+
+		clearAllFieldsErrorMessages();
+		resetFilters();
+
+		loggedIn = false;
+		username = null;
+		return null;
+	}
+
 	public String updateAction() {
 		clearAllFieldsErrorMessages();
 
@@ -178,8 +148,7 @@ public class Login implements Serializable {
 			return null;
 		}
 
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
+		Long userId = getUserIdFromSessionMap();
 
 		try {
 			User user = UserService.getSingleton().getUserById(userId);
@@ -207,26 +176,47 @@ public class Login implements Serializable {
 		return null;
 	}
 
-	public String signout() {
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		if (sessionMap.containsKey(SESSION_KEY_USER_ID))
-			sessionMap.remove(SESSION_KEY_USER_ID);
-		if (sessionMap.containsKey(SESSION_KEY_USER_ROLE))
-			sessionMap.remove(SESSION_KEY_USER_ROLE);
+	public void filterAction() {
+		orders = updateOrders();
+	}
 
-		loggedIn = false;
-		username = null;
+	public String resetFilterAction() {
+		resetFilters();
+		return null;
+	}
+
+	private void resetFilters() {
+		selectedPlaceId = null;
+		selectedPlaceItemId = null;
+	}
+
+	private void checkAdmin() {
+		String userRole = getUserRoleFromSessionMap();
+		if (userRole != null && userRole.equals(UserRole.ADMIN)) {
+			admin = true;
+		} else {
+			admin = false;
+		}
+	}
+
+
+	public String loginButton() {
+		signingUp = false;
+		password = null;
+		return null;
+	}
+
+	public String signupButton() {
+		signingUp = true;
+		password = null;
 		return null;
 	}
 
 	public String editButton() {
 		editing = true;
 
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-
-		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
-			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
-
+		Long userId = getUserIdFromSessionMap();
+		if (userId != null) {
 			User user = UserService.getSingleton().getUserById(userId);
 			if (user != null) {
 				username = user.getUsername();
@@ -245,6 +235,26 @@ public class Login implements Serializable {
 	public String editCancelButton() {
 		editing = false;
 		return null;
+	}
+
+	private void clearAllFieldsErrorMessages() {
+		usernameFieldMessage = null;
+		invalidPasswordMessage = null;
+		unmatchedPasswordMessage = null;
+	}
+
+	private void updateListsAndTables() {
+		places = PlaceService.retrievePlaces();
+		placeItems = new ArrayList<PlacesItem>(); //TODO
+
+		orders = updateOrders();
+	}
+
+	private void updateViewLoginData(User user) {
+		loggedIn = true;
+		loggedUserId = user.getId();
+		loggedUserName = user.getName();
+		loggedUsername = user.getUsername();
 	}
 
 	public String getPageTitle() {
@@ -271,33 +281,48 @@ public class Login implements Serializable {
 		return new ArrayList<OrderItem>(); //TODO
 	}
 
-	private void clearAllFieldsErrorMessages() {
-		usernameFieldMessage = null;
-		invalidPasswordMessage = null;
-		unmatchedPasswordMessage = null;
-	}
-
-	public void filterAction() {
-		orders = updateOrders();
-	}
-
 	private Collection<OrderView> updateOrders() {
 		Collection<OrderView> orderViews;
-		Long userId = loggedUserId;
+		Long userId = getUserIdFromSessionMap();
+		String userRole = getUserRoleFromSessionMap();
 		// Don't filter by user id if admin is logged in
-		if (UserService.getSingleton().getUserRole(loggedUserId).equals(UserRole.ADMIN))
+		if (userRole.equals(UserRole.ADMIN))
 			userId = null;
 
 		orderViews = orderService.find(null, null, null, null, selectedPlaceId, userId);
 		return orderViews;
 	}
 
-	public String resetFilterAction() {
-		selectedPlaceId = null;
-		selectedPlaceItemId = null;
+	private Map<String, Object> getSessionMap() {
+		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+	}
+
+	private void putUserIdIntoSessionMap(Long userId) {
+		getSessionMap().put(SESSION_KEY_USER_ID, userId);
+	}
+
+	private Long getUserIdFromSessionMap() {
+		Map<String, Object> sessionMap = getSessionMap();
+
+		if (sessionMap.containsKey(SESSION_KEY_USER_ID))
+			return (Long) sessionMap.get(SESSION_KEY_USER_ID);
 
 		return null;
 	}
+
+	private void putUserRoleIntoSessionMap(String userRole) {
+		getSessionMap().put(SESSION_KEY_USER_ROLE, userRole);
+	}
+
+	private String getUserRoleFromSessionMap() {
+		Map<String, Object> sessionMap = getSessionMap();
+
+		if (sessionMap.containsKey(SESSION_KEY_USER_ROLE))
+			return (String) sessionMap.get(SESSION_KEY_USER_ROLE);
+
+		return null;
+	}
+
 
 	public String getUsername() {
 		return username;
@@ -347,6 +372,46 @@ public class Login implements Serializable {
 		this.invalidPasswordMessage = invalidPasswordMessage;
 	}
 
+	public String getUnmatchedPasswordMessage() {
+		return unmatchedPasswordMessage;
+	}
+
+	public void setUnmatchedPasswordMessage(String unmatchedPasswordMessage) {
+		this.unmatchedPasswordMessage = unmatchedPasswordMessage;
+	}
+
+	public String getUsernameFieldMessage() {
+		return usernameFieldMessage;
+	}
+
+	public void setUsernameFieldMessage(String usernameFieldMessage) {
+		this.usernameFieldMessage = usernameFieldMessage;
+	}
+
+	public Long getLoggedUserId() {
+		return loggedUserId;
+	}
+
+	public void setLoggedUserId(Long loggedUserId) {
+		this.loggedUserId = loggedUserId;
+	}
+
+	public String getLoggedUserName() {
+		return loggedUserName;
+	}
+
+	public void setLoggedUserName(String loggedUserName) {
+		this.loggedUserName = loggedUserName;
+	}
+
+	public String getLoggedUsername() {
+		return loggedUsername;
+	}
+
+	public void setLoggedUsername(String loggedUsername) {
+		this.loggedUsername = loggedUsername;
+	}
+
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}
@@ -369,38 +434,6 @@ public class Login implements Serializable {
 
 	public void setEditing(boolean editing) {
 		this.editing = editing;
-	}
-
-	public String getUnmatchedPasswordMessage() {
-		return unmatchedPasswordMessage;
-	}
-
-	public void setUnmatchedPasswordMessage(String unmatchedPasswordMessage) {
-		this.unmatchedPasswordMessage = unmatchedPasswordMessage;
-	}
-
-	public String getUsernameFieldMessage() {
-		return usernameFieldMessage;
-	}
-
-	public void setUsernameFieldMessage(String usernameFieldMessage) {
-		this.usernameFieldMessage = usernameFieldMessage;
-	}
-
-	public String getLoggedUserName() {
-		return loggedUserName;
-	}
-
-	public void setLoggedUserName(String loggedUserName) {
-		this.loggedUserName = loggedUserName;
-	}
-
-	public String getLoggedUsername() {
-		return loggedUsername;
-	}
-
-	public void setLoggedUsername(String loggedUsername) {
-		this.loggedUsername = loggedUsername;
 	}
 
 	public Collection<Place> getPlaces() {
