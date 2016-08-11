@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @ManagedBean
@@ -31,6 +30,7 @@ public class Login implements Serializable {
 	private String unmatchedPasswordMessage;
 	private String usernameFieldMessage;
 
+	private Long loggedUserId;
 	private String loggedUserName;
 	private String loggedUsername;
 
@@ -47,6 +47,10 @@ public class Login implements Serializable {
 	private Collection<PlacesItem> placeItems;
 	private Long selectedPlaceItemId;
 
+	private Collection<OrderView> orders;
+
+	private boolean admin = false;
+
 	public Login() {
 	}
 
@@ -58,17 +62,25 @@ public class Login implements Serializable {
 			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
 			User user = UserService.getSingleton().getUserById(userId);
 
-			if (user != null)
+			if (user != null) {
 				updateViewLoginData(user);
+				checkAdmin();
+			}
 
+			updateListsAndTables();
 		}
+	}
 
+	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
 		placeItems = new ArrayList<PlacesItem>();
+
+		orders = updateOrders();
 	}
 
 	private void updateViewLoginData(User user) {
 		loggedIn = true;
+		loggedUserId = user.getId();
 		loggedUserName = user.getName();
 		loggedUsername = user.getUsername();
 	}
@@ -92,12 +104,27 @@ public class Login implements Serializable {
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			sessionMap.put(SESSION_KEY_USER_ID, userId);
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
+
+			checkAdmin();
+			updateListsAndTables();
 		} else {
 			invalidPasswordMessage = "Wrong password!";
 		}
 
 		password = null;
 		return null;
+	}
+
+	private void checkAdmin() {
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		if (sessionMap.containsKey(SESSION_KEY_USER_ROLE)) {
+			String userRole = (String) sessionMap.get(SESSION_KEY_USER_ROLE);
+			if (userRole.equals(UserRole.ADMIN)) {
+				admin = true;
+			} else {
+				admin = false;
+			}
+		}
 	}
 
 	public String signupButton() {
@@ -250,8 +277,26 @@ public class Login implements Serializable {
 		unmatchedPasswordMessage = null;
 	}
 
-	public List<OrderView> getOrders() {
-		return orderService.getALL();
+	public void filterAction() {
+		orders = updateOrders();
+	}
+
+	private Collection<OrderView> updateOrders() {
+		Collection<OrderView> orderViews;
+		Long userId = loggedUserId;
+		// Don't filter by user id if admin is logged in
+		if (UserService.getSingleton().getUserRole(loggedUserId).equals(UserRole.ADMIN))
+			userId = null;
+
+		orderViews = orderService.find(null, null, null, null, selectedPlaceId, userId);
+		return orderViews;
+	}
+
+	public String resetFilterAction() {
+		selectedPlaceId = null;
+		selectedPlaceItemId = null;
+
+		return null;
 	}
 
 	public String getUsername() {
@@ -388,5 +433,21 @@ public class Login implements Serializable {
 
 	public void setSelectedPlaceItemId(Long selectedPlaceItemId) {
 		this.selectedPlaceItemId = selectedPlaceItemId;
+	}
+
+	public Collection<OrderView> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Collection<OrderView> orders) {
+		this.orders = orders;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 }

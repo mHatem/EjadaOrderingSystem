@@ -266,6 +266,8 @@
 										<h:selectOneMenu id="place_combobox"
 										                 value="#{login.selectedPlaceId}"
 										                 styleClass="form-control dropdown">
+											<f:selectItem itemValue="#{null}"
+											              itemLabel="Select a place"/>
 											<f:selectItems value="#{login.places}"
 											               var="place"
 											               itemLabel="#{place.name}"
@@ -277,6 +279,8 @@
 										<h:selectOneMenu id="item_combobox"
 										                 value="{login.selectedItemId}"
 										                 styleClass="form-control dropdown">
+											<f:selectItem itemValue="#{null}"
+											              itemLabel="Select an item"/>
 											<f:selectItems value="#{login.placeItems}"
 											               var="item"
 											               itemLabel="#{item.name}"
@@ -295,7 +299,7 @@
 									<h:commandLink styleClass="btn"
 									               value="Reset"
 									               action="#{login.resetFilterAction}">
-										<f:ajax execute="filter_orders_form" render="orders_table"/>
+										<f:ajax execute="filter_orders_form" render="filter_orders_form orders_table"/>
 									</h:commandLink>
 								</div>
 							</div>
@@ -324,7 +328,7 @@
 										<f:facet name="header">Place</f:facet>
 										#{order.placeName}
 									</h:column>
-									<h:column>
+									<h:column rendered="#{login.admin}">
 										<f:facet name="header">Delete</f:facet>
 										<h:commandButton value="Delete" class="btn btn-primary"
 										                 action="{order.delete(order.order)}"/>

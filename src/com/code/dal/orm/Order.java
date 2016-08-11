@@ -1,5 +1,6 @@
 package com.code.dal.orm;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import com.code.OrderStatusEnum;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order implements Serializable{
 	private Long id;
 	private String name;
 	private Long ownerID;

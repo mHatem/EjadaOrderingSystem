@@ -1,5 +1,6 @@
 package com.code.dal.orm;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ import weblogic.security.pk.IssuerDNSerialNumberSelector;
 		)
 
 })
-public class OrderView {
+public class OrderView implements Serializable{
 	private Long id;
 	private Long ownerId;
 	private Long placeId;
