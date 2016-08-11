@@ -1,6 +1,7 @@
 package com.code.ui.user;
 
 import com.code.dal.orm.User;
+import com.code.dal.orm.UserRole;
 import com.code.services.UserService;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -72,10 +73,11 @@ public class Login implements Serializable {
 		if (user != null) {
 			updateViewLoginData(user);
 
-			String userRole = UserRole.NORMAL; //TODO get role from database
+			Long userId = user.getId();
+			String userRole = UserService.getSingleton().getUserRole(userId);
 
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-			sessionMap.put(SESSION_KEY_USER_ID, user.getId());
+			sessionMap.put(SESSION_KEY_USER_ID, userId);
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
 		} else {
 			invalidPasswordMessage = "Wrong password!";
@@ -220,13 +222,6 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
-	}
-
-	public static class UserRole {
-		public static final String NORMAL = "normal";
-		public static final String ADMIN = "admin";
-		public static final String ADMIN_PLACES = "admin_places";
-		public static final String ADMIN_ITEMS = "admin_items";
 	}
 
 	private void clearAllFieldsErrorMessages() {

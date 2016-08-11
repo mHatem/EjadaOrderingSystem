@@ -14,8 +14,8 @@
 	to: ~ Free Software Foundation, Inc. ~ 51 Franklin Street, Fifth Floor ~ 
 	Boston, MA 02110-1301 USA -->
 <!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
 
@@ -43,12 +43,13 @@
 		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Names the annotated entity class -->
-		<mapping class="com.code.dal.orm.Order" />
-		<mapping class="com.code.dal.orm.OrderItem" />
-		<mapping class="com.code.dal.orm.Place" />
-		<mapping class="com.code.dal.orm.PlacesItem" />
-		<mapping class="com.code.dal.orm.User" />
-				<mapping class="com.code.dal.orm.OrderView" />
+		<mapping class="com.code.dal.orm.Order"/>
+		<mapping class="com.code.dal.orm.OrderItem"/>
+		<mapping class="com.code.dal.orm.Place"/>
+		<mapping class="com.code.dal.orm.PlacesItem"/>
+		<mapping class="com.code.dal.orm.User"/>
+		<mapping class="com.code.dal.orm.OrderView"/>
+		<mapping class="com.code.dal.orm.UserRole"/>
 
 	</session-factory>
 

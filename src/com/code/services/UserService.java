@@ -1,6 +1,7 @@
 package com.code.services;
 
 import com.code.dal.orm.User;
+import com.code.dal.orm.UserRole;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -91,6 +92,24 @@ public class UserService {
 
 	public User authenticateUser(String username, String password) {
 		return getUserByUsernameAndPassword(username, password);
+	}
+
+	public String getUserRole(Long userId) {
+		String userRole = null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		Query query = session.getNamedQuery("UserRole.byUserId");
+		query.setLong("userId", userId);
+
+		List list = query.list();
+		if (list.size() > 0)  //TODO
+			userRole = ((UserRole) list.get(0)).getRoleName();
+
+		session.getTransaction().commit();
+		session.close();
+
+		return userRole;
 	}
 
 }
