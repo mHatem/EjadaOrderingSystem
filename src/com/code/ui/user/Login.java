@@ -182,7 +182,10 @@ public class Login implements Serializable {
 
 	public String signout() {
 		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		sessionMap.remove(SESSION_KEY_USER_ID);
+		if (sessionMap.containsKey(SESSION_KEY_USER_ID))
+			sessionMap.remove(SESSION_KEY_USER_ID);
+		if (sessionMap.containsKey(SESSION_KEY_USER_ROLE))
+			sessionMap.remove(SESSION_KEY_USER_ROLE);
 
 		loggedIn = false;
 		username = null;
