@@ -65,7 +65,7 @@
 			</rich:column>
 			<rich:column>
 				<h:outputText value="#{order.count}"  rendered="#{!order.selected}" />
-				<h:inputText value="#{order.count}"  rendered="#{order.selected}"  >
+				<h:inputText value="#{order.count}" onkeypress="if(event.which &lt; 48 || event.which > 57 ) if(event.which != 8) return false;" rendered="#{order.selected}"  >
 				<f:ajax  execute ="@this" render="@form" />
 				</h:inputText>
 				<f:facet name="header">
