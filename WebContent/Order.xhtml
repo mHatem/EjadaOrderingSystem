@@ -16,25 +16,29 @@
 		<div class="page-header">
 			<h3 style="text-align: left">Order page</h3>
 		</div>
-		<h:form role="form" class="form-group" >
+		<h:form role="form" class="form-group">
 			<table class=" col-md-12" border="0" cellpadding="0" cellspacing="0"
 				width="100%">
-				<tr class="form-group col-md-12" style="width: inherit;" id="firstRow">
+				<tr class="form-group col-md-12" style="width: inherit;"
+					id="firstRow">
 
 					<th><label for="Owner">Owner:</label></th>
 					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="Owner" class="form-control" id="Owner" value="#{order.SUName}">
+							type="Owner" class="form-control" id="Owner"
+							value="#{order.SUName}">
 						</h:inputText></td>
 					<th><label for="pName">PlaceName:</label></th>
 					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="PlaceName" class="form-control" id="pName" value="#{order.SPName}"></h:inputText></td>
+							type="PlaceName" class="form-control" id="pName"
+							value="#{order.SPName}"></h:inputText></td>
 
 				</tr>
 
 				<tr class="form-group col-md-12" style="width: inherit;">
 					<th><label for="status">Status:</label></th>
 					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="status" class="form-control" id="status" value="#{order.SNAme}">
+							type="status" class="form-control" id="status"
+							value="#{order.SNAme}">
 						</h:inputText></td>
 					<th><label for="num">Order Num:</label></th>
 					<td class="col-md-3" style="width: initial;"><h:inputText
@@ -55,14 +59,17 @@
 				</tr>
 				<tr class="form-group col-md-12" style="width: inherit;">
 					<td class="col-md-3" style="width: inherit;"><h:commandButton
-							value="Search" styleClass="btn btn-primary" action="#{order.search}">
-							
+							value="Search" styleClass="btn btn-primary"
+							action="#{order.search}">
+
 							<f:ajax execute="Owner  pName status num" render="data"></f:ajax>
 						</h:commandButton></td>
 					<td class="col-md-3" style="width: inherit;"><h:commandButton
-							value="Pre-Search" styleClass="btn btn-primary" action="#{order.displayAllOrders()}">
-						<f:ajax render="data"> </f:ajax>
-							</h:commandButton></td>
+							value="Pre-Search" styleClass="btn btn-primary"
+							action="#{order.displayAllOrders()}">
+							<f:ajax render="data">
+							</f:ajax>
+						</h:commandButton></td>
 					<td>
 						<button type="button" class="btn btn-primary " data-toggle="modal"
 							data-target="#myModal">Add Order</button>
@@ -70,7 +77,8 @@
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" id="Close">&times;</button>
+										<button type="button" class="close" data-dismiss="modal"
+											id="Close">&times;</button>
 										<h4 class="modal-title">New Order</h4>
 									</div>
 									<div class="modal-body">
@@ -78,7 +86,7 @@
 										<h:inputText value="#{order.name}" id="orderNAME" />
 										<h:selectOneMenu value="#{order.selectedPlace}">
 											<f:selectItems value="#{place.places}" var="plac"
-												itemValue="#{plac.name}" id="placeNAME"/>
+												itemValue="#{plac.name}" id="placeNAME" />
 										</h:selectOneMenu>
 									</div>
 									<div class="modal-footer">
@@ -104,19 +112,25 @@
 							<h:dataTable value="#{order.orders}" var="ord"
 								class="table table-bordered" id="data">
 								<h:column>
-									<f:facet name="header">ID</f:facet>    				
-                				<h:outputText value="#{ord.id}" rendered="#{not order.editable}" />
-                				<h:inputText value="#{ord.id}" rendered="#{order.editable}" /> 
- 					  	</h:column>
+									<f:facet name="header">ID</f:facet>
+									<h:outputText value="#{ord.id}"
+										/>	</h:column>
 								<h:column style="margin:25px">
 
-									<f:facet name="header">OwnerName</f:facet>    				
-                				#{ord.ownerName}
-   						</h:column>
+									<f:facet name="header">OwnerName</f:facet>
+									<h:outputText value="#{ord.ownerName}"
+										rendered="#{not ord.editable}" />
+									<h:inputText value="#{order.ownerName}"
+										rendered="#{ord.editable}" />
+								</h:column>
 								<h:column>
-									<f:facet name="header">Place</f:facet>    				
-                				#{ord.placeName}
-   						</h:column>
+									<f:facet name="header">Place</f:facet>
+									<h:outputText value="#{ord.placeName}"
+										rendered="#{not ord.editable}" />
+									<h:inputText value="#{order.selectedPlace}"
+										rendered="#{ord.editable}" />
+
+								</h:column>
 								<h:column>
 									<f:facet name="header">Add</f:facet>
 									<h:commandButton value="Add Items" class="btn btn-primary">
@@ -124,7 +138,7 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">Edit</f:facet>
-									<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
+									<h:commandButton value="Edit" class="btn btn-primary" action="#{order.edit(ord)}"></h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
