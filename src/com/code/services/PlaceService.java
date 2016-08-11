@@ -81,6 +81,51 @@ public class PlaceService implements Serializable {
 		else return null;
 	}
 
+	
+	/*
+	  public List<Place> searchByNameAndPhone(String name, String phone) {
+	 
+		
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		Query query = session.getNamedQuery("placeSearchByNameAndPhone");
+		query.setString("name", name);
+		query.setString("phoneNo", phone);
+
+		List <Place>list = (List<Place>)query.list();
+		
+		
+
+		session.getTransaction().commit();
+		session.close();
+
+		return list;
+	}
+*/
+	public static List<Place> finalSearch(String name, String phone) {
+		
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query query = session.getNamedQuery("placeSearchByNameAndPhone");
+		if (name == null || name.trim().equals("")) {
+			name = "-1";
+		}
+		if (phone == null || phone.trim().equals("")) {
+			phone = "-1";
+		}
+		
+		query.setString("name", name);
+		query.setString("phoneNo", phone);
+		
+		@SuppressWarnings("unchecked")
+		List<Place> place = (List<Place>) query.list();
+		session.getTransaction().commit();
+		session.close();
+		return place;
+	}
 	public static void deletePlace(Place place){
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
