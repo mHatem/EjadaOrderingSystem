@@ -10,6 +10,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.context.FacesContext;
 
+import com.code.OrderStatusEnum;
 import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 import com.code.dal.orm.Place;
@@ -24,12 +25,15 @@ public class order implements Serializable {
 	private long id;
 	private String name;
 	private long ownerID;
+	
 	private String status;
 	private long placeID;
 	private Date date;
 	private float totalPrice;
 	private List<OrderView> orders;
 	private String selectedPlace;
+	private String SUName;
+	private String SPName;
 
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
@@ -41,6 +45,11 @@ public class order implements Serializable {
 		return 0;
 	}
 
+	public void search()
+	{
+		setOrders(orderService.find(SUName, SPName));
+		
+	}
 	public void displayAllOrders() {
 		setOrders(orderService.getALL());
 	}
@@ -51,13 +60,14 @@ public class order implements Serializable {
 		Order order = new Order();
 		order.setName(this.name);
 		order.setPlaceID(extractPlaceID(selectedPlace));
-		order.setStatus(this.status);
+		order.setStatus(OrderStatusEnum.OPENED.getCode());
 		order.setOwnerID((Long) sessionMap.get(Login.SESSION_KEY_USER_ID));
 		order.setDate(dat);
 		orderService.insert(order);
 
 	}
 
+	
 	public void delete (Order r)
 	{
 		orderService.delete(r);
@@ -142,5 +152,21 @@ public class order implements Serializable {
 	public void setOrders(List<OrderView> orders) {
 		this.orders = orders;
 	}
+	public String getSUName() {
+		return SUName;
+	}
+
+	public void setSUName(String sUName) {
+		SUName = sUName;
+	}
+
+	public String getSPName() {
+		return SPName;
+	}
+
+	public void setSPName(String sPName) {
+		SPName = sPName;
+	}
+
 
 }
