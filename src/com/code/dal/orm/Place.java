@@ -17,12 +17,9 @@ import javax.persistence.Transient;
 @NamedQueries({
 		@NamedQuery ( name = "Place_all", query = "SELECT p FROM Place p"  ),
 		@NamedQuery ( name = "Place.name",query="from Place where name = ? "),
-		//@NamedQuery (name = "placeSearchByNameAndPhone",
-		//query = "SELECT p FROM Place p WHERE (p.name) = (:name ) AND (p.phoneNo = :phoneNo )")
 		@NamedQuery(name = "placeSearchByNameAndPhone", 
 				query = "SELECT p FROM Place p WHERE  (:name = '-1' OR p.name =:name ) "
 						+ "AND (:phoneNo = '-1' or p.phoneNo = :phoneNo )") })
-
 @Entity
 @Table (name = "PLACES")
 public class Place implements Serializable {

@@ -23,7 +23,8 @@
 			<div class="navbar navbar-inverse">
 				
 				<div class="navbar-brand">
-					<h:outputText value="Welcome, "/>	
+					<h:outputText value="Welcome, "/>
+					<h:outputText value="#{place.userName}"/>	
 					<h:outputText value=" :D "/>	
 				</div>
 				
@@ -38,11 +39,11 @@
 			<!-- input text > insert name and phone -->
 			<div>
 				<h:outputLabel value="PlaceName: " />
-				<h:inputText id="placeNameId" value="#{place.name}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times" />
+				<h:inputText id="placeNameId" value="#{place.name}"  />
 			</div>
 			<div>	
 				<h:outputLabel value="PlacePhone"/>
-				<h:inputText id="placePhoneId" value="#{place.phoneNo}" style="color: white;background: blue ;border: thin solid blue;font-family:Good Times"  />
+				<h:inputText id="placePhoneId" value="#{place.phoneNo}" />
 			</div>
 			
 			<!-- insert -->
@@ -56,7 +57,7 @@
 			
 			<!-- search by name only -->
 			<div>
-				<h:commandButton value="serach" 
+				<h:commandButton value="serachByName" 
 								 class="btn btn-primary" 
 								 action="#{place.searchPlaceName}" 
 								 style="font-family:Good Times" >
@@ -71,8 +72,8 @@
 								 class="btn btn-primary" 
 								 action="#{place.searchPlace}" 
 								 style="font-family:Good Times" >
-				<f:ajax execute="palcesForm:placeNameId"
-					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
+				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
+					 render="palcesForm:placesTableId "/>
 				</h:commandButton>					
 			</div>
 			<!-- show all places -->
@@ -117,7 +118,7 @@
 				
 				
 				<!-- delete -->
-				<h:column headerClass="columnHeader" footerClass="columnFooter">
+				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">delete</f:facet>
 						<h:commandButton value="delete" action="#{place.deletePlace(row)}" class="btn btn-primary btn-xs" /> 
 				</h:column>

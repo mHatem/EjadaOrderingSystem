@@ -74,5 +74,16 @@ public class orderService {
 		session.close();
 		return orders;
 	}
+	
+	public static void update(Order o)
+	{
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.update(o);
+		session.getTransaction().commit();
+		session.close();
+		
+	}
 
 }
