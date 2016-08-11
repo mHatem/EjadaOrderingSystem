@@ -2,20 +2,18 @@ package com.code.ui;
 
 import java.io.Serializable;
 import java.util.List;
-//import java.util.Map;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import com.code.dal.orm.Place;
-import com.code.dal.orm.User;
+import com.code.dal.orm.UserRole;
 import com.code.services.PlaceService;
-//import com.code.services.UserService;
-//import com.code.ui.user.Login;
+import com.code.ui.user.Login;
+import com.code.services.UserService;
+import com.code.ui.user.Login;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "place")
@@ -25,7 +23,7 @@ public class PlaceBean implements Serializable {
 	private String name;
 	private String phoneNo;
 	private List<Place> places;
-	//private String userName;
+	private String userName;
 	
 	public PlaceBean() {
 		
@@ -67,8 +65,6 @@ public class PlaceBean implements Serializable {
 	// search by name
 	public List<Place> searchPlaceName() {
 		places = PlaceService.searchPlaces(name);
-		name = null;
-		phoneNo = null;
 		return places;
 	}
 	
@@ -76,11 +72,8 @@ public class PlaceBean implements Serializable {
 	public List<Place> searchPlace() {
 			places = PlaceService.finalSearch(name, phoneNo);
 			return places;
-			}
+	}
 		
-
-
-	
 	public void deletePlace(Place deletedPlace) {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
@@ -117,15 +110,23 @@ public class PlaceBean implements Serializable {
 	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
-	/*
+	
+	public boolean adminPlaces(){
+		Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		
+		String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
+		return userRole.equals(UserRole.ADMIN_PLACES);
+	}	
+	
 	public String getUserName() {
 		Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 		Long userId=(Long) sessionMap.get(Login.SESSION_KEY_USER_ID);
+		
 		userName=UserService.getSingleton().getUserById(userId).getName();
 		return userName;
 	}
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}*/
+	}
 }
