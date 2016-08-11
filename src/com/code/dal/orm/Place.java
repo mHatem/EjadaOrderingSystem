@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 @SuppressWarnings("serial")
 @NamedQueries({
 		@NamedQuery ( name = "Place_all", query = "SELECT p FROM Place p"  ),
-		@NamedQuery ( name = "place.name",query="from Place where name = ? ")
+		@NamedQuery ( name = "Place.name",query="from Place where name = ? ")
 		})
 
 @Entity

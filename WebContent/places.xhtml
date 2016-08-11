@@ -21,13 +21,12 @@
 		<div class="container">
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
-				<h:outputText value="Welcome, "/>
+				
 				<div class="navbar-brand">
-					
-					<h:outputText value="#{place.userName}"/>
-					
+					<h:outputText value="Welcome, "/>	
+					<h:outputText value=" :D "/>	
 				</div>
-				<h:outputText value=" :D "/>
+				
 			</div>
 			<!-- place -->
 			<div>
@@ -56,9 +55,14 @@
 			<!-- search by name only -->
 			<div>
 				<h:commandButton value="serach" 
-				class="btn btn-primary" 
-				action="#{place.searchPlaceName}" 
-				style="color: blue;font-family:Good Times" />
+								 class="btn btn-primary" 
+								 action="#{place.searchPlaceName}" 
+								 style="color: blue;font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
+				
+				</h:commandButton>
+								
 			</div>
 			
 			<!-- the table  -->
