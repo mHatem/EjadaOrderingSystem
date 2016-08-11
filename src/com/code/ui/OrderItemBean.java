@@ -11,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 
 
 
+
 import com.code.dal.orm.*;
 import com.code.services.OrderItemService;
 @SuppressWarnings("serial")
@@ -22,7 +23,8 @@ public class OrderItemBean implements Serializable{
 	private Order order ; 
 	private Place place;
 	private List<OrderItemView> items;
-    private List<PlacesItem> menu;
+
+	private List<PlacesItem> menu;
 	private List<User> user ;
     private String errorMessage;
 

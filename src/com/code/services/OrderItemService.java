@@ -23,7 +23,7 @@ public class OrderItemService {
 	    }catch(Exception ea){return null;}
 	}
 	
-	public static List<OrderItemView> getOrderItemListByUserId( Long userId)
+	public static List<OrderItemView> getOrderItemListByUserId(Long userId)
 	{  try{
 		SessionFactory  sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
