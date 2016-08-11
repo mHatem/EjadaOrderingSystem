@@ -8,7 +8,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+
 import com.code.dal.orm.Place;
+import com.code.dal.orm.User;
 import com.code.services.PlaceService;
 //import com.code.services.UserService;
 //import com.code.ui.user.Login;
@@ -41,6 +45,7 @@ public class PlaceBean implements Serializable {
 	//////////////////////////////////////////////////////////////////
 	
 	
+	// insert
 	public String addPlace() {
 		Place insertedPlace = new Place();
 		insertedPlace.setName(name);
@@ -51,24 +56,30 @@ public class PlaceBean implements Serializable {
 		phoneNo = null;
 		return null;
 	}
-
+	
+	// show the list
 	public List<Place> showAll() {
 		places = PlaceService.retrievePlaces();
 		return places;
 
 	}
 	
+	// search by name
 	public List<Place> searchPlaceName() {
 		places = PlaceService.searchPlaces(name);
 		name = null;
 		phoneNo = null;
 		return places;
 	}
+	
+	//search by name and phone 
 	public List<Place> searchPlace() {
-			places = PlaceService.searchPlaceNPh(name, phoneNo);
+			places = PlaceService.finalSearch(name, phoneNo);
 			return places;
 			}
 		
+
+
 	
 	public void deletePlace(Place deletedPlace) {
 		PlaceService.deletePlace(deletedPlace);
