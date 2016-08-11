@@ -105,7 +105,8 @@
 								class="table table-bordered" id="data">
 								<h:column>
 									<f:facet name="header">ID</f:facet>    				
-                				#{ord.id}
+                				<h:outputText value="#{ord.id}" rendered="#{not order.editable}" />
+                				<h:inputText value="#{ord.id}" rendered="#{order.editable}" /> 
  					  	</h:column>
 								<h:column style="margin:25px">
 

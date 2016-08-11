@@ -36,8 +36,9 @@ public class order implements Serializable {
 	private String SPName;
 	private String SNAme;
 	private Long SID;
-	private Long SPID;
+	private boolean editable;
 
+	
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
 		for (Place p : bean.getPlaces()) {
@@ -49,7 +50,7 @@ public class order implements Serializable {
 	}
 
 	public void search() {
-		setOrders(orderService.find(SUName, SPName,SNAme,SID,SPID));
+		setOrders(orderService.find(SUName, SPName,SNAme,SID,null));
 
 	}
 
@@ -78,6 +79,14 @@ public class order implements Serializable {
 
 	public order() {
 		displayAllOrders();
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 	public String getSNAme() {
