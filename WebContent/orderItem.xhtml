@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"> 
+	
+<h:head>
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+</h:head>
+<body id = "Page">
+	<h:form class="form-horizontal col-md-4" role="form">
+		<h:outputText
+			value=" Place : #{OrderItem.place.name}" />
+		<h:outputText
+			value=" Phone number :  #{OrderItem.place.phoneNo}" />
+			<br/>
+			<h:outputText
+			value="  State :  #{OrderItem.order.status}" />
+			<h:outputText
+			value="  Date :  #{OrderItem.order.date}" />	
+			<br/>
+	</h:form>
+	<br />
+
+	<h:form id="formTable">
+	<h:panelGrid columnClasses="acent">
+	
+	<h:commandButton  value ="Add order"   action="#{OrderItem.appendOrder}">
+			<f:ajax   render="@form" />
+	        </h:commandButton>
+	        
+            <rich:dataScroller for="datatable" maxPages="5" fastStep="3"/>
+		<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable">
+			<rich:column>
+				<h:outputText value="#{order.username}" rendered="#{!order.selected}" />
+				<h:selectOneMenu value="#{order.userId}" rendered="#{order.selected}" >
+				 <f:selectItems value="#{OrderItem.user}" var="user"
+                       itemLabel="#{user.username}" itemValue="#{user.id}" />
+				</h:selectOneMenu>
+				<f:facet name="header">
+					<h:outputText value="Username" />
+				</f:facet>
+			</rich:column>
+            
+            
+            <rich:column>
+				<h:outputText value="#{order.itemName}" rendered="#{!order.selected}"  />
+				<h:selectOneMenu value="#{order.itemId}" rendered="#{order.selected}" >
+				 <f:selectItems value="#{OrderItem.menu}" var="menu"
+                       itemLabel="#{menu.name}" itemValue="#{menu.id}" />
+			    <f:ajax  event="change" execute ="@form" render="@form" listener="#{OrderItem.updatePrice(order)}" />
+				</h:selectOneMenu>
+				<f:facet name="header">
+					<h:outputText value="Item name" />
+				</f:facet>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{order.price}" />
+				<f:facet name="header">
+					<h:outputText value="Item price" />
+				</f:facet>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{order.count}"  rendered="#{!order.selected}" />
+				<h:inputText value="#{order.count}"  rendered="#{order.selected}"  >
+				<f:ajax  execute ="@this" render="@form" />
+				</h:inputText>
+				<f:facet name="header">
+					<h:outputText value="Item count" />
+				</f:facet>
+			</rich:column>
+			<rich:column>
+				<h:outputText value="#{order.count * order.price}" />
+				<f:facet name="header">
+					<h:outputText value="Total cost" />
+				</f:facet>
+			</rich:column>
+			<rich:column>
+			<h:commandButton rendered = "#{!order.selected }"  value ="update"  action="#{OrderItem.toggleSelection(order)}">
+			<f:ajax execute ="@form" render="@form" />
+			</h:commandButton>
+			<h:commandButton rendered = "#{order.selected and ! order.toAdd }"   value ="save"   action="#{OrderItem.save(order)}">
+			<f:ajax execute ="@form" render="@form" />
+	        </h:commandButton>
+	        <h:commandButton rendered = "#{order.toAdd}"   value ="add"   action="#{OrderItem.add(order)}">
+			<f:ajax execute ="@form" render="@form" />
+	        </h:commandButton>
+	        <h:commandButton rendered = "#{order.selected}"   value ="cancel"   action="#{OrderItem.toggleSelection(order)}">
+			<f:ajax  execute ="@form" render="@form" />
+	        </h:commandButton>
+			</rich:column>
+			<rich:column>
+			<h:commandButton  rendered = "#{!order.toAdd}"  value ="Delete"   action="#{OrderItem.delete(order)}">
+			<f:ajax  render="@form" />
+	        </h:commandButton>
+			</rich:column>
+		</rich:dataTable>
+		<h:outputText value="#{OrderItem.errorMessage}" id="ErrorName" style="color:red;" />
+		</h:panelGrid>
+	</h:form>
+	    
+	              
+</body>
+</html>
