@@ -28,7 +28,7 @@
 						<p>
 							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
 							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
-								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form"/>
+								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
 						</p>
 					</h:panelGroup>
@@ -36,8 +36,21 @@
 			</div>
 		</h:panelGroup>
 
-		<!--Empty left side pane-->
+		<!--Left sidebar-->
 		<div class="col-lg-2">
+			<h:panelGroup id="sidebar">
+				<h:panelGroup rendered="#{login.loggedIn}">
+					<div class="container" style="padding-top: 50px">
+						<div class="bar">
+							<h3><h:link value="Orders" outcome="Order"/></h3>
+						</div>
+						<div class="bar">
+							<h3><h:link value="Places" outcome="places"/></h3>
+						</div>
+					</div>
+
+				</h:panelGroup>
+			</h:panelGroup>
 		</div>
 
 		<!--Content-->
@@ -76,7 +89,7 @@
 									<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
 									               styleClass="btn btn-primary btn-sm ">
 										<f:ajax execute="login_form"
-										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
+										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle sidebar"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.not_a_user_signup}"
 									               action="#{login.signupButton}"
