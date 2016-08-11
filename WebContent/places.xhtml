@@ -21,7 +21,9 @@
 		<div class="container">
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
-				<div class="navbar-brand">Sba7 Elfol Ya Kbeer :D</div>
+				<div class="navbar-brand">
+					<h:outputText value="#{place.userName}"/>
+				</div>
 			</div>
 			<!-- place -->
 			<div>
@@ -75,6 +77,15 @@
 						<h:outputText value="#{row.phoneNo}" rendered="#{not row.selected}"/>
 						<h:inputText value="#{row.phoneNo}" rendered="#{row.selected}" />
 				</h:column>
+				
+				
+				
+				<!-- Items -->
+				<h:column headerClass="columnHeader" footerClass="columnFooter">
+						<f:facet name="header">Items</f:facet>
+						<h:commandButton value="Items" action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+				</h:column>
+				
 				
 				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
