@@ -1,8 +1,6 @@
 package com.code.ui.user;
 
-import com.code.dal.orm.OrderView;
-import com.code.dal.orm.Place;
-import com.code.dal.orm.User;
+import com.code.dal.orm.*;
 import com.code.services.PlaceService;
 import com.code.services.UserService;
 import com.code.services.orderService;
@@ -14,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,9 @@ public class Login implements Serializable {
 	private Collection<Place> places;
 	private Long selectedPlaceId;
 
+	private Collection<PlacesItem> placeItems;
+	private Long selectedPlaceItemId;
+
 	public Login() {
 	}
 
@@ -62,6 +64,7 @@ public class Login implements Serializable {
 		}
 
 		places = PlaceService.retrievePlaces();
+		placeItems = new ArrayList<PlacesItem>();
 	}
 
 	private void updateViewLoginData(User user) {
@@ -234,6 +237,10 @@ public class Login implements Serializable {
 		return title;
 	}
 
+	public Collection<OrderItem> getOrderItems() {
+		return new ArrayList<OrderItem>(); //TODO
+	}
+
 	private void clearAllFieldsErrorMessages() {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
@@ -362,5 +369,21 @@ public class Login implements Serializable {
 
 	public void setSelectedPlaceId(Long selectedPlaceId) {
 		this.selectedPlaceId = selectedPlaceId;
+	}
+
+	public Collection<PlacesItem> getPlaceItems() {
+		return placeItems;
+	}
+
+	public void setPlaceItems(Collection<PlacesItem> placeItems) {
+		this.placeItems = placeItems;
+	}
+
+	public Long getSelectedPlaceItemId() {
+		return selectedPlaceItemId;
+	}
+
+	public void setSelectedPlaceItemId(Long selectedPlaceItemId) {
+		this.selectedPlaceItemId = selectedPlaceItemId;
 	}
 }

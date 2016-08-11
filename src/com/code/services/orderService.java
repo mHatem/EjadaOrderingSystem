@@ -13,44 +13,64 @@ import com.code.dal.orm.OrderView;
 public class orderService {
 
 	public static List<OrderView> getALL() {
+		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("Order.all");
 		@SuppressWarnings("unchecked")
 		List<OrderView> orders = (List<OrderView>) query.list();
+
+		session.getTransaction().commit();
+		session.close();
 		return orders;
 	}
 
 	public static void insert(Order r) {
+		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save(r);
 
 		session.getTransaction().commit();
-
+		session.close();
 	}
-	
-	public static void delete(Order r)
-	{
+
+	public static void delete(Order r) {
+		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.delete(r);
 		session.getTransaction().commit();
-		
+		session.close();
 	}
-	
-	public static List<OrderView> find(String userNAME , String placeNAME)
-	{
+
+	public static List<OrderView> find(String userNAME, String placeNAME, String status, Long id, Long placeID) {
+		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("search");
-		query.setString(0,userNAME);
-		query.setString(1,placeNAME);
+		if (userNAME == null || userNAME.trim().equals("")) {
+			userNAME = "-1";
+		}
+		if (placeNAME == null || placeNAME.trim().equals("")) {
+			placeNAME = "-1";
+		}
+		if (status == null || status.trim().equals("")) {
+			status = "-1";
+		}
+		query.setString("ownerName", userNAME);
+		query.setString("placeName", placeNAME);
+		query.setString("status", status);
+		query.setLong("id", id==null ? -1 : id);
+		query.setLong("placeId", placeID == null ? -1 : placeID);
+		@SuppressWarnings("unchecked")
 		List<OrderView> orders = (List<OrderView>) query.list();
+		session.getTransaction().commit();
+		session.close();
 		return orders;
 	}
 
