@@ -12,6 +12,8 @@ import javax.persistence.Transient;
 
 import com.code.ui.order;
 
+import weblogic.security.pk.IssuerDNSerialNumberSelector;
+
 @Entity
 @Table(name = "VW_ORDER")
 
@@ -42,7 +44,7 @@ public class OrderView {
 	@Transient
 	public static void edit(OrderView o)
 	{
-		o.setEditable(true);
+		o.setEditable(!(o.isEditable()));
 	}
 	
 	@Transient

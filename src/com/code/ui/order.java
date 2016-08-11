@@ -73,6 +73,20 @@ public class order implements Serializable {
 		orderService.insert(order);
 
 	}
+	
+	public void save(OrderView Toupdate)
+	{
+		Order order = new Order();
+		order.setDate(Toupdate.getOrderDate());
+		order.setId(Toupdate.getId());
+		order.setName(Toupdate.getName());
+		order.setOwnerID(Toupdate.getOwnerId());
+		order.setPlaceID(extractPlaceID(selectedPlace));
+	  	order.setStatus(Toupdate.getStatus());
+		orderService.update(order);
+	     OrderView.edit(Toupdate);
+
+  	}
 
 	public void delete(Order r) {
 		orderService.delete(r);

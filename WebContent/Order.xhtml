@@ -45,15 +45,7 @@
 							type="num" class="form-control" id="num" value="#{order.SID}"></h:inputText></td>
 				</tr>
 
-				<tr class="form-group col-md-12" style="width: inherit;">
-					<th><label for="from">Date From:</label></th>
-					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="form" class="form-control" id="form">
-						</h:inputText></td>
-					<th><label for="to">Date To:</label></th>
-					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="to" class="form-control" id="to"></h:inputText></td>
-				</tr>
+		
 				<tr>
 					<td><br></br></td>
 				</tr>
@@ -113,8 +105,8 @@
 								class="table table-bordered" id="data">
 								<h:column>
 									<f:facet name="header">ID</f:facet>
-									<h:outputText value="#{ord.id}"
-										/>	</h:column>
+									<h:outputText value="#{ord.id}" />
+								</h:column>
 								<h:column style="margin:25px">
 
 									<f:facet name="header">OwnerName</f:facet>
@@ -138,12 +130,20 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">Edit</f:facet>
-									<h:commandButton value="Edit" class="btn btn-primary" action="#{order.edit(ord)}"></h:commandButton>
+									<h:commandButton value="Edit" class="btn btn-primary"
+										action="#{order.edit(ord)}" rendered="#{not ord.editable}">
+										<f:ajax execute="data" render="data"></f:ajax>
+											</h:commandButton>
+									<h:commandButton value="save" class="btn btn-primary"
+										action="#{order.save(ord)}" rendered="#{ord.editable}">
+										<f:ajax execute="data" render="data"></f:ajax>
+									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
 									<h:commandButton value="Delete" class="btn btn-primary"
-										action="#{order.delete(ord.order)}"></h:commandButton>
+										action="#{order.delete(ord.order)}">
+									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Cancel</f:facet>
