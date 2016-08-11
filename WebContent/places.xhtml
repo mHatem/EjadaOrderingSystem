@@ -21,9 +21,13 @@
 		<div class="container">
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
+				<h:outputText value="Welcome, "/>
 				<div class="navbar-brand">
+					
 					<h:outputText value="#{place.userName}"/>
+					
 				</div>
+				<h:outputText value=" :D "/>
 			</div>
 			<!-- place -->
 			<div>
@@ -83,7 +87,7 @@
 				<!-- Items -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Items</f:facet>
-						<h:commandButton value="Items" action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandButton value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
 				</h:column>
 				
 				

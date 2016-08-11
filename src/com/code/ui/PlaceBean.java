@@ -67,11 +67,14 @@ public class PlaceBean implements Serializable {
 		places.remove(deletedPlace);
 	}
 	
+	
 	public String redirectToItems(Place place)
-	{
-		
-		return "Items??faces-redirect=true";
+	{	
+		Long placeId=place.getId();
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
+		return "Items";
 	}
+	
 	
 	public String getName() {
 		return name;
@@ -99,7 +102,6 @@ public class PlaceBean implements Serializable {
 
 	public String getUserName() {
 		Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		
 		Long userId=(Long) sessionMap.get(Login.SESSION_KEY_USER_ID);
 		userName=UserService.getSingleton().getUserById(userId).getName();
 		return userName;
