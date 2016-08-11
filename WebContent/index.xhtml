@@ -264,7 +264,7 @@
 										<h:selectOneMenu id="item_combobox"
 										                 value="{login.selectedItemId}"
 										                 styleClass="form-control dropdown">
-											<f:selectItems value="{login.items}"
+											<f:selectItems value="#{login.placeItems}"
 											               var="item"
 											               itemLabel="#{item.name}"
 											               itemValue="#{item.id}"/>
@@ -291,35 +291,54 @@
 						<!--Orders Table-->
 						<!--TODO-->
 						<h:panelGroup id="orders_table">
-							<h:dataTable value="#{login.orders}" var="order"
-							             styleClass="table table-bordered">
-								<h:column>
-									<f:facet name="header">ID</f:facet>
-									#{order.id}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Status</f:facet>
-									#{order.status}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Owner</f:facet>
-									#{order.ownerName}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Place</f:facet>
-									#{order.placeName}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary"
-									                 action="{order.delete(order.order)}"/>
-								</h:column>
-							</h:dataTable>
+							<div class="container col-lg-12">
+								<h2>Orders</h2>
+								<h:dataTable value="#{login.orders}" var="order"
+								             styleClass="table table-bordered">
+									<h:column>
+										<f:facet name="header">ID</f:facet>
+										#{order.id}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Status</f:facet>
+										#{order.status}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Owner</f:facet>
+										#{order.ownerName}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Place</f:facet>
+										#{order.placeName}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Delete</f:facet>
+										<h:commandButton value="Delete" class="btn btn-primary"
+										                 action="{order.delete(order.order)}"/>
+									</h:column>
+								</h:dataTable>
+							</div>
 						</h:panelGroup>
 
-						<!--Items Table-->
+						<!--OrderItems Table-->
 						<!--TODO-->
-
+						<h:panelGroup id="order_items_table">
+							<div class="container col-lg-12">
+								<h2>Order Items</h2>
+								<h:dataTable value="#{login.orderItems}" var="order_item"
+								             styleClass="table table-bordered">
+									<h:column>
+										<f:facet name="header">ID</f:facet>
+										#{order_item.id}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Delete</f:facet>
+										<h:commandButton value="Delete" class="btn btn-primary"
+										                 action="{order.delete(order.order)}"/>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
 
