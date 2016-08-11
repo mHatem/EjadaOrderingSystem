@@ -22,7 +22,7 @@ import javax.persistence.Transient;
 @Entity
 @Table (name = "PLACES")
 public class Place implements Serializable {
-	private long id;
+	private Long id;
 	private String name;
 	private String phoneNo;
 	private Boolean selected;
@@ -31,11 +31,11 @@ public class Place implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
 	@SequenceGenerator(name = "sequence_generator", sequenceName = "PLACES_SEQUENCE", allocationSize = 1)
 	@Column(name = "ID" )
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
