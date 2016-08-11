@@ -109,6 +109,8 @@ public class UserService {
 		session.getTransaction().commit();
 		session.close();
 
+		if(userRole == null)
+			userRole = UserRole.NORMAL;
 		return userRole;
 	}
 

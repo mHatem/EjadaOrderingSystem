@@ -57,7 +57,7 @@ public class PlaceService implements Serializable {
 		session.beginTransaction();
 
 		Query query = session.getNamedQuery("Place.name");
-		query.setString(0,name );
+		query.setString(0,name);
 		List<Place> places = (List<Place>) query.list();
 
 		session.getTransaction().commit();

@@ -21,7 +21,13 @@
 		<div class="container">
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
-				<div class="navbar-brand">Sba7 Elfol Ya Kbeer :D</div>
+				<h:outputText value="Welcome, "/>
+				<div class="navbar-brand">
+					
+					<h:outputText value="#{place.userName}"/>
+					
+				</div>
+				<h:outputText value=" :D "/>
 			</div>
 			<!-- place -->
 			<div>
@@ -48,13 +54,12 @@
 			</div>
 			
 			<!-- search by name only -->
-				<div>
+			<div>
 				<h:commandButton value="serach" 
 				class="btn btn-primary" 
 				action="#{place.searchPlaceName}" 
 				style="color: blue;font-family:Good Times" />
 			</div>
-							
 			
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
@@ -76,6 +81,15 @@
 						<h:outputText value="#{row.phoneNo}" rendered="#{not row.selected}"/>
 						<h:inputText value="#{row.phoneNo}" rendered="#{row.selected}" />
 				</h:column>
+				
+				
+				
+				<!-- Items -->
+				<h:column headerClass="columnHeader" footerClass="columnFooter">
+						<f:facet name="header">Items</f:facet>
+						<h:commandButton value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+				</h:column>
+				
 				
 				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
