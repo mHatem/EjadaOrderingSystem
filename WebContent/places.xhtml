@@ -21,13 +21,12 @@
 		<div class="container">
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
-				<h:outputText value="Welcome, "/>
+				
 				<div class="navbar-brand">
-					
-					<h:outputText value="#{place.userName}"/>
-					
+					<h:outputText value="Welcome, "/>	
+					<h:outputText value=" :D "/>	
 				</div>
-				<h:outputText value=" :D "/>
+				
 			</div>
 			<!-- place -->
 			<div>
@@ -48,7 +47,9 @@
 			
 			<!-- insert -->
 			<div>
-				<h:commandButton value="add place" class="btn btn-primary" action="#{place.addPlace}" style="color: blue;font-family:Good Times" >
+				<h:commandButton value="add place"
+				 	class="btn btn-primary" 
+				 	action="#{place.addPlace}" style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
 				</h:commandButton>
 			</div>
@@ -56,11 +57,24 @@
 			<!-- search by name only -->
 			<div>
 				<h:commandButton value="serach" 
-				class="btn btn-primary" 
-				action="#{place.searchPlaceName}" 
-				style="color: blue;font-family:Good Times" />
+								 class="btn btn-primary" 
+								 action="#{place.searchPlaceName}" 
+								 style="font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
+				</h:commandButton>
+				
+								
 			</div>
-			
+			<div>
+			<h:commandButton value="ShowAllPlaces" 
+								 class="btn btn-primary" 
+								 action="#{place.showAll}" 
+								 style="font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId"/>
+			</h:commandButton>
+			</div>
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
