@@ -32,11 +32,8 @@ public class Login implements Serializable {
 	private String unmatchedPasswordMessage;
 	private String usernameFieldMessage;
 
-	private Long loggedUserId;
-	private String loggedUserName;
-	private String loggedUsername;
+	private User loggedUser;
 
-	private boolean loggedIn = false;
 	private boolean signingUp = false;
 	private boolean editing = false;
 
@@ -55,14 +52,9 @@ public class Login implements Serializable {
 	@PostConstruct
 	public void init() {
 		Long userId = getUserIdFromSessionMap();
-
 		if (userId != null) {
 			User user = UserService.getSingleton().getUserById(userId);
-
-			if (user != null) {
-				updateViewLoginData(user);
-				checkAdmin();
-			}
+			updateLoginStatus(user);
 
 			updateListsAndTables();
 		}
@@ -74,20 +66,10 @@ public class Login implements Serializable {
 		if (password == null || password.length() == 0)
 			return null;
 
-		loggedIn = false;
-
 		User user = UserService.getSingleton().authenticateUser(username, password);
+		updateLoginStatus(user);
 
 		if (user != null) {
-			updateViewLoginData(user);
-
-			Long userId = user.getId();
-			String userRole = UserService.getSingleton().getUserRole(userId);
-
-			putUserIdIntoSessionMap(userId);
-			putUserRoleIntoSessionMap(userRole);
-
-			checkAdmin();
 			updateListsAndTables();
 		} else {
 			invalidPasswordMessage = "Wrong password!";
@@ -125,14 +107,11 @@ public class Login implements Serializable {
 	}
 
 	public String signoutAction() {
-		putUserIdIntoSessionMap(null);
-		putUserRoleIntoSessionMap(null);
-
 		clearAllFieldsErrorMessages();
 		resetFilters();
 
-		loggedIn = false;
-		username = null;
+		updateLoginStatus(null);
+
 		return null;
 	}
 
@@ -160,7 +139,7 @@ public class Login implements Serializable {
 
 			UserService.getSingleton().updateUser(user);
 
-			updateViewLoginData(user);
+			updateLoginStatus(user);
 		} catch (ConstraintViolationException e) {
 			if (e.getConstraintName().equals(UserService.UNIQUE_USERNAME_CONSTRAINT_NAME)) {
 				usernameFieldMessage = "Username already taken";
@@ -189,16 +168,6 @@ public class Login implements Serializable {
 		selectedPlaceId = null;
 		selectedPlaceItemId = null;
 	}
-
-	private void checkAdmin() {
-		String userRole = getUserRoleFromSessionMap();
-		if (userRole != null && userRole.equals(UserRole.ADMIN)) {
-			admin = true;
-		} else {
-			admin = false;
-		}
-	}
-
 
 	public String loginButton() {
 		signingUp = false;
@@ -250,16 +219,21 @@ public class Login implements Serializable {
 		orders = updateOrders();
 	}
 
-	private void updateViewLoginData(User user) {
-		loggedIn = true;
-		loggedUserId = user.getId();
-		loggedUserName = user.getName();
-		loggedUsername = user.getUsername();
+	private void updateLoginStatus(User user) {
+		loggedUser = user;
+
+		Long userId = loggedUser != null ? loggedUser.getId() : null;
+		String userRole = userId != null ? UserService.getSingleton().getUserRole(userId) : null;
+
+		putUserIdIntoSessionMap(userId);
+		putUserRoleIntoSessionMap(userRole);
+
+		admin = (userRole != null && userRole.equals(UserRole.ADMIN));
 	}
 
 	public String getPageTitle() {
 		String titleExpression;
-		if (loggedIn)
+		if (isLoggedIn())
 			titleExpression = "#{msgs.welcomeHeading}";
 		else {
 			if (signingUp)
@@ -321,6 +295,10 @@ public class Login implements Serializable {
 			return (String) sessionMap.get(SESSION_KEY_USER_ROLE);
 
 		return null;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedUser != null && getUserIdFromSessionMap() != null;
 	}
 
 
@@ -388,36 +366,12 @@ public class Login implements Serializable {
 		this.usernameFieldMessage = usernameFieldMessage;
 	}
 
-	public Long getLoggedUserId() {
-		return loggedUserId;
+	public User getLoggedUser() {
+		return loggedUser;
 	}
 
-	public void setLoggedUserId(Long loggedUserId) {
-		this.loggedUserId = loggedUserId;
-	}
-
-	public String getLoggedUserName() {
-		return loggedUserName;
-	}
-
-	public void setLoggedUserName(String loggedUserName) {
-		this.loggedUserName = loggedUserName;
-	}
-
-	public String getLoggedUsername() {
-		return loggedUsername;
-	}
-
-	public void setLoggedUsername(String loggedUsername) {
-		this.loggedUsername = loggedUsername;
-	}
-
-	public boolean isLoggedIn() {
-		return loggedIn;
-	}
-
-	public void setLoggedIn(boolean loggedIn) {
-		this.loggedIn = loggedIn;
+	public void setLoggedUser(User loggedUser) {
+		this.loggedUser = loggedUser;
 	}
 
 	public boolean isSigningUp() {

@@ -26,7 +26,7 @@
 				<h:panelGroup id="header_signout_form">
 					<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 						<p>
-							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
+							#{msgs.you_are_logged_as} <strong>@#{login.loggedUser.username}</strong> |
 							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}">
 								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
@@ -184,7 +184,7 @@
 					<h:panelGroup rendered="#{login.loggedIn}">
 						<!--Welcome/Edit panel-->
 						<div class="col-lg-12">
-							<h2>Welcome, #{login.loggedUserName}! | <h:commandLink value="#{msgs.edit_profile}"
+							<h2>Welcome, #{login.loggedUser.name}! | <h:commandLink value="#{msgs.edit_profile}"
 							                                                       action="#{login.editButton}"
 							                                                       disabled="#{login.editing}">
 								<f:ajax render="logged_in_content edit_form"/>
