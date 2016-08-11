@@ -23,11 +23,11 @@
 
 					<th><label for="Owner">Owner:</label></th>
 					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="Owner" class="form-control" id="Owner">
+							type="Owner" class="form-control" id="Owner" value="#{order.SUName}">
 						</h:inputText></td>
 					<th><label for="pwd">PlaceName:</label></th>
 					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="PlaceName" class="form-control" id="pwd"></h:inputText></td>
+							type="PlaceName" class="form-control" id="pwd" value="#{order.SPName}"></h:inputText></td>
 
 				</tr>
 
@@ -55,7 +55,7 @@
 				</tr>
 				<tr class="form-group col-md-12" style="width: inherit;">
 					<td class="col-md-3" style="width: inherit;"><h:commandButton
-							value="Search" styleClass="btn btn-primary">
+							value="Search" styleClass="btn btn-primary" action="#{order.search}">
 						</h:commandButton></td>
 					<td class="col-md-3" style="width: inherit;"><h:commandButton
 							value="Pre-Search" styleClass="btn btn-primary"></h:commandButton></td>
@@ -105,7 +105,7 @@
  					  	</h:column>
 								<h:column style="margin:25px">
 
-									<f:facet name="header">Owner</f:facet>    				
+									<f:facet name="header">OwnerName</f:facet>    				
                 				#{ord.ownerName}
    						</h:column>
 								<h:column>
@@ -119,12 +119,12 @@
 								</h:column>
 								<h:column>
 									<f:facet name="header">Edit</f:facet>
-									<h:commandButton value="Edit" class="btn btn-primary"
-										></h:commandButton>
+									<h:commandButton value="Edit" class="btn btn-primary"></h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary" action="#{order.delete(ord.order)}"></h:commandButton>
+									<h:commandButton value="Delete" class="btn btn-primary"
+										action="#{order.delete(ord.order)}"></h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Cancel</f:facet>
