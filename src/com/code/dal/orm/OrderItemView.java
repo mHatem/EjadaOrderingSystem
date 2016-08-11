@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 @SuppressWarnings("serial")
+@NamedQueries({
+	@NamedQuery ( name = "OrderItemByOrder", query = "from com.code.dal.orm.OrderItemView AS OIV where OIV.orderId = :OrderId "  ),
+	@NamedQuery ( name = "OrderItemByUser",query= "from com.code.dal.orm.OrderItemView AS OIV where OIV.userId = :UserId ")
+	})
 @Entity(name = "VW_ORDER_ITEM")
 public class OrderItemView implements Serializable{
 	private Long id;

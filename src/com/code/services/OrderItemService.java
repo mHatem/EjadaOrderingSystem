@@ -2,6 +2,7 @@ package com.code.services;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -14,19 +15,33 @@ public class OrderItemService {
 	{  try{
 		SessionFactory  sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
-		String hql = "from com.code.dal.orm.OrderItemView AS OIV where OIV.orderId = :OrderId ";
-		List <OrderItemView> result = session.createQuery(hql).setParameter("OrderId", orderId).list();
+		Query query = session.getNamedQuery("OrderItemByOrder");
+		query.setLong("OrderId",orderId);
+		List <OrderItemView> result = (List<OrderItemView>)query.list();
 		session.close();
         return result;
 	    }catch(Exception ea){return null;}
 	}
+	
+	public static List<OrderItemView> getOrderItemListByUserId( Long userId)
+	{  try{
+		SessionFactory  sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query query = session.getNamedQuery("OrderItemByUser");
+		query.setLong("UserId",userId);
+		List <OrderItemView> result = (List<OrderItemView>)query.list();
+		session.close();
+        return result;
+	    }catch(Exception ea){return null;}
+	}
+	
+	
 
 	public static List<User> getAllUsers( )
 	{  try{
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
-		String hql = "from com.code.dal.orm.User";
-		List <User> result = session.createQuery(hql).list();
+		List <User> result = session.createCriteria(User.class).list();
 		session.close();
         return result;
 	    }catch(Exception ea){return null;}
