@@ -7,7 +7,7 @@ import javax.persistence.*;
 @NamedQueries({
 	@NamedQuery(
 		name = "User.byUsernameAndPassword",
-		query = "SELECT u FROM User u WHERE u.username = :username AND (u.password = :password OR :password IS NULL)"
+		query = "SELECT u FROM User u WHERE LOWER(u.username) = LOWER(:username) AND (u.password = :password OR :password IS NULL)"
 	),
 	@NamedQuery(
 		name = "User.all",

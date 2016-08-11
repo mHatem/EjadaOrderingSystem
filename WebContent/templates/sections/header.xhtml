@@ -23,12 +23,9 @@
 				<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 					<p>
 						#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
-						<ui:remove>
-							<!--TODO-->
 							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
 								<f:ajax render="@all"/>
 							</h:commandLink>
-						</ui:remove>
 					</p>
 				</h:panelGroup>
 			</h:panelGroup>

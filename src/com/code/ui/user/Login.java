@@ -1,30 +1,20 @@
 package com.code.ui.user;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import com.code.dal.orm.User;
+import com.code.services.UserService;
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
-
-import com.code.dal.orm.User;
-import com.code.services.SessionFactoryBean;
+import java.io.Serializable;
+import java.util.Map;
 
 @ManagedBean
 @ViewScoped
 public class Login implements Serializable {
-	@ManagedProperty(value = "#{sessionFactoryBean}")
-	private SessionFactoryBean sessionFactoryBean;
-
 	private String username;
 	private String password;
 
@@ -34,6 +24,10 @@ public class Login implements Serializable {
 
 	private String invalidPasswordMessage;
 	private String unmatchedPasswordMessage;
+	private String usernameFieldMessage;
+
+	private String loggedUserName;
+	private String loggedUsername;
 
 	private boolean loggedIn = false;
 	private boolean signingUp = false;
@@ -41,7 +35,6 @@ public class Login implements Serializable {
 
 	public static final String SESSION_KEY_USER_ID = "user_id";
 	public static final String SESSION_KEY_USER_ROLE = "user_role";
-
 
 	public Login() {
 	}
@@ -52,60 +45,41 @@ public class Login implements Serializable {
 
 		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
 			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
+			User user = UserService.getSingleton().getUserById(userId);
 
-			Session session = sessionFactoryBean.getSessionFactory().openSession();
-			session.beginTransaction();
+			if (user != null)
+				updateViewLoginData(user);
 
-			Query query = session.getNamedQuery("User.byId");
-			query.setLong("id", userId);
-
-			List list = query.list();
-			if (list.size() == 1) {
-				User user = (User) list.get(0);
-				username = user.getUsername();
-
-				loggedIn = true;
-			}
-
-			session.getTransaction().commit();
-			session.close();
 		}
 	}
 
-	public String loginAction() {
+	private void updateViewLoginData(User user) {
+		loggedIn = true;
+		loggedUserName = user.getName();
+		loggedUsername = user.getUsername();
+	}
 
-		invalidPasswordMessage = null;
+	public String loginAction() {
+		clearAllFieldsErrorMessages();
 
 		if (password == null || password.length() == 0)
 			return null;
 
 		loggedIn = false;
 
-		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
+		User user = UserService.getSingleton().authenticateUser(username, password);
 
-		Query query = session.getNamedQuery("User.byUsernameAndPassword");
-		query.setString("username", username);
-		query.setString("password", password);
+		if (user != null) {
+			updateViewLoginData(user);
 
-		List<User> usersList = (List<User>) query.list();
-		if (usersList.size() == 1) {
-			loggedIn = true;
-			User user = usersList.get(0);
 			String userRole = UserRole.NORMAL; //TODO get role from database
 
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			sessionMap.put(SESSION_KEY_USER_ID, user.getId());
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
-		}
-
-		session.getTransaction().commit();
-		session.close();
-
-		if (!loggedIn)
+		} else {
 			invalidPasswordMessage = "Wrong password!";
-
+		}
 
 		password = null;
 		return null;
@@ -133,17 +107,14 @@ public class Login implements Serializable {
 		user.setName(name);
 		user.setPhoneNo(phoneNo);
 
-		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
-		Session session = null;
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-			session.save(user);
-			session.getTransaction().commit();
-			session.close();
+			UserService.getSingleton().saveUser(user);
 		} catch (ConstraintViolationException e) {
-			if (session != null)
-				session.close();
+			if (e.getConstraintName().equals(UserService.UNIQUE_USERNAME_CONSTRAINT_NAME)) {
+				usernameFieldMessage = "Username already taken";
+			} else {
+				e.printStackTrace();
+			}
 			return null;
 		} catch (HibernateException e) {
 			e.printStackTrace();
@@ -153,10 +124,14 @@ public class Login implements Serializable {
 		return null;
 	}
 
-
 	public String updateAction() {
-		unmatchedPasswordMessage = null;
-		if (!password.equals(passwordConfirm)) {
+		clearAllFieldsErrorMessages();
+
+		if ((password == null || password.length() == 0) &&
+			(passwordConfirm == null || passwordConfirm.length() == 0)) {
+			// No password change
+			password = null;
+		} else if (password != null && !password.equals(passwordConfirm)) {
 			unmatchedPasswordMessage = "Passwords do not match";
 			return null;
 		}
@@ -164,27 +139,23 @@ public class Login implements Serializable {
 		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 		Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
 
-		SessionFactory sessionFactory = sessionFactoryBean.getSessionFactory();
-		Session session = null;
 		try {
-			session = sessionFactory.openSession();
-			session.beginTransaction();
-
-			Query query = session.getNamedQuery("User.byId");
-			query.setLong("id", userId);
-
-			User user = (User) query.list().get(0);
+			User user = UserService.getSingleton().getUserById(userId);
 			user.setUsername(username);
-			user.setPassword(password);
+			if (password != null)
+				user.setPassword(password);
 			user.setName(name);
 			user.setPhoneNo(phoneNo);
 
-			session.update(user);
-			session.getTransaction().commit();
-			session.close();
+			UserService.getSingleton().updateUser(user);
+
+			updateViewLoginData(user);
 		} catch (ConstraintViolationException e) {
-			if (session != null)
-				session.close();
+			if (e.getConstraintName().equals(UserService.UNIQUE_USERNAME_CONSTRAINT_NAME)) {
+				usernameFieldMessage = "Username already taken";
+			} else {
+				e.printStackTrace();
+			}
 			return null;
 		} catch (HibernateException e) {
 			e.printStackTrace();
@@ -211,24 +182,16 @@ public class Login implements Serializable {
 		if (sessionMap.containsKey(SESSION_KEY_USER_ID)) {
 			Long userId = (Long) sessionMap.get(SESSION_KEY_USER_ID);
 
-			Session session = sessionFactoryBean.getSessionFactory().openSession();
-			session.beginTransaction();
-
-			Query query = session.getNamedQuery("User.byId");
-			query.setLong("id", userId);
-
-			List list = query.list();
-			if (list.size() == 1) {
-				User user = (User) list.get(0);
+			User user = UserService.getSingleton().getUserById(userId);
+			if (user != null) {
 				username = user.getUsername();
 				password = user.getPassword();
 				passwordConfirm = password;
 				name = user.getName();
 				phoneNo = user.getPhoneNo();
-			}
 
-			session.getTransaction().commit();
-			session.close();
+				UserService.getSingleton().updateUser(user);
+			}
 		}
 
 		return null;
@@ -238,7 +201,6 @@ public class Login implements Serializable {
 		editing = false;
 		return null;
 	}
-
 
 	public String getPageTitle() {
 		String titleExpression;
@@ -267,14 +229,12 @@ public class Login implements Serializable {
 		public static final String ADMIN_ITEMS = "admin_items";
 	}
 
-	public SessionFactoryBean getSessionFactoryBean() {
-		return sessionFactoryBean;
+	private void clearAllFieldsErrorMessages() {
+		usernameFieldMessage = null;
+		invalidPasswordMessage = null;
+		unmatchedPasswordMessage = null;
 	}
-
-	public void setSessionFactoryBean(SessionFactoryBean sessionFactoryBean) {
-		this.sessionFactoryBean = sessionFactoryBean;
-	}
-
+	
 	public String getUsername() {
 		return username;
 	}
@@ -353,5 +313,29 @@ public class Login implements Serializable {
 
 	public void setUnmatchedPasswordMessage(String unmatchedPasswordMessage) {
 		this.unmatchedPasswordMessage = unmatchedPasswordMessage;
+	}
+
+	public String getUsernameFieldMessage() {
+		return usernameFieldMessage;
+	}
+
+	public void setUsernameFieldMessage(String usernameFieldMessage) {
+		this.usernameFieldMessage = usernameFieldMessage;
+	}
+
+	public String getLoggedUserName() {
+		return loggedUserName;
+	}
+
+	public void setLoggedUserName(String loggedUserName) {
+		this.loggedUserName = loggedUserName;
+	}
+
+	public String getLoggedUsername() {
+		return loggedUsername;
+	}
+
+	public void setLoggedUsername(String loggedUsername) {
+		this.loggedUsername = loggedUsername;
 	}
 }
