@@ -64,7 +64,12 @@ public class PlaceBean implements Serializable {
 		phoneNo = null;
 		return places;
 	}
-
+	public List<Place> searchPlace() {
+			places = PlaceService.searchPlaceNPh(name, phoneNo);
+			return places;
+			}
+		
+	
 	public void deletePlace(Place deletedPlace) {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);

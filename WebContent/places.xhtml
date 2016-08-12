@@ -62,10 +62,20 @@
 								 style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId"
 					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
-				</h:commandButton>
-				
-								
+				</h:commandButton>					
 			</div>
+			
+			<!-- search by name only -->
+			<div>
+				<h:commandButton value="serachAll" 
+								 class="btn btn-primary" 
+								 action="#{place.searchPlace}" 
+								 style="font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
+				</h:commandButton>					
+			</div>
+			<!-- show all places -->
 			<div>
 			<h:commandButton value="ShowAllPlaces" 
 								 class="btn btn-primary" 
@@ -75,6 +85,7 @@
 					 render="palcesForm:placesTableId"/>
 			</h:commandButton>
 			</div>
+			
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
