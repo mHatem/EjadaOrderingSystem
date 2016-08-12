@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class UserService {
@@ -66,6 +68,23 @@ public class UserService {
 		return user;
 	}
 
+	public Collection<User> getAllUsers() {
+		Collection<User> users = new ArrayList<User>();
+
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+
+		Query query = session.getNamedQuery("User.all");
+		List list = query.list();
+		for (Object o : list)
+			users.add((User) o);
+
+		session.getTransaction().commit();
+		session.close();
+
+		return users;
+	}
+
 	public void saveUser(User user) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -109,7 +128,7 @@ public class UserService {
 		session.getTransaction().commit();
 		session.close();
 
-		if(userRole == null)
+		if (userRole == null)
 			userRole = UserRole.NORMAL;
 		return userRole;
 	}

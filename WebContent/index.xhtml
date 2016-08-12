@@ -28,7 +28,7 @@
 						<p>
 							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
 							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
-								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form"/>
+								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
 						</p>
 					</h:panelGroup>
@@ -36,8 +36,21 @@
 			</div>
 		</h:panelGroup>
 
-		<!--Empty left side pane-->
+		<!--Left sidebar-->
 		<div class="col-lg-2">
+			<h:panelGroup id="sidebar">
+				<h:panelGroup rendered="#{login.loggedIn}">
+					<div class="container" style="padding-top: 50px">
+						<div class="bar">
+							<h3><h:link value="Orders" outcome="Order"/></h3>
+						</div>
+						<div class="bar">
+							<h3><h:link value="Places" outcome="places"/></h3>
+						</div>
+					</div>
+
+				</h:panelGroup>
+			</h:panelGroup>
 		</div>
 
 		<!--Content-->
@@ -76,7 +89,7 @@
 									<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
 									               styleClass="btn btn-primary btn-sm ">
 										<f:ajax execute="login_form"
-										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
+										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle sidebar"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.not_a_user_signup}"
 									               action="#{login.signupButton}"
@@ -264,7 +277,7 @@
 										<h:selectOneMenu id="item_combobox"
 										                 value="{login.selectedItemId}"
 										                 styleClass="form-control dropdown">
-											<f:selectItems value="{login.items}"
+											<f:selectItems value="#{login.placeItems}"
 											               var="item"
 											               itemLabel="#{item.name}"
 											               itemValue="#{item.id}"/>
@@ -291,35 +304,54 @@
 						<!--Orders Table-->
 						<!--TODO-->
 						<h:panelGroup id="orders_table">
-							<h:dataTable value="#{login.orders}" var="order"
-							             styleClass="table table-bordered">
-								<h:column>
-									<f:facet name="header">ID</f:facet>
-									#{order.id}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Status</f:facet>
-									#{order.status}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Owner</f:facet>
-									#{order.ownerName}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Place</f:facet>
-									#{order.placeName}
-								</h:column>
-								<h:column>
-									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary"
-									                 action="{order.delete(order.order)}"/>
-								</h:column>
-							</h:dataTable>
+							<div class="container col-lg-12">
+								<h2>Orders</h2>
+								<h:dataTable value="#{login.orders}" var="order"
+								             styleClass="table table-bordered">
+									<h:column>
+										<f:facet name="header">ID</f:facet>
+										#{order.id}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Status</f:facet>
+										#{order.status}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Owner</f:facet>
+										#{order.ownerName}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Place</f:facet>
+										#{order.placeName}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Delete</f:facet>
+										<h:commandButton value="Delete" class="btn btn-primary"
+										                 action="{order.delete(order.order)}"/>
+									</h:column>
+								</h:dataTable>
+							</div>
 						</h:panelGroup>
 
-						<!--Items Table-->
+						<!--OrderItems Table-->
 						<!--TODO-->
-
+						<h:panelGroup id="order_items_table">
+							<div class="container col-lg-12">
+								<h2>Order Items</h2>
+								<h:dataTable value="#{login.orderItems}" var="order_item"
+								             styleClass="table table-bordered">
+									<h:column>
+										<f:facet name="header">ID</f:facet>
+										#{order_item.id}
+									</h:column>
+									<h:column>
+										<f:facet name="header">Delete</f:facet>
+										<h:commandButton value="Delete" class="btn btn-primary"
+										                 action="{order.delete(order.order)}"/>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
 

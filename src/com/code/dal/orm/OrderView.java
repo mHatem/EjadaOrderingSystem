@@ -15,7 +15,12 @@ import javax.persistence.Transient;
 
 @NamedQueries({
 @NamedQuery(name = "Order.all", query = "FROM OrderView "),
-@NamedQuery(name = "search", query = "FROM OrderView  WHERE (ownerName=? OR ownerName IS NULL) AND (placeName =? OR placeName IS NULL)")
+@NamedQuery(name = "search", query = "SELECT o  FROM OrderView o  WHERE (:ownerName = '-1' OR o.ownerName =:ownerName ) "
+		+ "AND (:placeName = '-1' or o.placeName = :placeName )"
+		+ "AND (:status = '-1' or o.status = :status )"
+		+"AND ( :id  = -1 or o.id = :id )"
+		+"AND ( :placeId = -1 or o.placeId = :placeId)"
+		)
 
 })
 public class OrderView {

@@ -25,7 +25,7 @@ public class order implements Serializable {
 	private long id;
 	private String name;
 	private long ownerID;
-	
+
 	private String status;
 	private long placeID;
 	private Date date;
@@ -34,6 +34,9 @@ public class order implements Serializable {
 	private String selectedPlace;
 	private String SUName;
 	private String SPName;
+	private String SNAme;
+	private Long SID;
+	private Long SPID;
 
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
@@ -45,11 +48,11 @@ public class order implements Serializable {
 		return 0;
 	}
 
-	public void search()
-	{
-		setOrders(orderService.find(SUName, SPName));
-		
+	public void search() {
+		setOrders(orderService.find(SUName, SPName,SNAme,SID,SPID));
+
 	}
+
 	public void displayAllOrders() {
 		setOrders(orderService.getALL());
 	}
@@ -67,19 +70,39 @@ public class order implements Serializable {
 
 	}
 
-	
-	public void delete (Order r)
-	{
+	public void delete(Order r) {
 		orderService.delete(r);
 		displayAllOrders();
-		
+
 	}
-	
+
 	public order() {
 		displayAllOrders();
 	}
 
-	
+	public String getSNAme() {
+		return SNAme;
+	}
+
+	public void setSNAme(String sNAme) {
+		SNAme = sNAme;
+	}
+
+	public Long getSID() {
+		return SID;
+	}
+
+	public void setSID(Long sID) {
+		SID = sID;
+	}
+
+	public Long getSPID() {
+		return SPID;
+	}
+
+	public void setSPID(Long sPID) {
+		SPID = sPID;
+	}
 
 	public String getSelectedPlace() {
 		return selectedPlace;
@@ -152,6 +175,7 @@ public class order implements Serializable {
 	public void setOrders(List<OrderView> orders) {
 		this.orders = orders;
 	}
+
 	public String getSUName() {
 		return SUName;
 	}
@@ -167,6 +191,5 @@ public class order implements Serializable {
 	public void setSPName(String sPName) {
 		SPName = sPName;
 	}
-
 
 }
