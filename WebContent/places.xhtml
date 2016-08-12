@@ -47,7 +47,9 @@
 			
 			<!-- insert -->
 			<div>
-				<h:commandButton value="add place" class="btn btn-primary" action="#{place.addPlace}" style="color: blue;font-family:Good Times" >
+				<h:commandButton value="add place"
+				 	class="btn btn-primary" 
+				 	action="#{place.addPlace}" style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
 				</h:commandButton>
 			</div>
@@ -57,14 +59,22 @@
 				<h:commandButton value="serach" 
 								 class="btn btn-primary" 
 								 action="#{place.searchPlaceName}" 
-								 style="color: blue;font-family:Good Times" >
+								 style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId"
 					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
-				
 				</h:commandButton>
+				
 								
 			</div>
-			
+			<div>
+			<h:commandButton value="ShowAllPlaces" 
+								 class="btn btn-primary" 
+								 action="#{place.showAll}" 
+								 style="font-family:Good Times" >
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId"/>
+			</h:commandButton>
+			</div>
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
