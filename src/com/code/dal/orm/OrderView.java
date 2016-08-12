@@ -10,6 +10,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.code.ui.order;
+
 @Entity
 @Table(name = "VW_ORDER")
 
@@ -20,6 +22,8 @@ import javax.persistence.Transient;
 		+ "AND (:status = '-1' or o.status = :status )"
 		+"AND ( :id  = -1 or o.id = :id )"
 		+"AND ( :placeId = -1 or o.placeId = :placeId)"
+		+"AND ( :ownerId = -1 or o.ownerId = :ownerId)"
+
 		)
 
 })
@@ -33,6 +37,22 @@ public class OrderView {
 	private String placeName;
 	private Date orderDate;
 	private Order order;
+	private boolean editable;
+
+	@Transient
+	public static void edit(OrderView o)
+	{
+		o.setEditable(true);
+	}
+	
+	@Transient
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
 
 	public OrderView() {
 		order = new Order();

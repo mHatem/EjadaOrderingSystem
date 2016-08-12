@@ -47,7 +47,7 @@ public class orderService {
 		session.close();
 	}
 
-	public static List<OrderView> find(String userNAME, String placeNAME, String status, Long id, Long placeID) {
+	public static List<OrderView> find(String userNAME, String placeNAME, String status, Long id, Long placeID,Long ownerID) {
 		@SuppressWarnings("deprecation")
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
@@ -67,6 +67,7 @@ public class orderService {
 		query.setString("status", status);
 		query.setLong("id", id==null ? -1 : id);
 		query.setLong("placeId", placeID == null ? -1 : placeID);
+		query.setLong("ownerId", ownerID == null ? -1 : ownerID);
 		@SuppressWarnings("unchecked")
 		List<OrderView> orders = (List<OrderView>) query.list();
 		session.getTransaction().commit();

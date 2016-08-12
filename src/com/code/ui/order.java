@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.html.HtmlDataTable;
 import javax.faces.context.FacesContext;
 
 import com.code.OrderStatusEnum;
@@ -32,12 +31,17 @@ public class order implements Serializable {
 	private float totalPrice;
 	private List<OrderView> orders;
 	private String selectedPlace;
+	private String ownerName;
 	private String SUName;
 	private String SPName;
 	private String SNAme;
 	private Long SID;
-	private Long SPID;
 
+	public void edit(OrderView o)
+	{
+     OrderView.edit(o);
+	}
+	
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
 		for (Place p : bean.getPlaces()) {
@@ -49,7 +53,7 @@ public class order implements Serializable {
 	}
 
 	public void search() {
-		setOrders(orderService.find(SUName, SPName,SNAme,SID,SPID));
+		setOrders(orderService.find(SUName, SPName,SNAme,SID,null,null));
 
 	}
 
@@ -80,6 +84,8 @@ public class order implements Serializable {
 		displayAllOrders();
 	}
 
+	
+
 	public String getSNAme() {
 		return SNAme;
 	}
@@ -96,13 +102,6 @@ public class order implements Serializable {
 		SID = sID;
 	}
 
-	public Long getSPID() {
-		return SPID;
-	}
-
-	public void setSPID(Long sPID) {
-		SPID = sPID;
-	}
 
 	public String getSelectedPlace() {
 		return selectedPlace;
@@ -142,6 +141,13 @@ public class order implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 
 	public String getStatus() {
