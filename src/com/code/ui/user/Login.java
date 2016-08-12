@@ -1,7 +1,11 @@
 package com.code.ui.user;
 
+import com.code.dal.orm.OrderView;
+import com.code.dal.orm.Place;
 import com.code.dal.orm.User;
+import com.code.services.PlaceService;
 import com.code.services.UserService;
+import com.code.services.orderService;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -10,6 +14,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @ManagedBean
@@ -36,6 +42,9 @@ public class Login implements Serializable {
 	public static final String SESSION_KEY_USER_ID = "user_id";
 	public static final String SESSION_KEY_USER_ROLE = "user_role";
 
+	private Collection<Place> places;
+	private Long selectedPlaceId;
+
 	public Login() {
 	}
 
@@ -51,6 +60,8 @@ public class Login implements Serializable {
 				updateViewLoginData(user);
 
 		}
+
+		places = PlaceService.retrievePlaces();
 	}
 
 	private void updateViewLoginData(User user) {
@@ -72,10 +83,11 @@ public class Login implements Serializable {
 		if (user != null) {
 			updateViewLoginData(user);
 
-			String userRole = UserRole.NORMAL; //TODO get role from database
+			Long userId = user.getId();
+			String userRole = UserService.getSingleton().getUserRole(userId);
 
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-			sessionMap.put(SESSION_KEY_USER_ID, user.getId());
+			sessionMap.put(SESSION_KEY_USER_ID, userId);
 			sessionMap.put(SESSION_KEY_USER_ROLE, userRole);
 		} else {
 			invalidPasswordMessage = "Wrong password!";
@@ -222,19 +234,16 @@ public class Login implements Serializable {
 		return title;
 	}
 
-	public static class UserRole {
-		public static final String NORMAL = "normal";
-		public static final String ADMIN = "admin";
-		public static final String ADMIN_PLACES = "admin_places";
-		public static final String ADMIN_ITEMS = "admin_items";
-	}
-
 	private void clearAllFieldsErrorMessages() {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
 		unmatchedPasswordMessage = null;
 	}
-	
+
+	public List<OrderView> getOrders() {
+		return orderService.getALL();
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -337,5 +346,21 @@ public class Login implements Serializable {
 
 	public void setLoggedUsername(String loggedUsername) {
 		this.loggedUsername = loggedUsername;
+	}
+
+	public Collection<Place> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(Collection<Place> places) {
+		this.places = places;
+	}
+
+	public Long getSelectedPlaceId() {
+		return selectedPlaceId;
+	}
+
+	public void setSelectedPlaceId(Long selectedPlaceId) {
+		this.selectedPlaceId = selectedPlaceId;
 	}
 }
