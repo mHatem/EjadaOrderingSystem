@@ -6,12 +6,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
-	<title>places</title>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script
-		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+	<title>places</title>	
 	<h:outputStylesheet library="css" name="bootstrap.css"></h:outputStylesheet>
 
 </h:head>
@@ -124,7 +119,7 @@
 				</h:column>
 				
 				<!-- Update -->
-				<h:column headerClass="columnHeader" footerClass="columnFooter">
+				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">update</f:facet>
 						<h:commandButton value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default " >
 							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>			 
