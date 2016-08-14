@@ -52,11 +52,13 @@
 			
 			<!-- insert -->
 			<div>
-				<h:commandLink value="add place"
+				<h:commandLink id="add" value="add place"
 				 	class="btn btn-primary" 
+				 	 binding="#{place.addButton}" 	
 				 	action="#{place.addPlace}" style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
 				</h:commandLink>
+    			<h:message for="add" />
 			</div>
 			
 			<!-- search by nameAndPhone -->
