@@ -10,10 +10,13 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import org.hibernate.exception.ConstraintViolationException;
+
 import com.code.dal.orm.Place;
 import com.code.dal.orm.UserRole;
 import com.code.services.PlaceService;
 import com.code.services.UserService;
+import com.code.services.orderService;
 import com.code.ui.user.Login;
 
 @SuppressWarnings("serial")
@@ -26,7 +29,16 @@ public class PlaceBean implements Serializable {
 	private List<Place> places;
 	private String userName;
 	private UIComponent addButton;
+	private boolean flagDeleteUsedPlace;
 	
+	public boolean isFlagDeleteUsedPlace() {
+		return flagDeleteUsedPlace;
+	}
+
+	public void setFlagDeleteUsedPlace(boolean flagDeleteUsedPlace) {
+		this.flagDeleteUsedPlace = flagDeleteUsedPlace;
+	}
+
 	public PlaceBean() {
 		
 		places = null;
@@ -94,9 +106,17 @@ public class PlaceBean implements Serializable {
 	}
 		
 	public void deletePlace(Place deletedPlace) {
+		flagDeleteUsedPlace = false;
+		try {
 		PlaceService.deletePlace(deletedPlace);
 		places.remove(deletedPlace);
-	}
+		} catch (ConstraintViolationException e){
+			System.err.println("this place is used already, u can't delete it now");
+			flagDeleteUsedPlace=true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+}
 	
 	
 	public String redirectToItems(Place place)
