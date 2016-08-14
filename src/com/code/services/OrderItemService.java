@@ -28,6 +28,8 @@ public class OrderItemService {
 	public List<OrderItemView> getOrderListByOrderID(Long orderId) {
 		try {
 
+			if (orderId == null)
+				orderId = -1L;
 			Session session = sessionFactory.openSession();
 			Query query = session.getNamedQuery("OrderItemByOrder");
 			query.setLong("OrderId", orderId);
@@ -42,6 +44,8 @@ public class OrderItemService {
 	public List<OrderItemView> getOrderItemListByUserId(Long userId) {
 		try {
 
+			if (userId == null)
+				userId = -1L;
 			Session session = sessionFactory.openSession();
 			Query query = session.getNamedQuery("OrderItemByUser");
 			query.setLong("UserId", userId);
