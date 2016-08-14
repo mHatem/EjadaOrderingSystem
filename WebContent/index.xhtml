@@ -357,10 +357,10 @@
 												<f:facet name="header">ID</f:facet>
 												#{order_item.id}
 											</h:column>
-											<h:column>
+											<h:column rendered="#{login.admin}">
 												<f:facet name="header">Delete</f:facet>
 												<!--TODO set action-->
-												<h:commandLink value="Delete" class="btn btn-primary"
+												<h:commandLink value="Delete" class="btn"
 												               action="{order.delete(order.order)}"/>
 											</h:column>
 										</h:dataTable>
