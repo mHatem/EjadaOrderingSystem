@@ -34,7 +34,7 @@
 			<!-- place -->
 			<div>
 				<h:outputText value="Places "
-					style="color: blue;font-family:Good Times size=40" />
+					style="color: blue;font-family:Good Times;size=40" />
 			</div>
 			
 			
@@ -63,24 +63,22 @@
 			
 			<!-- search by nameAndPhone -->
 			<div>
-				<h:commandButton value="serachAll" 
+				<h:commandLink value="serachAll" 
 								 class="btn btn-primary" 
-								 action="#{place.searchPlace}" 
-								 style="font-family:Good Times" >
+								 action="#{place.searchPlace}" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
 					 render="palcesForm:placesTableId "/>
-				</h:commandButton>					
+				</h:commandLink>					
 			</div>
 			
 			<!-- show all places -->
 			<div>
-			<h:commandButton value="ShowAllPlaces" 
+			<h:commandLink value="ShowAllPlaces" 
 								 class="btn btn-primary" 
-								 action="#{place.showAll}" 
-								 style="font-family:Good Times" >
+								 action="#{place.showAll}">
 				<f:ajax execute="palcesForm:placeNameId"
 					 render="palcesForm:placesTableId"/>
-			</h:commandButton>
+			</h:commandLink>
 			</div>
 			
 			<!-- Reset inputText -->
@@ -93,6 +91,9 @@
 					 render="palcesForm:placeNameId palcesForm:placePhoneId"/>
 			</h:commandButton>
 			</div>
+			<h:outputScript rendered="#{place.flagDeleteUsedPlace}">
+				alert("this place is used already");
+			</h:outputScript>
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
