@@ -1,6 +1,7 @@
 package com.code.dal.orm;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "USERS")
@@ -18,7 +19,7 @@ import javax.persistence.*;
 		query = "SELECT u FROM User u WHERE u.id = :id"
 	)
 })
-public class User {
+public class User implements Serializable {
 	private Long id;
 	private String username;
 	private String password;
@@ -43,7 +44,7 @@ public class User {
 	}
 
 	public void setUsername(String username) {
-		this.username = username.toLowerCase();
+		this.username = username;
 	}
 
 	@Column(name = "PASS")
