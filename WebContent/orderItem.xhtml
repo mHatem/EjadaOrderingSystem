@@ -23,8 +23,25 @@
 
 	<h:form id="formTable">
 		<h:panelGrid columnClasses="acent">
+			<h:outputText value="Item name: " />
+			<h:inputText value="#{OrderItem.searchParameterItemName}"/>
+				
+			<br />
 
-			<h:commandButton value="Add order" action="#{OrderItem.appendOrder}">
+			<h:outputText value="username: " />
+			<h:inputText value="#{OrderItem.searchParameterUsername}"/>
+			
+			<br />
+			<h:commandButton value="Filter data" action="#{OrderItem.filterData()}">
+				<f:ajax execute="@form" render="@form" />
+			</h:commandButton>
+			<h:commandButton value="Preload " action="#{OrderItem.resetData()}">
+				<f:ajax execute="@form" render="@form" />
+			</h:commandButton>
+			
+			
+			<h:commandButton value="Add order" action="#{OrderItem.appendOrder}"
+				rendered="#{OrderItem.isOpened}">
 				<f:ajax render="@form" />
 			</h:commandButton>
 
@@ -32,9 +49,9 @@
 			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable">
 				<rich:column>
 					<h:outputText value="#{order.username}"
-						rendered="#{!order.selected}" />
+						rendered="#{!order.selected or  !OrderItem.isAdmin }" />
 					<h:selectOneMenu value="#{order.userIdToCheck}"
-						rendered="#{order.selected}">
+						rendered="#{order.selected and OrderItem.isAdmin }">
 						<f:selectItems value="#{OrderItem.user}" var="user"
 							itemLabel="#{user.username}" itemValue="#{user.id}" />
 					</h:selectOneMenu>
@@ -82,9 +99,10 @@
 						<h:outputText value="Total cost" />
 					</f:facet>
 				</rich:column>
-				<rich:column>
-					<h:commandButton rendered="#{!order.selected }" value="update"
-						action="#{OrderItem.toggleSelection(order)}">
+				<rich:column rendered="#{OrderItem.isOpened}">
+					<h:commandButton
+						rendered="#{!order.selected and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
+						value="update" action="#{OrderItem.toggleSelection(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 					<h:commandButton rendered="#{order.selected and ! order.toAdd }"
@@ -100,9 +118,10 @@
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 				</rich:column>
-				<rich:column>
-					<h:commandButton rendered="#{!order.toAdd}" value="Delete"
-						action="#{OrderItem.delete(order)}">
+				<rich:column rendered="#{OrderItem.isOpened}">
+					<h:commandButton
+						rendered="#{!order.toAdd and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
+						value="Delete" action="#{OrderItem.delete(order)}">
 						<f:ajax render="@form" />
 					</h:commandButton>
 				</rich:column>

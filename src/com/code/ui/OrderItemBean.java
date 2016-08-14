@@ -1,31 +1,44 @@
 package com.code.ui;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
+
+
+import com.code.OrderStatusEnum;
 import com.code.dal.orm.*;
 import com.code.services.OrderItemService;
 import com.code.services.UserService;
-import java.util.Collection;
+import com.code.ui.user.Login;
+
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "OrderItem")
 @ViewScoped
 public class OrderItemBean implements Serializable {
 
-	private Long orderId = 9L;
+	private Long orderId;
 	private Order order;
 	private Place place;
 	private List<OrderItemView> items;
 	private OrderItemService orderItemService = null;
 	private List<PlacesItem> menu;
-	private Collection<User> user;
+	private List<User> user;
 	private String errorMessage;
+	private Boolean isAdmin = false;
+	private User loggedUser;
+	private Long userId;
+	private String searchParameterUsername;
+	private String searchParameterItemName;
+	private Boolean isOpened;
 
 	public String getErrorMessage() {
 		return errorMessage;
@@ -51,18 +64,50 @@ public class OrderItemBean implements Serializable {
 		this.items = items;
 	}
 
+	public String resetData()
+	{
+		searchParameterItemName = null;
+		searchParameterUsername = null;
+		filterData();
+		return null;
+	}
+	
+	public String filterData() {
+		if(searchParameterItemName != null)
+			searchParameterItemName = searchParameterItemName.trim().toLowerCase();
+	    if(searchParameterItemName != null)	
+	    	searchParameterUsername = searchParameterUsername.trim().toLowerCase();
+		items = orderItemService.getOrderedItemsFiltered(orderId  , searchParameterItemName , searchParameterUsername);
+		return null;
+	}
+
 	public void refresh() {
 		try {
-			orderId = 1L;
+			String orderIdString=((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("ORDERID");
+			orderId = Long.parseLong(orderIdString); 
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
 			}
 			setOrder(orderItemService.getOrderByOrderID(orderId));
+			if (order.getStatus().trim().toLowerCase()
+					.equals(OrderStatusEnum.OPENED.getCode()))
+				isOpened = true;
+			else
+				isOpened = false;
 			setPlace(orderItemService.getPlaceByPlaceID(order.getPlaceID()));
 			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
 			UserService userService = UserService.getSingleton();
-			user = userService.getAllUsers();
+			User[] transfer = (User[]) userService.getAllUsers().toArray();
+			Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+			String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
+		    String userIdTransefer = (String) sessionMap.get(Login.SESSION_KEY_USER_ID);
+		    if(userRole.equals(UserRole.ADMIN))
+		    	isAdmin = true;
+		    else isAdmin = false;
+		    userId = Long.parseLong(userIdTransefer);
+			user = Arrays.asList(transfer);
+			loggedUser = userService.getUserById(userId);
 
 		} catch (Exception ea) {
 			return;
@@ -115,6 +160,14 @@ public class OrderItemBean implements Serializable {
 		OrderItemView newOrder = new OrderItemView();
 		newOrder.setToAdd(true);
 		newOrder.setSelected(true);
+		newOrder.setUserId(userId);
+		newOrder.setUserIdToCheck(userId.toString());
+		newOrder.setUsername(loggedUser.getUsername());
+		if (menu.size() > 0 && menu.get(0).getId() != null) {
+			newOrder.setItemId(menu.get(0).getId());
+			newOrder.setItemIdToCheck(menu.get(0).getId().toString());
+		}
+
 		items.add(newOrder);
 		return null;
 	}
@@ -201,6 +254,7 @@ public class OrderItemBean implements Serializable {
 			else {
 				selectedItem.setCount(count);
 				selectedItem.setPrice(searchPrice(ItemId));
+				selectedItem.setItemId(ItemId);
 				return true;
 			}
 		} catch (Exception ea) {
@@ -231,11 +285,11 @@ public class OrderItemBean implements Serializable {
 		}
 	}
 
-	public Collection<User> getUser() {
+	public List<User> getUser() {
 		return user;
 	}
 
-	public void setUser(Collection<User> user) {
+	public void setUser(List<User> user) {
 		this.user = user;
 	}
 
@@ -245,6 +299,46 @@ public class OrderItemBean implements Serializable {
 
 	public void setPlace(Place place) {
 		this.place = place;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public User getLoggedUser() {
+		return loggedUser;
+	}
+
+	public void setLoggedUser(User loggedUser) {
+		this.loggedUser = loggedUser;
+	}
+
+	public String getSearchParameterUsername() {
+		return searchParameterUsername;
+	}
+
+	public void setSearchParameterUsername(String searchParameterUserId) {
+		this.searchParameterUsername = searchParameterUserId;
+	}
+
+	public String getSearchParameterItemName() {
+		return searchParameterItemName;
+	}
+
+	public void setSearchParameterItemName(String searchParameterItemId) {
+		this.searchParameterItemName = searchParameterItemId;
+	}
+
+	public Boolean getIsOpened() {
+		return isOpened;
+	}
+
+	public void setIsOpened(Boolean isOpened) {
+		this.isOpened = isOpened;
 	}
 
 }
