@@ -34,27 +34,29 @@
 			<!-- place -->
 			<div>
 				<h:outputText value="Places "
-					style="color: blue;font-family:Good Times" />
+					style="color: blue;font-family:Good Times size=40" />
 			</div>
 			
 			
 			<!-- input text > insert name and phone -->
 			<div>
 				<h:outputLabel value="PlaceName: " />
-				<h:inputText id="placeNameId" value="#{place.name}"  />
+				<h:inputText id="placeNameId" value="#{place.name}" 
+					 styleClass="form-control"/>
+					
 			</div>
 			<div>	
 				<h:outputLabel value="PlacePhone"/>
-				<h:inputText id="placePhoneId" value="#{place.phoneNo}" />
+				<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
 			</div>
 			
 			<!-- insert -->
 			<div>
-				<h:commandButton value="add place"
+				<h:commandLink value="add place"
 				 	class="btn btn-primary" 
 				 	action="#{place.addPlace}" style="font-family:Good Times" >
-				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
-				</h:commandButton>
+				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
+				</h:commandLink>
 			</div>
 			
 			<!-- search by nameAndPhone -->
