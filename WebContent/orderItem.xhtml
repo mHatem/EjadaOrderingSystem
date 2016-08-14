@@ -24,22 +24,23 @@
 	<h:form id="formTable">
 		<h:panelGrid columnClasses="acent">
 			<h:outputText value="Item name: " />
-			<h:inputText value="#{OrderItem.searchParameterItemName}"/>
-				
+			<h:inputText value="#{OrderItem.searchParameterItemName}" />
+
 			<br />
 
 			<h:outputText value="username: " />
-			<h:inputText value="#{OrderItem.searchParameterUsername}"/>
-			
+			<h:inputText value="#{OrderItem.searchParameterUsername}" />
+
 			<br />
-			<h:commandButton value="Filter data" action="#{OrderItem.filterData()}">
+			<h:commandButton value="Filter data"
+				action="#{OrderItem.filterData()}">
 				<f:ajax execute="@form" render="@form" />
 			</h:commandButton>
 			<h:commandButton value="Preload " action="#{OrderItem.resetData()}">
 				<f:ajax execute="@form" render="@form" />
 			</h:commandButton>
-			
-			
+
+
 			<h:commandButton value="Add order" action="#{OrderItem.appendOrder}"
 				rendered="#{OrderItem.isOpened}">
 				<f:ajax render="@form" />

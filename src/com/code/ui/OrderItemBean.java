@@ -25,7 +25,7 @@ import com.code.ui.user.Login;
 @ViewScoped
 public class OrderItemBean implements Serializable {
 
-	private Long orderId;
+	private Long orderId = 1L;
 	private Order order;
 	private Place place;
 	private List<OrderItemView> items;
@@ -35,7 +35,7 @@ public class OrderItemBean implements Serializable {
 	private String errorMessage;
 	private Boolean isAdmin = false;
 	private User loggedUser;
-	private Long userId;
+	private Long userId = 13L;
 	private String searchParameterUsername;
 	private String searchParameterItemName;
 	private Boolean isOpened;
@@ -83,8 +83,8 @@ public class OrderItemBean implements Serializable {
 
 	public void refresh() {
 		try {
-			String orderIdString=((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("ORDERID");
-			orderId = Long.parseLong(orderIdString); 
+			/*String orderIdString=((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("ORDERID");
+			orderId = Long.parseLong(orderIdString); */
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
@@ -99,13 +99,13 @@ public class OrderItemBean implements Serializable {
 			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
 			UserService userService = UserService.getSingleton();
 			User[] transfer = (User[]) userService.getAllUsers().toArray();
-			Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+			/*Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
 		    String userIdTransefer = (String) sessionMap.get(Login.SESSION_KEY_USER_ID);
 		    if(userRole.equals(UserRole.ADMIN))
 		    	isAdmin = true;
 		    else isAdmin = false;
-		    userId = Long.parseLong(userIdTransefer);
+		    userId = Long.parseLong(userIdTransefer);*/
 			user = Arrays.asList(transfer);
 			loggedUser = userService.getUserById(userId);
 
