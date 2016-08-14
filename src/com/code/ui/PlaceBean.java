@@ -62,11 +62,7 @@ public class PlaceBean implements Serializable {
 
 	}
 	
-	// search by name
-	public List<Place> searchPlaceName() {
-		places = PlaceService.searchPlaces(name);
-		return places;
-	}
+	
 	
 	//search by name and phone 
 	public List<Place> searchPlace() {
