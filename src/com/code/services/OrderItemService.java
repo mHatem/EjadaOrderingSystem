@@ -14,6 +14,7 @@ public class OrderItemService {
 	private SessionFactory sessionFactory = null;
 	private static OrderItemService orderItemService = null;
 
+	@SuppressWarnings("deprecation")
 	private OrderItemService() {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
