@@ -256,6 +256,7 @@
 							</h:panelGroup>
 						</h:panelGroup>
 
+						<!--View Tables-->
 						<h:panelGroup id="order_and_items_tables">
 							<h:panelGroup rendered="#{login.loggedIn and not login.editing}">
 								<!--Search filter controls-->
@@ -336,14 +337,19 @@
 												<h:commandLink value="Delete" class="btny"
 												               action="#{login.deleteOrder(order)}">
 													<!--TODO render row only-->
-													<f:ajax render="orders_datatable"/>
+													<f:ajax render="orders_datatable formId:scriptsss"/>
 												</h:commandLink>
 											</h:column>
 										</h:dataTable>
-										<h:outputScript rendered="#{login.showAlert}">
+									</div>
+								</h:panelGroup>
+
+								<h:panelGroup id="scriptsss">
+									<h:panelGroup rendered="#{login.showAlert}">
+										<h:outputScript>
 											alert("You cannot delete this order.");
 										</h:outputScript>
-									</div>
+									</h:panelGroup>
 								</h:panelGroup>
 
 								<!--OrderItems Table-->
@@ -370,7 +376,6 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-
 			</h:panelGroup>
 		</div>
 

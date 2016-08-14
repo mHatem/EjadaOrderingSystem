@@ -232,10 +232,10 @@ public class Login implements Serializable {
 		Long userId = getUserIdFromSessionMap();
 		String userRole = getUserRoleFromSessionMap();
 		// TODO Don't filter by user id if admin is logged in
-		// if (userRole.equals(UserRole.ADMIN))
-		//   userId = null;
+		if (userRole.equals(UserRole.ADMIN))
+			userId = null;
 
-		orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
+		orderItemViews = OrderItemService.getSingleton().getOrderedItemsFiltered(null, null, null);
 		return orderItemViews;
 	}
 
@@ -345,7 +345,8 @@ public class Login implements Serializable {
 				orderService.delete(order);
 				orders.remove(orderView);
 			} catch (ConstraintViolationException e) {
-				if (e.getConstraintName().equals(UserService.SCHEMA_NAME + "." + "SYS_C008103")) {
+				// TODO correct constraint name
+				if (true || e.getConstraintName().equals(UserService.SCHEMA_NAME + "." + "SYS_C008103")) {
 					// TODO warning message
 					System.err.println("Cant delete this order");
 					showAlert = true;
@@ -353,6 +354,7 @@ public class Login implements Serializable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 		}
 
 		return null;
