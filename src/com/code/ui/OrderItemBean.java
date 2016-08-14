@@ -171,6 +171,7 @@ public class OrderItemBean implements Serializable {
 		if (menu.size() > 0 && menu.get(0).getId() != null) {
 			newOrder.setItemId(menu.get(0).getId());
 			newOrder.setItemIdToCheck(menu.get(0).getId().toString());
+			newOrder.setPrice(menu.get(0).getPrice());
 		}
 
 		items.add(newOrder);
