@@ -2,6 +2,8 @@ package com.code.services;
 
 import java.util.List;
 
+import javax.persistence.NamedQuery;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -41,7 +43,20 @@ public class OrderItemService {
 			return null;
 		}
 	}
-
+	
+	public List<OrderItemView> getAllOrderItem()
+	{
+		try{
+		Session session = sessionFactory.openSession();
+		Query query = session.getNamedQuery("AllOrderItem");
+		List<OrderItemView> result = (List<OrderItemView>) query.list();
+		session.close();
+		return result; 
+		}
+		catch(Exception ea){return null;}
+		
+	}
+ 
 	public List<OrderItemView> getOrderItemListByUserId(Long userId) {
 		try {
 
