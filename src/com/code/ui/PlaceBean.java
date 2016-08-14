@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.code.dal.orm.Place;
 import com.code.dal.orm.UserRole;
 import com.code.services.PlaceService;
-import com.code.ui.user.Login;
 import com.code.services.UserService;
 import com.code.ui.user.Login;
 
@@ -24,6 +25,7 @@ public class PlaceBean implements Serializable {
 	private String phoneNo;
 	private List<Place> places;
 	private String userName;
+	private UIComponent addButton;
 	
 	public PlaceBean() {
 		
@@ -45,16 +47,33 @@ public class PlaceBean implements Serializable {
 	
 	// insert
 	public String addPlace() {
+		if (name == null || name.trim().equals(""))
+		{
+			FacesMessage message = new FacesMessage("Invalid add");
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(addButton.getClientId(context), message);
+
+		}
+		else
+		{	
 		Place insertedPlace = new Place();
 		insertedPlace.setName(name);
 		insertedPlace.setPhoneNo(phoneNo);
 		PlaceService.insertPlace(insertedPlace);
 		places.add(insertedPlace);
 		name = null;
-		phoneNo = null;
+		phoneNo = null;}
 		return null;
 	}
 	
+	public UIComponent getaddButton() {
+		return addButton;
+	}
+
+	public void setaddButton(UIComponent addButton) {
+		this.addButton = addButton;
+	}
+
 	// show the list
 	public List<Place> showAll() {
 		places = PlaceService.retrievePlaces();
@@ -62,11 +81,11 @@ public class PlaceBean implements Serializable {
 
 	}
 	
-	// search by name
-	public List<Place> searchPlaceName() {
-		places = PlaceService.searchPlaces(name);
-		return places;
+	public void resetAllInputText(){
+		name=null;
+		phoneNo=null;
 	}
+	
 	
 	//search by name and phone 
 	public List<Place> searchPlace() {
@@ -84,9 +103,11 @@ public class PlaceBean implements Serializable {
 	{	
 		Long placeId=place.getId();
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
-		return "Items?faces-redirct=true";
+		return "Items?faces-redirct=true&id="+placeId;
 	}
-	
+	public void signOut(){
+		
+	}
 	public String getName() {
 		return name;
 	}

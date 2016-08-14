@@ -3,13 +3,13 @@ package com.code.dal.orm;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
 @SuppressWarnings("serial")
 @NamedQueries({
-	@NamedQuery ( name = "OrderItemByOrder", query = "from com.code.dal.orm.OrderItemView AS OIV where OIV.orderId = :OrderId "  ),
-	@NamedQuery ( name = "OrderItemByUser",query= "from com.code.dal.orm.OrderItemView AS OIV where OIV.userId = :UserId ")
-	})
+		@NamedQuery(name = "OrderItemByOrder", query = "from com.code.dal.orm.OrderItemView AS OIV where OIV.orderId = :OrderId "),
+		@NamedQuery(name = "OrderItemByUser", query = "from com.code.dal.orm.OrderItemView AS OIV where OIV.userId = :UserId ") })
 @Entity(name = "VW_ORDER_ITEM")
-public class OrderItemView implements Serializable{
+public class OrderItemView implements Serializable {
 	private Long id;
 	private Long orderId;
 	private Long userId;
@@ -24,32 +24,59 @@ public class OrderItemView implements Serializable{
 	private String itemName;
 	private Boolean selected = false;
 	private Boolean toAdd = false;
-	@Transient
-	private Long userIdHistory;
-	@Transient
-	private Float priceHistory;
-	@Transient
-	private Long itemIdHistory;
-	@Transient
-    private Integer countHistory;
 
-	public void saveHistory()
-	{
+	private String userIdToCheck;
+
+	private String countToCheck = "1";
+
+	private String itemIdToCheck;
+
+	private Long userIdHistory;
+
+	private Float priceHistory;
+
+	private Long itemIdHistory;
+
+	private Integer countHistory;
+
+	public void saveHistory() {
+		if (userId == null)
+			userIdToCheck = null;
+		else
+			userIdToCheck = userId.toString();
+		if (count == null)
+			countToCheck = null;
+		else
+			countToCheck = count.toString();
+		if (itemId == null)
+			itemIdToCheck = null;
+		else
+			itemIdToCheck = itemId.toString();
 		userIdHistory = userId;
 		priceHistory = price;
 		itemIdHistory = itemId;
 		countHistory = count;
 	}
-	public void RetriveHistory()
-	{
-		 userId = userIdHistory ;
-		 price = priceHistory ;
-		 itemId = itemIdHistory ;
-		 count  = countHistory ;
-		
+
+	public void RetriveHistory() {
+		if (userIdHistory == null)
+			userIdToCheck = null;
+		else
+			userIdToCheck = userIdHistory.toString();
+		if (countHistory == null)
+			countToCheck = null;
+		else
+			countToCheck = countHistory.toString();
+		if (itemIdHistory == null)
+			itemIdToCheck = null;
+		else
+			itemIdToCheck = itemIdHistory.toString();
+		userId = userIdHistory;
+		price = priceHistory;
+		itemId = itemIdHistory;
+		count = countHistory;
 	}
-	
-	
+
 	@Id
 	@Column(name = "ID")
 	public Long getId() {
@@ -137,7 +164,6 @@ public class OrderItemView implements Serializable{
 		return itemName;
 	}
 
-	
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
@@ -176,6 +202,33 @@ public class OrderItemView implements Serializable{
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	@Transient
+	public String getUserIdToCheck() {
+		return userIdToCheck;
+	}
+
+	public void setUserIdToCheck(String userIdToCheck) {
+		this.userIdToCheck = userIdToCheck;
+	}
+
+	@Transient
+	public String getCountToCheck() {
+		return countToCheck;
+	}
+
+	public void setCountToCheck(String countToCheck) {
+		this.countToCheck = countToCheck;
+	}
+
+	@Transient
+	public String getItemIdToCheck() {
+		return itemIdToCheck;
+	}
+
+	public void setItemIdToCheck(String itemIdToCheck) {
+		this.itemIdToCheck = itemIdToCheck;
 	}
 
 }
