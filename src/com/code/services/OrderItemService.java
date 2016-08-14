@@ -118,9 +118,7 @@ public class OrderItemService {
 			if (ord == null)
 				return "Error . Please refresh the page to retrieve updated data";
 			if (ord.getStatus().toLowerCase().trim()
-					.equals(OrderStatusEnum.OPENED.getCode())
-					|| ord.getStatus().toLowerCase().trim()
-							.equals(OrderStatusEnum.CANCELED.getCode())) {
+					.equals(OrderStatusEnum.OPENED.getCode())) {
 				OrderItem ordItem = new OrderItem();
 				ordItem.setId(ordItemView.getId());
 				Session session = sessionFactory.openSession();
