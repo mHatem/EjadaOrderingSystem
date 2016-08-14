@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @ManagedBean
@@ -36,6 +37,8 @@ public class Login implements Serializable {
 
 	private boolean signingUp = false;
 	private boolean editing = false;
+
+	private boolean showAlert = false;
 
 	private Collection<Place> places;
 	private Collection<PlacesItem> placeItems;
@@ -110,6 +113,7 @@ public class Login implements Serializable {
 		updateLoggedUser(null);
 
 		resetAll();
+		// TODO invalidate session
 		return null;
 	}
 
@@ -208,6 +212,7 @@ public class Login implements Serializable {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
 		unmatchedPasswordMessage = null;
+		showAlert = false;
 	}
 
 	private void updateListsAndTables() {
@@ -299,7 +304,6 @@ public class Login implements Serializable {
 		return loggedUser != null && getUserIdFromSessionMap() != null;
 	}
 
-
 	private void resetAll() {
 		editing = false;
 		signingUp = false;
@@ -317,6 +321,29 @@ public class Login implements Serializable {
 		phoneNo = null;
 	}
 
+	public String deleteOrder(OrderView orderView) {
+		showAlert = false;
+
+		Long orderId = orderView.getId();
+		List list = orderService.find(null, null, null, orderId, null, null);
+		if (list.size() == 1) {
+			Order order = ((OrderView) list.get(0)).getOrder();
+			try {
+				orderService.delete(order);
+				orders.remove(orderView);
+			} catch (ConstraintViolationException e) {
+				if (e.getConstraintName().equals(UserService.SCHEMA_NAME + "." + "SYS_C008103")) {
+					// TODO warning message
+					System.err.println("Cant delete this order");
+					showAlert = true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
 
 	public String getUsername() {
 		return username;
@@ -452,5 +479,13 @@ public class Login implements Serializable {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public boolean isShowAlert() {
+		return showAlert;
+	}
+
+	public void setShowAlert(boolean showAlert) {
+		this.showAlert = showAlert;
 	}
 }

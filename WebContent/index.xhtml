@@ -42,13 +42,12 @@
 				<h:panelGroup rendered="#{login.loggedIn}">
 					<div class="container" style="padding-top: 50px">
 						<div class="bar">
-							<h3><h:link value="Orders" outcome="Order"/></h3>
+							<h:link value="Orders" outcome="Order" styleClass="btn"/>
 						</div>
 						<div class="bar">
-							<h3><h:link value="Places" outcome="places"/></h3>
+							<h:link value="Places" outcome="places" styleClass="btn"/>
 						</div>
 					</div>
-
 				</h:panelGroup>
 			</h:panelGroup>
 		</div>
@@ -87,13 +86,13 @@
 								</div>
 								<div class="col-lg-12 form-group center-block">
 									<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
-									               styleClass="btn btn-primary btn-sm ">
+									               styleClass="btn btn-primary">
 										<f:ajax execute="login_form"
 										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle sidebar"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.not_a_user_signup}"
 									               action="#{login.signupButton}"
-									               styleClass="btn btn-sm ">
+									               styleClass="btn">
 										<f:ajax render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
 									</h:commandLink>
 								</div>
@@ -155,13 +154,13 @@
 								<div class="col-lg-12 form-group center-block">
 									<h:commandLink value="#{msgs.signup}"
 									               action="#{login.signupAction}"
-									               styleClass="btn btn-primary btn-sm ">
+									               styleClass="btn btn-primary">
 										<f:ajax execute="signup_form"
 										        render="login_form signup_form pageTitle"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.login}"
 									               action="#{login.loginButton}"
-									               styleClass="btn btn-sm ">
+									               styleClass="btn">
 										<f:ajax render="login_form signup_form pageTitle"/>
 									</h:commandLink>
 								</div>
@@ -185,8 +184,8 @@
 						<!--Welcome/Edit panel-->
 						<div class="col-lg-12">
 							<h2>Welcome, #{login.loggedUser.name}! | <h:commandLink value="#{msgs.edit_profile}"
-							                                                       action="#{login.editButton}"
-							                                                       disabled="#{login.editing}">
+							                                                        action="#{login.editButton}"
+							                                                        disabled="#{login.editing}">
 								<f:ajax render="logged_in_content edit_form"/>
 							</h:commandLink>
 							</h2>
@@ -243,13 +242,13 @@
 									<div class="col-lg-12 form-group center-block">
 										<h:commandLink value="#{msgs.save}"
 										               action="#{login.updateAction}"
-										               styleClass="btn btn-primary btn-sm ">
+										               styleClass="btn btn-primary">
 											<f:ajax execute="edit_form"
 											        render="edit_form logged_in_content header_signout_form order_and_items_tables"/>
 										</h:commandLink>
 										<h:commandLink value="#{msgs.cancel}"
 										               action="#{login.editCancelButton}"
-										               styleClass="btn btn-sm ">
+										               styleClass="btn">
 											<f:ajax render="edit_form logged_in_content order_and_items_tables"/>
 										</h:commandLink>
 									</div>
@@ -291,13 +290,11 @@
 											</div>
 										</div>
 										<div class="form-group col-lg-12">
-											<!--TODO-->
 											<h:commandLink styleClass="btn btn-primary"
 											               value="Filter"
 											               action="#{login.filterAction}">
 												<f:ajax execute="filter_orders_form" render="orders_table"/>
 											</h:commandLink>
-											<!--TODO-->
 											<h:commandLink styleClass="btn"
 											               value="Reset"
 											               action="#{login.resetFilterAction}">
@@ -308,15 +305,19 @@
 								</h:panelGroup>
 
 								<!--Orders Table-->
-								<!--TODO-->
 								<h:panelGroup id="orders_table">
 									<div class="container col-lg-12">
 										<h2>Orders</h2>
-										<h:dataTable value="#{login.orders}" var="order"
+										<h:dataTable id="orders_datatable"
+										             value="#{login.orders}" var="order"
 										             styleClass="table table-bordered">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
 												#{order.id}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Order Name</f:facet>
+												#{order.name}
 											</h:column>
 											<h:column>
 												<f:facet name="header">Status</f:facet>
@@ -332,10 +333,16 @@
 											</h:column>
 											<h:column rendered="#{login.admin}">
 												<f:facet name="header">Delete</f:facet>
-												<h:commandButton value="Delete" class="btn btn-primary"
-												                 action="{order.delete(order.order)}"/>
+												<h:commandLink value="Delete" class="btny"
+												               action="#{login.deleteOrder(order)}">
+													<!--TODO render row only-->
+													<f:ajax render="orders_datatable"/>
+												</h:commandLink>
 											</h:column>
 										</h:dataTable>
+										<h:outputScript rendered="#{login.showAlert}">
+											alert("Error");
+										</h:outputScript>
 									</div>
 								</h:panelGroup>
 
