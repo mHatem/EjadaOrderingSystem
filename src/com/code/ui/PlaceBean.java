@@ -62,6 +62,10 @@ public class PlaceBean implements Serializable {
 
 	}
 	
+	public void resetAllInputText(){
+		name=null;
+		phoneNo=null;
+	}
 	
 	
 	//search by name and phone 
@@ -80,9 +84,11 @@ public class PlaceBean implements Serializable {
 	{	
 		Long placeId=place.getId();
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
-		return "Items?faces-redirct=true";
+		return "Items?faces-redirct=true&id="+placeId;
 	}
-	
+	public void signOut(){
+		
+	}
 	public String getName() {
 		return name;
 	}
