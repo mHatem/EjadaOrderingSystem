@@ -1,6 +1,7 @@
 package com.code.ui.user;
 
 import com.code.dal.orm.*;
+import com.code.services.OrderItemService;
 import com.code.services.PlaceService;
 import com.code.services.UserService;
 import com.code.services.orderService;
@@ -46,6 +47,7 @@ public class Login implements Serializable {
 	private Long selectedPlaceItemId;
 
 	private Collection<OrderView> orders;
+	private Collection<OrderItemView> orderItemViews;
 
 	private boolean admin = false;
 
@@ -159,6 +161,7 @@ public class Login implements Serializable {
 
 	public void filterAction() {
 		orders = updateOrders();
+		orderItemViews = updateOrderItemViews();
 	}
 
 	public String resetFilterAction() {
@@ -217,9 +220,23 @@ public class Login implements Serializable {
 
 	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
-		placeItems = new ArrayList<PlacesItem>(); //TODO
+		placeItems = new ArrayList<PlacesItem>(); // TODO from database
 
 		orders = updateOrders();
+		orderItemViews = updateOrderItemViews();
+	}
+
+	private Collection<OrderItemView> updateOrderItemViews() {
+		Collection<OrderItemView> orderItemViews = null;
+
+		Long userId = getUserIdFromSessionMap();
+		String userRole = getUserRoleFromSessionMap();
+		// TODO Don't filter by user id if admin is logged in
+		// if (userRole.equals(UserRole.ADMIN))
+		//   userId = null;
+
+		orderItemViews = OrderItemService.getOrderItemListByUserId(userId);
+		return orderItemViews;
 	}
 
 	private void updateLoggedUser(User user) {
@@ -252,10 +269,6 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
-	}
-
-	public Collection<OrderItem> getOrderItems() {
-		return new ArrayList<OrderItem>(); //TODO
 	}
 
 	private Collection<OrderView> updateOrders() {
@@ -487,5 +500,13 @@ public class Login implements Serializable {
 
 	public void setShowAlert(boolean showAlert) {
 		this.showAlert = showAlert;
+	}
+
+	public Collection<OrderItemView> getOrderItemViews() {
+		return orderItemViews;
+	}
+
+	public void setOrderItemViews(Collection<OrderItemView> orderItemViews) {
+		this.orderItemViews = orderItemViews;
 	}
 }

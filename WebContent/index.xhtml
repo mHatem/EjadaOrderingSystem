@@ -341,7 +341,7 @@
 											</h:column>
 										</h:dataTable>
 										<h:outputScript rendered="#{login.showAlert}">
-											alert("Error");
+											alert("You cannot delete this order.");
 										</h:outputScript>
 									</div>
 								</h:panelGroup>
@@ -351,7 +351,7 @@
 								<h:panelGroup id="order_items_table">
 									<div class="container col-lg-12">
 										<h2>Order Items</h2>
-										<h:dataTable value="#{login.orderItems}" var="order_item"
+										<h:dataTable value="#{login.orderItemViews}" var="order_item"
 										             styleClass="table table-bordered">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
@@ -359,8 +359,9 @@
 											</h:column>
 											<h:column>
 												<f:facet name="header">Delete</f:facet>
-												<h:commandButton value="Delete" class="btn btn-primary"
-												                 action="{order.delete(order.order)}"/>
+												<!--TODO set action-->
+												<h:commandLink value="Delete" class="btn btn-primary"
+												               action="{order.delete(order.order)}"/>
 											</h:column>
 										</h:dataTable>
 									</div>
