@@ -1,6 +1,7 @@
 package com.code.ui;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+
 
 
 
@@ -31,7 +33,7 @@ public class OrderItemBean implements Serializable {
 	private List<OrderItemView> items;
 	private OrderItemService orderItemService = null;
 	private List<PlacesItem> menu;
-	private List<User> user;
+	private ArrayList<User> user;
 	private String errorMessage;
 	private Boolean isAdmin = false;
 	private User loggedUser;
@@ -84,7 +86,9 @@ public class OrderItemBean implements Serializable {
 	public void refresh() {
 		try {
 			/*String orderIdString=((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("ORDERID");
-			orderId = Long.parseLong(orderIdString); */
+			orderId = Long.parseLong(orderIdString); 
+			*/
+			
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
@@ -98,15 +102,16 @@ public class OrderItemBean implements Serializable {
 			setPlace(orderItemService.getPlaceByPlaceID(order.getPlaceID()));
 			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
 			UserService userService = UserService.getSingleton();
-			User[] transfer = (User[]) userService.getAllUsers().toArray();
-			/*Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+			user = new ArrayList<User>(userService.getAllUsers());
+			/*
+			Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 			String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
 		    String userIdTransefer = (String) sessionMap.get(Login.SESSION_KEY_USER_ID);
 		    if(userRole.equals(UserRole.ADMIN))
 		    	isAdmin = true;
 		    else isAdmin = false;
-		    userId = Long.parseLong(userIdTransefer);*/
-			user = Arrays.asList(transfer);
+		    userId = Long.parseLong(userIdTransefer);
+		    */
 			loggedUser = userService.getUserById(userId);
 
 		} catch (Exception ea) {
@@ -285,11 +290,11 @@ public class OrderItemBean implements Serializable {
 		}
 	}
 
-	public List<User> getUser() {
+	public ArrayList<User> getUser() {
 		return user;
 	}
 
-	public void setUser(List<User> user) {
+	public void setUser(ArrayList<User> user) {
 		this.user = user;
 	}
 
