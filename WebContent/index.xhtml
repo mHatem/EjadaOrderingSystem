@@ -334,26 +334,17 @@
 											</h:column>
 											<h:column rendered="#{login.admin}">
 												<f:facet name="header">Delete</f:facet>
-												<h:commandLink value="Delete" class="btny"
+												<h:commandLink value="Delete"
 												               action="#{login.deleteOrder(order)}">
 													<!--TODO render row only-->
-													<f:ajax render="orders_datatable formId:scriptsss"/>
+													<f:ajax render="orders_datatable formId:alert_script"/>
 												</h:commandLink>
 											</h:column>
 										</h:dataTable>
 									</div>
 								</h:panelGroup>
 
-								<h:panelGroup id="scriptsss">
-									<h:panelGroup rendered="#{login.showAlert}">
-										<h:outputScript>
-											alert("You cannot delete this order.");
-										</h:outputScript>
-									</h:panelGroup>
-								</h:panelGroup>
-
 								<!--OrderItems Table-->
-								<!--TODO-->
 								<h:panelGroup id="order_items_table">
 									<div class="container col-lg-12">
 										<h2>Order Items</h2>
@@ -363,14 +354,51 @@
 												<f:facet name="header">ID</f:facet>
 												#{order_item.id}
 											</h:column>
+											<h:column>
+												<f:facet name="header">Order ID</f:facet>
+												#{order_item.orderId}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Item Name</f:facet>
+												#{order_item.itemName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">User</f:facet>
+												#{order_item.userName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Place</f:facet>
+												#{order_item.placeName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Count</f:facet>
+												#{order_item.count}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Price</f:facet>
+												#{order_item.price}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Total</f:facet>
+												#{order_item.total}
+											</h:column>
 											<h:column rendered="#{login.admin}">
 												<f:facet name="header">Delete</f:facet>
-												<!--TODO set action-->
-												<h:commandLink value="Delete" class="btn"
-												               action="{order.delete(order.order)}"/>
+												<h:commandLink value="Delete"
+												               action="#{login.deleteOrderItemView(order_item)}">
+												</h:commandLink>
 											</h:column>
 										</h:dataTable>
 									</div>
+								</h:panelGroup>
+
+								<!--Alert script for deleting from tables-->
+								<h:panelGroup id="alert_script">
+									<h:panelGroup rendered="#{login.alertMessage != null}">
+										<h:outputScript>
+											alert("#{login.alertMessage}");
+										</h:outputScript>
+									</h:panelGroup>
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
