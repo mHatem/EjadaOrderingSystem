@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -22,7 +23,7 @@ import com.code.ui.user.Login;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "place")
-@SessionScoped
+@ViewScoped
 
 public class PlaceBean implements Serializable {
 	private String name;
@@ -43,6 +44,7 @@ public class PlaceBean implements Serializable {
 	public PlaceBean() {
 		
 		places = null;
+		//checkLoggedIn();
 		showAll();
 	}
 
@@ -64,7 +66,7 @@ public class PlaceBean implements Serializable {
 		{
 			FacesMessage message = new FacesMessage("Invalid add");
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(addButton.getClientId(context), message);
+			//context.addMessage(addButton.getClientId(context), message);
 
 		}
 		else
