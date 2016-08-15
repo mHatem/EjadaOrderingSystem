@@ -11,7 +11,7 @@
 	<style>               
         .Bimage{ background-image:url(/EjadaOrderingSystem/WebContent/resources/images/website-design-background.png); }        
      </style>
-	<f:event type="preRenderView" listener="#{place.checkLoggedIn}"/>
+	
 </h:head>
 <h:body style="background-image: url('http://www.uksoftech.com/wp-content/uploads/2016/02/website-design-background.png');">
 
@@ -56,7 +56,7 @@
 			<div>
 				<h:commandLink id="add" value="add place" rendered="#{place.adminPlaces()}"
 				 	class="btn btn-primary btn-sm" 
-				 	 binding="#{place.addButton}" 	
+				 	 	
 				 	action="#{place.addPlace}" >
 				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
 				</h:commandLink>
