@@ -2,7 +2,6 @@ package com.code.ui;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -194,13 +193,13 @@ public class OrderItemBean implements Serializable {
 		newOrder.setUserId(userId);
 		newOrder.setUserIdToCheck(userId.toString());
 		newOrder.setUsername(loggedUser.getUsername());
-		if (menu.size() > 0 && menu.get(0).getId() != null) {
+		if (menu != null && menu.size() > 0 && menu.get(0).getId() != null) {
 			newOrder.setItemId(menu.get(0).getId());
 			newOrder.setItemIdToCheck(menu.get(0).getId().toString());
 			newOrder.setPrice(menu.get(0).getPrice());
+			items.add(newOrder);
 		}
-
-		items.add(newOrder);
+		else {errorMessage = "there is no Item to select from to add new order";}
 		return null;
 	}
 
