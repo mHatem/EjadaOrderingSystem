@@ -39,7 +39,7 @@ public class Login implements Serializable {
 	private boolean signingUp = false;
 	private boolean editing = false;
 
-	private boolean showAlert = false;
+	private String alertMessage = null;
 
 	private Collection<Place> places;
 	private Collection<PlacesItem> placeItems;
@@ -215,7 +215,7 @@ public class Login implements Serializable {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
 		unmatchedPasswordMessage = null;
-		showAlert = false;
+		alertMessage = null;
 	}
 
 	private void updateListsAndTables() {
@@ -233,9 +233,10 @@ public class Login implements Serializable {
 		String userRole = getUserRoleFromSessionMap();
 		// TODO Don't filter by user id if admin is logged in
 		if (userRole.equals(UserRole.ADMIN))
-			userId = null;
+			orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
+		else
+			orderItemViews = OrderItemService.getSingleton().getOrderedItemsFiltered(null, null, null);
 
-		orderItemViews = OrderItemService.getSingleton().getOrderedItemsFiltered(null, null, null);
 		return orderItemViews;
 	}
 
@@ -335,7 +336,7 @@ public class Login implements Serializable {
 	}
 
 	public String deleteOrder(OrderView orderView) {
-		showAlert = false;
+		alertMessage = null;
 
 		Long orderId = orderView.getId();
 		List list = orderService.find(null, null, null, orderId, null, null);
@@ -348,13 +349,26 @@ public class Login implements Serializable {
 				// TODO correct constraint name
 				if (true || e.getConstraintName().equals(UserService.SCHEMA_NAME + "." + "SYS_C008103")) {
 					// TODO warning message
-					System.err.println("Cant delete this order");
-					showAlert = true;
+					alertMessage = "Cannot delete this order. One or more items are in this order.";
+					System.err.println(alertMessage);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
+		}
+
+		return null;
+	}
+
+	public String deleteOrderItemView(OrderItemView orderItemView) {
+		alertMessage = null;
+
+		Long orderItemId = orderItemView.getId();
+		String result = OrderItemService.getSingleton().orderItemDeleteManually(orderItemView);
+		if (result != null) {
+			alertMessage = "Cant delete this order item: " + result;
+			System.err.println(alertMessage);
 		}
 
 		return null;
@@ -496,19 +510,19 @@ public class Login implements Serializable {
 		this.admin = admin;
 	}
 
-	public boolean isShowAlert() {
-		return showAlert;
-	}
-
-	public void setShowAlert(boolean showAlert) {
-		this.showAlert = showAlert;
-	}
-
 	public Collection<OrderItemView> getOrderItemViews() {
 		return orderItemViews;
 	}
 
 	public void setOrderItemViews(Collection<OrderItemView> orderItemViews) {
 		this.orderItemViews = orderItemViews;
+	}
+
+	public String getAlertMessage() {
+		return alertMessage;
+	}
+
+	public void setAlertMessage(String alertMessage) {
+		this.alertMessage = alertMessage;
 	}
 }
