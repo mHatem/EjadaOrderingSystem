@@ -47,6 +47,7 @@
 					 styleClass="form-control"/>
 					
 			</div>
+			
 			<div>	
 				<h:outputLabel value="PlacePhone" style="color: white"/>
 				<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
@@ -62,9 +63,7 @@
 				 	action="#{place.addPlace}" >
 				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
 				</h:commandLink>
-    			<h:panelGroup id="msg">
-    					<h:outputLabel  value="Invalid Add : u must add the place name" style="color:white" rendered="#{place.isMsgAddPlaceNameNotUsed()}"/>
-    			</h:panelGroup>
+    			
     			
 
     			<h:message for="add" />
@@ -104,6 +103,11 @@
 			<h:outputScript rendered="#{place.flagDeleteUsedPlace}">
 				alert("this place is used already");
 			</h:outputScript>
+			<div>
+			<h:panelGroup id="msg">
+    					<h:outputLabel  value="Invalid Add : u must add the place name" style="color:white" rendered="#{place.isMsgAddPlaceNameNotUsed()}"/>
+    			</h:panelGroup>
+			</div>
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"

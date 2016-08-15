@@ -33,6 +33,8 @@ public class PlaceBean implements Serializable {
 	private UIComponent addButton;
 	private boolean flagDeleteUsedPlace = false;
 	private boolean msgAddPlaceNameNotUsed =false;
+	private String placeItem;
+	
 	
 	public boolean isMsgAddPlaceNameNotUsed() {
 		return msgAddPlaceNameNotUsed;
@@ -114,7 +116,7 @@ public class PlaceBean implements Serializable {
 		return places;
 
 	}
-	
+	// reset all buttons
 	public void resetAllInputText(){
 		name=null;
 		phoneNo=null;
@@ -211,6 +213,14 @@ public class PlaceBean implements Serializable {
 
 		if(userId == null)
 			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+	}
+	
+	public String getPlaceItem() {
+		return placeItem;
+	}
+
+	public void setPlaceItem(String placeItem) {
+		this.placeItem = placeItem;
 	}
 
 }
