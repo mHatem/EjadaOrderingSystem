@@ -40,7 +40,7 @@ public class orderService {
 
 	public static void delete(Order r) {
 		@SuppressWarnings("deprecation")
-		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory()
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.delete(r);
