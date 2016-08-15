@@ -310,7 +310,8 @@
 									<div class="container col-lg-12">
 										<h2>Orders</h2>
 										<h:dataTable id="orders_datatable"
-										             value="#{login.orders}" var="order"
+										             value="#{login.orders}"
+										             var="order"
 										             styleClass="table table-bordered">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
@@ -345,10 +346,12 @@
 								</h:panelGroup>
 
 								<!--OrderItems Table-->
-								<h:panelGroup id="order_items_table">
+								<h:panelGroup id="orderitems_table">
 									<div class="container col-lg-12">
 										<h2>Order Items</h2>
-										<h:dataTable value="#{login.orderItemViews}" var="order_item"
+										<h:dataTable id="orderitems_datetable"
+										             value="#{login.orderItemViews}"
+										             var="order_item"
 										             styleClass="table table-bordered">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
@@ -386,6 +389,7 @@
 												<f:facet name="header">Delete</f:facet>
 												<h:commandLink value="Delete"
 												               action="#{login.deleteOrderItemView(order_item)}">
+													<f:ajax render="orderitems_datetable formId:alert_script"/>
 												</h:commandLink>
 											</h:column>
 										</h:dataTable>
@@ -409,7 +413,6 @@
 
 		<!--Footer-->
 		<ui:decorate template="templates/sections/footer.xhtml"/>
-
 	</h:form>
 </h:body>
 </html>
