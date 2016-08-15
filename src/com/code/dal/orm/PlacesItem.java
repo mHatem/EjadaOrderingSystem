@@ -5,9 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.NamedQuery;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -15,8 +14,11 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "PLACE_ITEM")
 @NamedQueries({ @NamedQuery(name = "getItems", query = "from PlacesItem pt where pt.placeId =?"),
-	@NamedQuery(name = "getOpenOrders", query = "Select distinct o.status from Order o , OrderItem oi , PlacesItem pt "
-			+ "where oi.order=o.id and pt.id=oi.item and pt.id=?") })
+	@NamedQuery(name = "getOpenOrders", query = "Select distinct o.status from Order o , OrderItem oi , PlacesItem pi "
+			+ "where pi.id = oi.item and oi.order = o.id and pi.id = ?"
+			
+			)
+})
 public class PlacesItem {
 	private Long id;
 	private Long placeId;
