@@ -10,7 +10,7 @@ public class Service
 	 
 	public static List<PlacesItem> getItemsList(Long PlaceID)
 	{
-		SessionFactory   SF=new Configuration().configure().buildSessionFactory();
+		SessionFactory   SF=SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session S=SF.openSession();
 		S.beginTransaction();
 		Query Q=S.getNamedQuery("getItems");

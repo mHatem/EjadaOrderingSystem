@@ -13,7 +13,7 @@ import com.code.dal.orm.Place;
 public class PlaceService implements Serializable {
 	
 	public static void insertPlace(Place place ) {
-			SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+			SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 
@@ -26,7 +26,7 @@ public class PlaceService implements Serializable {
 	}
 	
 	public static void updatePlace(Place place ) {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 
@@ -39,7 +39,7 @@ public class PlaceService implements Serializable {
 	}
 
 	public static List<Place> retrievePlaces (){
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 
@@ -54,7 +54,7 @@ public class PlaceService implements Serializable {
 	
 	public static List<Place> finalSearch(String name, String phone) {
 		
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("placeSearchByNameAndPhone");
@@ -75,7 +75,7 @@ public class PlaceService implements Serializable {
 		return place;
 	}
 	public static void deletePlace(Place place){
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
