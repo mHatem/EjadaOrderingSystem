@@ -1,5 +1,6 @@
 package com.code.ui;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -175,4 +176,16 @@ public class PlaceBean implements Serializable {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
+	public void checkLoggedIn() throws IOException {
+		Map<String, Object> sessionMap  = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		Long userId = null;
+		if(sessionMap.containsKey(Login.SESSION_KEY_USER_ID)){
+			userId = (Long) sessionMap.get(Login.SESSION_KEY_USER_ID);
+		}
+
+		if(userId == null)
+			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+	}
+
 }

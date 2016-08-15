@@ -235,7 +235,7 @@ public class Login implements Serializable {
 		if (userRole.equals(UserRole.ADMIN))
 			orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
 		else
-			orderItemViews = OrderItemService.getSingleton().getOrderedItemsFiltered(null, null, null);
+			orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
 
 		return orderItemViews;
 	}
