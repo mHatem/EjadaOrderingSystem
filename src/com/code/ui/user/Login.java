@@ -369,6 +369,8 @@ public class Login implements Serializable {
 		if (result != null) {
 			alertMessage = "Cant delete this order item: " + result;
 			System.err.println(alertMessage);
+		} else {
+			orderItemViews.remove(orderItemView);
 		}
 
 		return null;
