@@ -98,7 +98,7 @@
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
-				style="width: 250px;">
+				style="width: 250px;color: white">
 
 				<f:facet name="caption">places</f:facet>
 				
@@ -121,26 +121,26 @@
 				<!-- Items -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Items</f:facet>
-						<h:commandLink value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandLink value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-warning btn-xs" /> 
 				</h:column>
 				
 				
 				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">delete</f:facet>
-						<h:commandButton value="delete" action="#{place.deletePlace(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandLink value="delete" action="#{place.deletePlace(row)}" class="btn btn-info btn-xs" /> 
 				</h:column>
 				
 				<!-- Update -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">update</f:facet>
-						<h:commandButton value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default " >
+						<h:commandLink value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default btn-xs" >
 							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>			 
-						</h:commandButton>
+						</h:commandLink>
 						
-						<h:commandButton value="edit" action="#{place.editPlace(row)}" rendered="#{not row.selected}" class="btn btn-default " >
+						<h:commandLink value="edit" action="#{place.editPlace(row)}" rendered="#{not row.selected}" class="btn btn-default btn-xs" >
 							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>
-						</h:commandButton>
+						</h:commandLink>
 				</h:column>
 			</h:dataTable>
 			
