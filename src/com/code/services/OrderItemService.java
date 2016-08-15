@@ -2,12 +2,10 @@ package com.code.services;
 
 import java.util.List;
 
-import javax.persistence.NamedQuery;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.*;
@@ -16,9 +14,9 @@ public class OrderItemService {
 	private SessionFactory sessionFactory = null;
 	private static OrderItemService orderItemService = null;
 
-	@SuppressWarnings("deprecation")
+
 	private OrderItemService() {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 	}
 
 	public static OrderItemService getSingleton() {
@@ -68,18 +66,6 @@ public class OrderItemService {
 			List<OrderItemView> result = (List<OrderItemView>) query.list();
 			session.close();
 			return result;
-		} catch (Exception ea) {
-			return null;
-		}
-	}
-
-	public Float itemPrice(Long Item) {
-		try {
-
-			Session session = sessionFactory.openSession();
-			PlacesItem obj = (PlacesItem) session.get(PlacesItem.class, Item);
-			session.close();
-			return obj.getPrice();
 		} catch (Exception ea) {
 			return null;
 		}

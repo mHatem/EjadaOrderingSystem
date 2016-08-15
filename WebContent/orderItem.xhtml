@@ -48,7 +48,6 @@
 				<f:ajax render="@form" />
 			</h:commandButton>
             <br/>  
-			<rich:dataScroller for="datatable" maxPages="7" fastStep="3" />
 			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="15">
 				<rich:column style="margin:25px">
 					<h:outputText value="#{order.username}"
@@ -128,8 +127,13 @@
 						<f:ajax render="@form" />
 					</h:commandButton>
 				</rich:column>
+				<f:facet name="header">
+                 <rich:dataScroller for="datatable" maxPages="5" fastStep="3"/>
+            </f:facet>
+            <f:facet name="footer">
+                 <rich:dataScroller for="datatable" maxPages="5" fastStep="3"/>
+            </f:facet>
 			</rich:dataTable>
-			 <rich:dataScroller for="datatable" maxPages="5" fastStep="3"/>
 			<h:outputText value="#{OrderItem.errorMessage}" id="ErrorName"
 				style="color:red;" />
 		

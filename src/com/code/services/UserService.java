@@ -19,7 +19,7 @@ public class UserService {
 	private SessionFactory sessionFactory = null;
 
 	private UserService() {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 	}
 
 	public static UserService getSingleton() {
