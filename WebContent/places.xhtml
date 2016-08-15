@@ -11,6 +11,7 @@
 	<style>               
         .Bimage{ background-image:url(/EjadaOrderingSystem/WebContent/resources/images/website-design-background.png); }        
      </style>
+	<f:event type="preRenderView" listener="#{place.checkLoggedIn}"/>
 </h:head>
 <h:body style="background-image: url('http://www.uksoftech.com/wp-content/uploads/2016/02/website-design-background.png');">
 
@@ -35,7 +36,7 @@
 			<!-- place -->
 			<div>
 				<h:outputText value="Places "
-					style="color: white;font-family:Good Times;font-size: 40px" />
+					style="color: white;font-family: 'Good Times';font-size: 40px" />
 			</div>
 			
 			
