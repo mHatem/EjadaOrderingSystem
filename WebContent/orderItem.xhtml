@@ -48,8 +48,8 @@
 				<f:ajax render="@form" />
 			</h:commandButton>
             <br/>  
-			<rich:dataScroller for="datatable" maxPages="5" fastStep="3" />
-			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="10">
+			<rich:dataScroller for="datatable" maxPages="7" fastStep="3" />
+			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="15">
 				<rich:column style="margin:25px">
 					<h:outputText value="#{order.username}"
 						rendered="#{!order.selected or  !OrderItem.isAdmin }" />
@@ -135,6 +135,9 @@
 		
 		</h:panelGroup>
 	</h:panelGrid>
+	<h:commandButton value="Logout" action="#{OrderItem.Logout()}">
+	<f:ajax/>
+    </h:commandButton>
 	</h:form>
 </body>
 </html>
