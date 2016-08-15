@@ -48,7 +48,7 @@
 				<f:ajax render="@form" />
 			</h:commandButton>
             <br/>  
-			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="15">
+			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="15"  width="500px" >
 				<rich:column style="margin:25px">
 					<h:outputText value="#{order.username}"
 						rendered="#{!order.selected or  !OrderItem.isAdmin }" />
