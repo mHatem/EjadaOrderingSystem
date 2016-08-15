@@ -11,7 +11,7 @@
 	<style>               
         .Bimage{ background-image:url(/EjadaOrderingSystem/WebContent/resources/images/website-design-background.png); }        
      </style>
-	
+	<f:event type="preRenderView" listener="#{place.checkLoggedIn}"/>
 </h:head>
 <h:body style="background-image: url('http://www.uksoftech.com/wp-content/uploads/2016/02/website-design-background.png');">
 
@@ -42,13 +42,13 @@
 			
 			<!-- input text > insert name and phone -->
 			<div>
-				<h:outputLabel value="PlaceName: " />
+				<h:outputLabel value="PlaceName: " style="color: white"/>
 				<h:inputText id="placeNameId" value="#{place.name}" 
 					 styleClass="form-control"/>
 					
 			</div>
 			<div>	
-				<h:outputLabel value="PlacePhone"/>
+				<h:outputLabel value="PlacePhone" style="color: white"/>
 				<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
 			</div>
 			
@@ -58,9 +58,15 @@
 				 	class="btn btn-primary btn-sm" 
 				 	 	
 				 	action="#{place.addPlace}" >
-				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
+				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
 				</h:commandLink>
+    			<h:panelGroup id="msg">
+    					<h:outputLabel  value="Invalid Add : u must add the place name" style="color:green" rendered="#{place.isMsgAddPlaceNameNotUsed()}"/>
+    			</h:panelGroup>
+    			
+
     			<h:message for="add" />
+    			
 			</div>
 			
 			<!-- search by nameAndPhone -->
@@ -69,7 +75,7 @@
 								 class="btn btn-primary btn-sm" 
 								 action="#{place.searchPlace}" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
-					 render="palcesForm:placesTableId "/>
+					 render="palcesForm:placesTableId palcesForm:msg"/>
 				</h:commandLink>					
 			</div>
 			
@@ -79,7 +85,7 @@
 								 class="btn btn-primary btn-sm" 
 								 action="#{place.showAll}">
 				<f:ajax execute="palcesForm:placeNameId"
-					 render="palcesForm:placesTableId"/>
+					 render="palcesForm:placesTableId palcesForm:msg palcesForm:placeNameId palcesForm:placePhoneId"/>
 			</h:commandLink>
 			</div>
 			
@@ -89,7 +95,7 @@
 								 class="btn btn-success btn-sm" 
 								 action="#{place.resetAllInputText}">
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
-					 render="palcesForm:placeNameId palcesForm:placePhoneId"/>
+					 render="palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
 			</h:commandLink>
 			</div>
 			<h:outputScript rendered="#{place.flagDeleteUsedPlace}">
