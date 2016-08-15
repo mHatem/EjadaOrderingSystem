@@ -19,7 +19,7 @@ public class UserService {
 	private SessionFactory sessionFactory = null;
 
 	private UserService() {
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 	}
 
 	public static UserService getSingleton() {
@@ -122,7 +122,7 @@ public class UserService {
 		query.setLong("userId", userId);
 
 		List list = query.list();
-		if (list.size() > 0)  //TODO
+		if (list.size() > 0)  // TODO handle multiple roles
 			userRole = ((UserRole) list.get(0)).getRoleName();
 
 		session.getTransaction().commit();

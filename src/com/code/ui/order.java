@@ -1,6 +1,7 @@
 package com.code.ui;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,16 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.metamodel.SetAttribute;
 
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 import com.code.dal.orm.Place;
+import com.code.dal.orm.User;
+import com.code.dal.orm.UserRole;
+import com.code.services.PlaceService;
+import com.code.services.UserService;
 import com.code.services.orderService;
 import com.code.ui.user.Login;
 
@@ -36,12 +42,29 @@ public class order implements Serializable {
 	private String SPName;
 	private String SNAme;
 	private Long SID;
-
-	public void edit(OrderView o)
-	{
-     OrderView.edit(o);
-	}
+	private String errorMsg;
+	private Collection <User> userList;
+	private List <Place> placeList;
 	
+	public void addItem(OrderView ord)
+	{
+		Long orderId = ord.getId();
+		try{
+		FacesContext.getCurrentInstance().getExternalContext().redirect("orderItem.jsf?ORDERID="+orderId);
+		return;
+		}catch(Exception ea){return;}
+	}
+
+	public order() {
+		displayAllOrders();
+		userList = UserService.getSingleton().getAllUsers();
+		placeList = PlaceService.retrievePlaces(); 
+	}
+
+	public void edit(OrderView o) {
+		OrderView.edit(o);
+	}
+
 	public long extractPlaceID(String n) {
 		PlaceBean bean = new PlaceBean();
 		for (Place p : bean.getPlaces()) {
@@ -53,11 +76,15 @@ public class order implements Serializable {
 	}
 
 	public void search() {
-		setOrders(orderService.find(SUName, SPName,SNAme,SID,null,null));
+		setOrders(orderService.find(SUName, SPName, SNAme, SID, null, null));
 
 	}
 
 	public void displayAllOrders() {
+		SUName = null;
+		SPName = null;
+		SNAme = null;
+		SID = null;
 		setOrders(orderService.getALL());
 	}
 
@@ -71,21 +98,36 @@ public class order implements Serializable {
 		order.setOwnerID((Long) sessionMap.get(Login.SESSION_KEY_USER_ID));
 		order.setDate(dat);
 		orderService.insert(order);
+		displayAllOrders();
+		
+
+	}
+
+	public void cancel(Order ToCancel) {
+		ToCancel.setStatus(OrderStatusEnum.CANCELED.getCode());
+		orderService.update(ToCancel);
+		displayAllOrders();
+	}
+
+	public void save(OrderView Toupdate) {
+
+		orderService.update(Toupdate.getOrder());
+		OrderView.edit(Toupdate);
+		displayAllOrders();
 
 	}
 
 	public void delete(Order r) {
-		orderService.delete(r);
-		displayAllOrders();
-
+		try {
+			errorMsg="";
+			orderService.delete(r);
+			orders.remove(r);
+		} catch (Exception e) {
+			errorMsg="cant delete this order it has open items";
+		}
 	}
-
-	public order() {
-		displayAllOrders();
-	}
-
-	
-
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String getSNAme() {
 		return SNAme;
 	}
@@ -101,7 +143,6 @@ public class order implements Serializable {
 	public void setSID(Long sID) {
 		SID = sID;
 	}
-
 
 	public String getSelectedPlace() {
 		return selectedPlace;
@@ -142,6 +183,7 @@ public class order implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getOwnerName() {
 		return ownerName;
 	}
@@ -197,5 +239,28 @@ public class order implements Serializable {
 	public void setSPName(String sPName) {
 		SPName = sPName;
 	}
+
+	public String getOpenedEnum() {
+		return OrderStatusEnum.OPENED.getCode();
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public Collection <User> getUserList() {
+		return userList;
+	}
+
+	public List<Place> getPlaceList() {
+		return placeList;
+	}
+
+	public void setPlaceList(List <Place> placeList) {
+		this.placeList = placeList;
+	}
+
+
+
 
 }

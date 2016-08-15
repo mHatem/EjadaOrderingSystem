@@ -16,21 +16,27 @@
 		<div class="page-header">
 			<h3 style="text-align: left">Order page</h3>
 		</div>
-		<h:form role="form" class="form-group">
+		<h:form id="formId" role="form" class="form-group">
 			<table class=" col-md-12" border="0" cellpadding="0" cellspacing="0"
 				width="100%">
 				<tr class="form-group col-md-12" style="width: inherit;"
 					id="firstRow">
 
 					<th><label for="Owner">Owner:</label></th>
-					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="Owner" class="form-control" id="Owner"
-							value="#{order.SUName}">
-						</h:inputText></td>
+					<td class="col-md-3" style="width: inherit;">
+						<h:selectOneMenu value="#{order.ownerID}" id="Owner" class="form-control" type="Owner">
+							<f:selectItem  itemValue="-1" itemLabel=""/>
+							<f:selectItems value="#{order.userList}" var="names" itemValue="#{names.id}" itemLabel="#{names.name}" />
+						</h:selectOneMenu>
+						</td>
 					<th><label for="pName">PlaceName:</label></th>
-					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="PlaceName" class="form-control" id="pName"
-							value="#{order.SPName}"></h:inputText></td>
+					<td class="col-md-3" style="width: initial;">
+						<h:selectOneMenu value="#{order.placeID}" id="pName" class="form-control">
+							<f:selectItem  itemValue="" itemLabel=""/>
+							<f:selectItems value="#{order.placeList}" var="plac" itemValue="#{plac.id}" itemLabel="#{plac.name}"/>
+						</h:selectOneMenu>
+					
+					</td>
 
 				</tr>
 
@@ -45,15 +51,7 @@
 							type="num" class="form-control" id="num" value="#{order.SID}"></h:inputText></td>
 				</tr>
 
-				<tr class="form-group col-md-12" style="width: inherit;">
-					<th><label for="from">Date From:</label></th>
-					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="form" class="form-control" id="form">
-						</h:inputText></td>
-					<th><label for="to">Date To:</label></th>
-					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="to" class="form-control" id="to"></h:inputText></td>
-				</tr>
+		
 				<tr>
 					<td><br></br></td>
 				</tr>
@@ -64,10 +62,9 @@
 
 							<f:ajax execute="Owner  pName status num" render="data"></f:ajax>
 						</h:commandButton></td>
-					<td class="col-md-3" style="width: inherit;"><h:commandButton
-							value="Pre-Search" styleClass="btn btn-primary"
-							action="#{order.displayAllOrders()}">
-							<f:ajax render="data">
+					<td class="col-md-3" style="width: inherit;"
+					><h:commandButton value="Pre-Search" styleClass="btn btn-primary" action="#{order.displayAllOrders()}">
+							<f:ajax render="@form">
 							</f:ajax>
 						</h:commandButton></td>
 					<td>
@@ -86,7 +83,7 @@
 										<h:inputText value="#{order.name}" id="orderNAME" />
 										<h:selectOneMenu value="#{order.selectedPlace}">
 											<f:selectItems value="#{place.places}" var="plac"
-												itemValue="#{plac.name}" id="placeNAME" />
+												itemValue="#{plac.name}" />
 										</h:selectOneMenu>
 									</div>
 									<div class="modal-footer">
@@ -113,44 +110,77 @@
 								class="table table-bordered" id="data">
 								<h:column>
 									<f:facet name="header">ID</f:facet>
-									<h:outputText value="#{ord.id}"
-										/>	</h:column>
+									<h:outputText value="#{ord.id}" />
+								</h:column>
+								<h:column style="margin:25px">
+
+									<f:facet name="header">OrderName</f:facet>
+									<h:outputText value="#{ord.name}" rendered="#{not ord.editable}" />
+									<h:inputText value="#{ord.name}" rendered="#{ord.editable}" >
+												
+									</h:inputText>
+									
+								</h:column>
 								<h:column style="margin:25px">
 
 									<f:facet name="header">OwnerName</f:facet>
 									<h:outputText value="#{ord.ownerName}"
 										rendered="#{not ord.editable}" />
-									<h:inputText value="#{order.ownerName}"
+									<h:inputText value="#{ord.ownerName}"
 										rendered="#{ord.editable}" />
 								</h:column>
 								<h:column>
 									<f:facet name="header">Place</f:facet>
-									<h:outputText value="#{ord.placeName}"
-										rendered="#{not ord.editable}" />
-									<h:inputText value="#{order.selectedPlace}"
-										rendered="#{ord.editable}" />
-
+									<h:outputText value="#{ord.placeName}" rendered="#{not ord.editable}" />
+									<h:selectOneMenu value="#{ord.placeId}" rendered="#{ord.editable}">
+										<f:selectItems value="#{place.places}" var="plac" itemValue="#{plac.id}" itemLabel="#{plac.name}" id="placeNAME" />
+										</h:selectOneMenu>
 								</h:column>
+								<h:column style="margin:25px">
+
+									<f:facet name="header">Status</f:facet>
+									<h:outputText value="#{ord.status}"
+										rendered="#{not ord.editable}" />
+									<h:inputText value="#{ord.order.status}"
+										rendered="#{ord.editable}" />
+								</h:column>
+								
 								<h:column>
 									<f:facet name="header">Add</f:facet>
 									<h:commandButton value="Add Items" class="btn btn-primary">
+									<f:ajax listener="#{order.addItem(ord)}" />
 									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Edit</f:facet>
-									<h:commandButton value="Edit" class="btn btn-primary" action="#{order.edit(ord)}"></h:commandButton>
+									<h:commandButton value="Edit" class="btn btn-primary"
+										action="#{order.edit(ord)}" rendered="#{not ord.editable}">
+										<f:ajax execute="data" render="data"></f:ajax>
+											</h:commandButton>
+									<h:commandButton value="save" class="btn btn-primary"
+										action="#{order.save(ord)}" rendered="#{ord.editable}">
+										<f:ajax execute="data" render="data"></f:ajax>
+									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Delete</f:facet>
-									<h:commandButton value="Delete" class="btn btn-primary"
-										action="#{order.delete(ord.order)}"></h:commandButton>
+									<h:commandButton value="Delete" class="btn btn-primary" action="#{order.delete(ord.order)}">
+										<f:ajax execute="data" render="data formId:errorMsgId"></f:ajax>
+									</h:commandButton>
 								</h:column>
 								<h:column>
 									<f:facet name="header">Cancel</f:facet>
-									<h:commandButton value="Cancel" class="btn btn-primary"></h:commandButton>
+									<h:commandButton value="Cancel" class="btn btn-primary" action="#{order.cancel(ord.order)}" rendered="#{ord.status == order.openedEnum}">
+										<f:ajax execute="data" render="data "></f:ajax>
+									</h:commandButton>
 								</h:column>
 							</h:dataTable>
 						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h:outputText value="#{order.errorMsg}" id="errorMsgId"/>
 					</td>
 				</tr>
 

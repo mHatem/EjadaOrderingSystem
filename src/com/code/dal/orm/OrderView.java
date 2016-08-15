@@ -1,7 +1,10 @@
 package com.code.dal.orm;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,8 +13,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.code.ui.order;
+import com.code.ui.user.Login;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "VW_ORDER")
 
@@ -27,7 +31,7 @@ import com.code.ui.order;
 		)
 
 })
-public class OrderView {
+public class OrderView implements Serializable{
 	private Long id;
 	private Long ownerId;
 	private Long placeId;
@@ -38,22 +42,7 @@ public class OrderView {
 	private Date orderDate;
 	private Order order;
 	private boolean editable;
-
-	@Transient
-	public static void edit(OrderView o)
-	{
-		o.setEditable(true);
-	}
-	
-	@Transient
-	public boolean isEditable() {
-		return editable;
-	}
-
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-
+	private static boolean activateList;
 	public OrderView() {
 		order = new Order();
 	}
@@ -62,14 +51,6 @@ public class OrderView {
 	@Column(name = "ID")
 	public Long getId() {
 		return id;
-	}
-@Transient
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
 	}
 
 	public void setId(Long id) {
@@ -104,6 +85,7 @@ public class OrderView {
 
 	public void setName(String name) {
 		this.name = name;
+		this.order.setName(name);
 	}
 
 	@Column(name = "OWNER_NAME")
@@ -143,4 +125,48 @@ public class OrderView {
 		this.orderDate = orderDate;
 		this.order.setDate(orderDate);
 	}
+	
+	@Transient
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	@Transient
+	public static void edit(OrderView o)
+	{
+		o.setEditable(!(o.isEditable()));
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
+		
+		if (userRole.equals("ADMIN"))
+		{
+			setActivateList(true);
+		}
+		else 
+		{
+			setActivateList(false);
+		}
+	}
+	
+	@Transient
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+    @Transient
+	public boolean isActivateList() {
+		return activateList;
+	}
+
+	public static void setActivateList(boolean ActivateList) {
+		activateList = ActivateList;
+	}
+ 
 }

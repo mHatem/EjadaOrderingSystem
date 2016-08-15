@@ -11,23 +11,24 @@
 	<h:outputStylesheet library="css" name="bootstrap.css"/>
 </h:head>
 
-<h:body>
+<h:body
+	style="background-image: url('http://www.uksoftech.com/wp-content/uploads/2016/02/website-design-background.png');">
 	<h:form id="formId">
 		<!--Header-->
 		<ui:remove>
 			<ui:decorate template="templates/sections/header.xhtml"/>
 		</ui:remove>
 		<h:panelGroup id="header">
-			<div class="col-lg-12">
-				<div class="text-left col-lg-8">
+			<div class="navbar col-lg-12">
+				<div class="navbar-header col-lg-8">
 					<a href="/index.xhtml"><img src="http://placehold.it/150x50"/></a>
 				</div>
 
 				<h:panelGroup id="header_signout_form">
 					<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 						<p>
-							#{msgs.you_are_logged_as} <strong>@#{login.loggedUsername}</strong> |
-							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
+							#{msgs.you_are_logged_as} <strong>@#{login.loggedUser.username}</strong> |
+							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}">
 								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
 						</p>
@@ -42,19 +43,18 @@
 				<h:panelGroup rendered="#{login.loggedIn}">
 					<div class="container" style="padding-top: 50px">
 						<div class="bar">
-							<h3><h:link value="Orders" outcome="Order"/></h3>
+							<h:link value="Orders" outcome="Order" styleClass="btn"/>
 						</div>
 						<div class="bar">
-							<h3><h:link value="Places" outcome="places"/></h3>
+							<h:link value="Places" outcome="places" styleClass="btn"/>
 						</div>
 					</div>
-
 				</h:panelGroup>
 			</h:panelGroup>
 		</div>
 
 		<!--Content-->
-		<div class="col-lg-10">
+		<div class="panel panel-body col-lg-9">
 			<h:panelGroup id="content">
 				<!--Login/Signup Section-->
 				<div class="col-lg-12">
@@ -87,13 +87,13 @@
 								</div>
 								<div class="col-lg-12 form-group center-block">
 									<h:commandLink value="#{msgs.login}" action="#{login.loginAction}"
-									               styleClass="btn btn-primary btn-sm ">
+									               styleClass="btn btn-primary">
 										<f:ajax execute="login_form"
 										        render="login_form signup_form welcome header_signout_form logged_in_content pageTitle sidebar"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.not_a_user_signup}"
 									               action="#{login.signupButton}"
-									               styleClass="btn btn-sm ">
+									               styleClass="btn">
 										<f:ajax render="login_form signup_form welcome header_signout_form logged_in_content pageTitle"/>
 									</h:commandLink>
 								</div>
@@ -155,13 +155,13 @@
 								<div class="col-lg-12 form-group center-block">
 									<h:commandLink value="#{msgs.signup}"
 									               action="#{login.signupAction}"
-									               styleClass="btn btn-primary btn-sm ">
+									               styleClass="btn btn-primary">
 										<f:ajax execute="signup_form"
 										        render="login_form signup_form pageTitle"/>
 									</h:commandLink>
 									<h:commandLink value="#{msgs.login}"
 									               action="#{login.loginButton}"
-									               styleClass="btn btn-sm ">
+									               styleClass="btn">
 										<f:ajax render="login_form signup_form pageTitle"/>
 									</h:commandLink>
 								</div>
@@ -184,9 +184,9 @@
 					<h:panelGroup rendered="#{login.loggedIn}">
 						<!--Welcome/Edit panel-->
 						<div class="col-lg-12">
-							<h2>Welcome, #{login.loggedUserName}! | <h:commandLink value="#{msgs.edit_profile}"
-							                                                       action="#{login.editButton}"
-							                                                       disabled="#{login.editing}">
+							<h2>Welcome, #{login.loggedUser.name}! | <h:commandLink value="#{msgs.edit_profile}"
+							                                                        action="#{login.editButton}"
+							                                                        disabled="#{login.editing}">
 								<f:ajax render="logged_in_content edit_form"/>
 							</h:commandLink>
 							</h2>
@@ -243,124 +243,179 @@
 									<div class="col-lg-12 form-group center-block">
 										<h:commandLink value="#{msgs.save}"
 										               action="#{login.updateAction}"
-										               styleClass="btn btn-primary btn-sm ">
+										               styleClass="btn btn-primary">
 											<f:ajax execute="edit_form"
-											        render="edit_form logged_in_content header_signout_form"/>
+											        render="edit_form logged_in_content header_signout_form order_and_items_tables"/>
 										</h:commandLink>
 										<h:commandLink value="#{msgs.cancel}"
 										               action="#{login.editCancelButton}"
-										               styleClass="btn btn-sm ">
-											<f:ajax render="edit_form logged_in_content"/>
+										               styleClass="btn">
+											<f:ajax render="edit_form logged_in_content order_and_items_tables"/>
 										</h:commandLink>
 									</div>
 								</div>
 							</h:panelGroup>
 						</h:panelGroup>
 
-						<!--Search filter controls-->
-						<h:panelGroup id="filter_orders_form">
-							<div>
-								<div class="col-lg-12">
-									<div class="form-group col-lg-4">
-										<h:outputLabel for="place_combobox" value="Place:"/>
-										<h:selectOneMenu id="place_combobox"
-										                 value="#{login.selectedPlaceId}"
-										                 styleClass="form-control dropdown">
-											<f:selectItems value="#{login.places}"
-											               var="place"
-											               itemLabel="#{place.name}"
-											               itemValue="#{place.id}"/>
-										</h:selectOneMenu>
+						<!--View Tables-->
+						<h:panelGroup id="order_and_items_tables">
+							<h:panelGroup rendered="#{login.loggedIn and not login.editing}">
+								<!--Search filter controls-->
+								<h:panelGroup id="filter_orders_form">
+									<div>
+										<div class="col-lg-12">
+											<div class="form-group col-lg-4">
+												<h:outputLabel for="place_combobox" value="Place:"/>
+												<h:selectOneMenu id="place_combobox"
+												                 value="#{login.selectedPlaceId}"
+												                 styleClass="form-control dropdown">
+													<f:selectItem itemValue="#{null}"
+													              itemLabel="Select a place"/>
+													<f:selectItems value="#{login.places}"
+													               var="place"
+													               itemLabel="#{place.name}"
+													               itemValue="#{place.id}"/>
+												</h:selectOneMenu>
 
-										<!--TODO-->
-										<h:outputLabel for="item_combobox" value="Item:"/>
-										<h:selectOneMenu id="item_combobox"
-										                 value="{login.selectedItemId}"
-										                 styleClass="form-control dropdown">
-											<f:selectItems value="#{login.placeItems}"
-											               var="item"
-											               itemLabel="#{item.name}"
-											               itemValue="#{item.id}"/>
-										</h:selectOneMenu>
+												<!--TODO-->
+												<h:outputLabel for="item_combobox" value="Item:"/>
+												<h:selectOneMenu id="item_combobox"
+												                 value="{login.selectedItemId}"
+												                 styleClass="form-control dropdown">
+													<f:selectItem itemValue="#{null}"
+													              itemLabel="Select an item"/>
+													<f:selectItems value="#{login.placeItems}"
+													               var="item"
+													               itemLabel="#{item.name}"
+													               itemValue="#{item.id}"/>
+												</h:selectOneMenu>
+											</div>
+										</div>
+										<div class="form-group col-lg-12">
+											<h:commandLink styleClass="btn btn-primary"
+											               value="Filter"
+											               action="#{login.filterAction}">
+												<f:ajax execute="filter_orders_form" render="orders_table"/>
+											</h:commandLink>
+											<h:commandLink styleClass="btn"
+											               value="Reset"
+											               action="#{login.resetFilterAction}">
+												<f:ajax execute="filter_orders_form" render="filter_orders_form orders_table"/>
+											</h:commandLink>
+										</div>
 									</div>
-								</div>
-								<div class="form-group col-lg-12">
-									<!--TODO-->
-									<h:commandLink styleClass="btn btn-primary"
-									               value="Filter"
-									               action="#{login.filterAction}">
-										<f:ajax execute="filter_orders_form" render="orders_table"/>
-									</h:commandLink>
-									<!--TODO-->
-									<h:commandLink styleClass="btn"
-									               value="Reset"
-									               action="#{login.resetFilterAction}">
-										<f:ajax execute="filter_orders_form" render="orders_table"/>
-									</h:commandLink>
-								</div>
-							</div>
-						</h:panelGroup>
+								</h:panelGroup>
 
-						<!--Orders Table-->
-						<!--TODO-->
-						<h:panelGroup id="orders_table">
-							<div class="container col-lg-12">
-								<h2>Orders</h2>
-								<h:dataTable value="#{login.orders}" var="order"
-								             styleClass="table table-bordered">
-									<h:column>
-										<f:facet name="header">ID</f:facet>
-										#{order.id}
-									</h:column>
-									<h:column>
-										<f:facet name="header">Status</f:facet>
-										#{order.status}
-									</h:column>
-									<h:column>
-										<f:facet name="header">Owner</f:facet>
-										#{order.ownerName}
-									</h:column>
-									<h:column>
-										<f:facet name="header">Place</f:facet>
-										#{order.placeName}
-									</h:column>
-									<h:column>
-										<f:facet name="header">Delete</f:facet>
-										<h:commandButton value="Delete" class="btn btn-primary"
-										                 action="{order.delete(order.order)}"/>
-									</h:column>
-								</h:dataTable>
-							</div>
-						</h:panelGroup>
+								<!--Orders Table-->
+								<h:panelGroup id="orders_table">
+									<div class="container col-lg-12">
+										<h2>Orders</h2>
+										<h:dataTable id="orders_datatable"
+										             value="#{login.orders}"
+										             var="order"
+										             styleClass="table table-bordered">
+											<h:column>
+												<f:facet name="header">ID</f:facet>
+												#{order.id}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Order Name</f:facet>
+												#{order.name}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Status</f:facet>
+												#{order.status}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Owner</f:facet>
+												#{order.ownerName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Place</f:facet>
+												#{order.placeName}
+											</h:column>
+											<h:column rendered="#{login.admin}">
+												<f:facet name="header">Delete</f:facet>
+												<h:commandLink value="Delete"
+												               action="#{login.deleteOrder(order)}">
+													<!--TODO render row only-->
+													<f:ajax render="orders_datatable formId:alert_script"/>
+												</h:commandLink>
+											</h:column>
+										</h:dataTable>
+									</div>
+								</h:panelGroup>
 
-						<!--OrderItems Table-->
-						<!--TODO-->
-						<h:panelGroup id="order_items_table">
-							<div class="container col-lg-12">
-								<h2>Order Items</h2>
-								<h:dataTable value="#{login.orderItems}" var="order_item"
-								             styleClass="table table-bordered">
-									<h:column>
-										<f:facet name="header">ID</f:facet>
-										#{order_item.id}
-									</h:column>
-									<h:column>
-										<f:facet name="header">Delete</f:facet>
-										<h:commandButton value="Delete" class="btn btn-primary"
-										                 action="{order.delete(order.order)}"/>
-									</h:column>
-								</h:dataTable>
-							</div>
+								<!--OrderItems Table-->
+								<h:panelGroup id="orderitems_table">
+									<div class="container col-lg-12">
+										<h2>Order Items</h2>
+										<h:dataTable id="orderitems_datetable"
+										             value="#{login.orderItemViews}"
+										             var="order_item"
+										             styleClass="table table-bordered">
+											<h:column>
+												<f:facet name="header">ID</f:facet>
+												#{order_item.id}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Order ID</f:facet>
+												#{order_item.orderId}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Item Name</f:facet>
+												#{order_item.itemName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">User</f:facet>
+												#{order_item.userName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Place</f:facet>
+												#{order_item.placeName}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Count</f:facet>
+												#{order_item.count}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Price</f:facet>
+												#{order_item.price}
+											</h:column>
+											<h:column>
+												<f:facet name="header">Total</f:facet>
+												#{order_item.total}
+											</h:column>
+											<h:column rendered="#{login.admin}">
+												<f:facet name="header">Delete</f:facet>
+												<h:commandLink value="Delete"
+												               action="#{login.deleteOrderItemView(order_item)}">
+													<f:ajax render="orderitems_datetable formId:alert_script"/>
+												</h:commandLink>
+											</h:column>
+										</h:dataTable>
+									</div>
+								</h:panelGroup>
+
+								<!--Alert script for deleting from tables-->
+								<h:panelGroup id="alert_script">
+									<h:panelGroup rendered="#{login.alertMessage != null}">
+										<h:outputScript>
+											alert("#{login.alertMessage}");
+										</h:outputScript>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-
 			</h:panelGroup>
 		</div>
 
+		<div class="col-lg-1"/>
+
 		<!--Footer-->
 		<ui:decorate template="templates/sections/footer.xhtml"/>
-
 	</h:form>
 </h:body>
 </html>

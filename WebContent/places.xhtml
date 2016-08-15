@@ -6,19 +6,20 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
-	<title>places</title>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script
-		src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
+	<title>places</title>	
 	<h:outputStylesheet library="css" name="bootstrap.css"></h:outputStylesheet>
-
+	<style>               
+        .Bimage{ background-image:url(/EjadaOrderingSystem/WebContent/resources/images/website-design-background.png); }        
+     </style>
+	<f:event type="preRenderView" listener="#{place.checkLoggedIn}"/>
 </h:head>
-<h:body>
+<h:body style="background-image: url('http://www.uksoftech.com/wp-content/uploads/2016/02/website-design-background.png');">
+
 	<h:form id="palcesForm">
-		<!-- the container -->
+			<!-- the container -->
 		<div class="container">
+			
+			
 			<!-- bar -->
 			<div class="navbar navbar-inverse">
 				
@@ -27,70 +28,90 @@
 					<h:outputText value="#{place.userName}"/>	
 					<h:outputText value=" :D "/>	
 				</div>
-				
+				<div class="text-right">
+					<h:commandLink value="Signout" action="#{place.signOut()}"/>
+				</div>
 			</div>
+			
 			<!-- place -->
 			<div>
 				<h:outputText value="Places "
-					style="color: blue;font-family:Good Times" />
+					style="color: white;font-family: 'Good Times';font-size: 40px" />
 			</div>
 			
 			
 			<!-- input text > insert name and phone -->
 			<div>
-				<h:outputLabel value="PlaceName: " />
-				<h:inputText id="placeNameId" value="#{place.name}"  />
+				<h:outputLabel value="PlaceName: " style="color: white"/>
+				<h:inputText id="placeNameId" value="#{place.name}" 
+					 styleClass="form-control"/>
+					
 			</div>
+			
 			<div>	
-				<h:outputLabel value="PlacePhone"/>
-				<h:inputText id="placePhoneId" value="#{place.phoneNo}" />
+				<h:outputLabel value="PlacePhone" style="color: white"/>
+				<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
 			</div>
 			
+			<!-- All Buttons -->
+			<div class="btn-group">
 			<!-- insert -->
-			<div>
-				<h:commandButton value="add place"
-				 	class="btn btn-primary" 
-				 	action="#{place.addPlace}" style="font-family:Good Times" >
-				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
-				</h:commandButton>
-			</div>
 			
-			<!-- search by name only -->
-			<div>
-				<h:commandButton value="serachByName" 
-								 class="btn btn-primary" 
-								 action="#{place.searchPlaceName}" 
-								 style="font-family:Good Times" >
-				<f:ajax execute="palcesForm:placeNameId"
-					 render="palcesForm:placesTableId palcesForm:placeNameId"/>
-				</h:commandButton>					
-			</div>
+				<h:commandLink id="add" value="add place" rendered="#{place.adminPlaces()}"
+				 	class="btn btn-primary btn-sm" 
+				 	 	
+				 	action="#{place.addPlace}" >
+				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
+				</h:commandLink>
+    			
+    			
+
+    			<h:message for="add" />
+    			
 			
-			<!-- search by name only -->
-			<div>
-				<h:commandButton value="serachAll" 
-								 class="btn btn-primary" 
-								 action="#{place.searchPlace}" 
-								 style="font-family:Good Times" >
+			
+			<!-- search by nameAndPhone -->
+			
+				<h:commandLink value="serachAll" 
+								 class="btn btn-primary btn-sm" 
+								 action="#{place.searchPlace}" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
-					 render="palcesForm:placesTableId "/>
-				</h:commandButton>					
-			</div>
-			<!-- show all places -->
-			<div>
-			<h:commandButton value="ShowAllPlaces" 
-								 class="btn btn-primary" 
-								 action="#{place.showAll}" 
-								 style="font-family:Good Times" >
-				<f:ajax execute="palcesForm:placeNameId"
-					 render="palcesForm:placesTableId"/>
-			</h:commandButton>
-			</div>
+					 render="palcesForm:placesTableId palcesForm:msg"/>
+				</h:commandLink>					
 			
+			
+			<!-- show all places -->
+			
+			<h:commandLink value="ShowAllPlaces" 
+								 class="btn btn-primary btn-sm" 
+								 action="#{place.showAll}">
+				<f:ajax execute="palcesForm:placeNameId"
+					 render="palcesForm:placesTableId palcesForm:msg palcesForm:placeNameId palcesForm:placePhoneId"/>
+			</h:commandLink>
+			
+			
+			<!-- Reset inputText -->
+			
+			<h:commandLink value="ResetInput" 
+								 class="btn btn-success btn-sm" 
+								 action="#{place.resetAllInputText}">
+				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
+					 render="palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
+			</h:commandLink>
+			
+			</div>
+			<h:outputScript rendered="#{place.flagDeleteUsedPlace}">
+				alert("this place is used already");
+			</h:outputScript>
+			<div>
+			<h:panelGroup id="msg">
+    					<h:outputLabel  value="Invalid Add : u must add the place name" style="color:white" rendered="#{place.isMsgAddPlaceNameNotUsed()}"/>
+    			</h:panelGroup>
+			</div>
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
-				style="width: 250px;">
+				style="width: 250px;color: white">
 
 				<f:facet name="caption">places</f:facet>
 				
@@ -113,26 +134,26 @@
 				<!-- Items -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Items</f:facet>
-						<h:commandButton value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandLink value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-warning btn-xs" /> 
 				</h:column>
 				
 				
 				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">delete</f:facet>
-						<h:commandButton value="delete" action="#{place.deletePlace(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandLink value="delete" action="#{place.deletePlace(row)}" class="btn btn-info btn-xs" /> 
 				</h:column>
 				
 				<!-- Update -->
-				<h:column headerClass="columnHeader" footerClass="columnFooter">
+				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">update</f:facet>
-						<h:commandButton value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default " >
+						<h:commandLink value="save" action="#{place.savePlace(row)}" rendered="#{row.selected}" class="btn btn-default btn-xs" >
 							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>			 
-						</h:commandButton>
+						</h:commandLink>
 						
-						<h:commandButton value="edit" action="#{place.editPlace(row)}" rendered="#{not row.selected}" class="btn btn-default " >
+						<h:commandLink value="edit" action="#{place.editPlace(row)}" rendered="#{not row.selected}" class="btn btn-default btn-xs" >
 							<f:ajax execute="palcesForm:placesTableId" render="palcesForm:placesTableId"/>
-						</h:commandButton>
+						</h:commandLink>
 				</h:column>
 			</h:dataTable>
 			

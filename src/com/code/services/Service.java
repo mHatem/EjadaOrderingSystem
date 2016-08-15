@@ -7,10 +7,12 @@ import org.hibernate.cfg.Configuration;
 import com.code.dal.orm.*;
 public class Service 
 {
+	
+	private static SessionFactory SF = new Configuration().configure().buildSessionFactory();
 	 
 	public static List<PlacesItem> getItemsList(Long PlaceID)
 	{
-		SessionFactory   SF=new Configuration().configure().buildSessionFactory();
+		
 		Session S=SF.openSession();
 		S.beginTransaction();
 		Query Q=S.getNamedQuery("getItems");
@@ -20,4 +22,66 @@ public class Service
 		S.close();
 		return PI;
 	}
+   public static void Delete(Long placeItemID)
+   {
+		Session S=SF.openSession();
+		S.beginTransaction();
+		PlacesItem placeItem=(PlacesItem)S.get(PlacesItem.class,placeItemID.longValue());
+		S.delete(placeItem);
+		S.getTransaction().commit();
+		S.close();
+   }
+   public static List <String>  getOrderStatus(Long ItemID)
+   {
+		Session S=SF.openSession();
+		S.beginTransaction();
+		Query Q=S.getNamedQuery("getOpenOrders");
+		Q.setLong(0,ItemID);
+		List <String> order=(List<String>)Q.list();
+		
+		S.getTransaction().commit();
+		S.close();
+		return order;
+   }
+   public static void Update(PlacesItem placeItem)
+   {
+	   try
+	   {
+		Session S=SF.openSession();
+		S.beginTransaction();
+		S.update(placeItem);
+		S.getTransaction().commit();
+		S.close();
+	   }
+	   catch(Exception ex)
+	   {
+		   System.out.println(ex.toString());
+	   }
+   }
+   public static void Add(String itemName,String itemDescription,Float price)
+   {
+			Session S=SF.openSession();
+			S.beginTransaction();
+			PlacesItem placeItem=new PlacesItem();
+			placeItem.setName(itemName);
+			placeItem.setDescription(itemDescription);
+			placeItem.setPrice(price);
+			S.getTransaction().commit();
+			S.close();
+   }
+   /*public static List<PlacesItem> Search(String itemName,Float priceFrom,Float priceTo)
+   {
+	   if(itemName== null)
+	   {
+		   itemName="-1";
+	   }
+	   if(priceFrom==null)
+	   {
+		   priceFrom=0F;
+	   }
+	   if(priceTo==null)
+	   {
+		   priceTo=100F;
+	   }
+   }*/
 }

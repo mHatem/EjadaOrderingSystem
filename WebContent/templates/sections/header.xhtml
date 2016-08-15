@@ -23,7 +23,7 @@
 				<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
 					<p>
 						#{msgs.you_are_logged_as} <strong>#{login.username}</strong> |
-							<h:commandLink value="#{msgs.sign_out}" action="#{login.signout}">
+							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}">
 								<f:ajax render="@all"/>
 							</h:commandLink>
 					</p>
