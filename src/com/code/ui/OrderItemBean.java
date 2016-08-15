@@ -12,15 +12,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-
-
-
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.*;
 import com.code.services.OrderItemService;
 import com.code.services.UserService;
 import com.code.ui.user.Login;
-
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "OrderItem")
@@ -66,29 +62,34 @@ public class OrderItemBean implements Serializable {
 		this.items = items;
 	}
 
-	public String resetData()
-	{
+	public String resetData() {
 		searchParameterItemName = null;
 		searchParameterUsername = null;
 		filterData();
 		return null;
 	}
-	
+
 	public String filterData() {
-		if(searchParameterItemName != null)
-			searchParameterItemName = searchParameterItemName.trim().toLowerCase();
-	    if(searchParameterItemName != null)	
-	    	searchParameterUsername = searchParameterUsername.trim().toLowerCase();
-		items = orderItemService.getOrderedItemsFiltered(orderId  , searchParameterItemName , searchParameterUsername);
+		if (searchParameterItemName != null)
+			searchParameterItemName = searchParameterItemName.trim()
+					.toLowerCase();
+		if (searchParameterItemName != null)
+			searchParameterUsername = searchParameterUsername.trim()
+					.toLowerCase();
+		items = orderItemService.getOrderedItemsFiltered(orderId,
+				searchParameterItemName, searchParameterUsername);
 		return null;
 	}
 
 	public void refresh() {
 		try {
-			/*String orderIdString=((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("ORDERID");
-			orderId = Long.parseLong(orderIdString); 
-			*/
-			
+			/*
+			 * String orderIdString=((HttpServletRequest)
+			 * FacesContext.getCurrentInstance
+			 * ().getExternalContext().getRequest()).getParameter("ORDERID");
+			 * orderId = Long.parseLong(orderIdString);
+			 */
+
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
@@ -102,16 +103,20 @@ public class OrderItemBean implements Serializable {
 			setPlace(orderItemService.getPlaceByPlaceID(order.getPlaceID()));
 			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
 			UserService userService = UserService.getSingleton();
-			user = new ArrayList<User>(userService.getAllUsers());
+
 			/*
-			Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-			String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
-		    String userIdTransefer = (String) sessionMap.get(Login.SESSION_KEY_USER_ID);
-		    if(userRole.equals(UserRole.ADMIN))
-		    	isAdmin = true;
-		    else isAdmin = false;
-		    userId = Long.parseLong(userIdTransefer);
-		    */
+			 * Map<String, Object>
+			 * sessionMap=FacesContext.getCurrentInstance().getExternalContext
+			 * ().getSessionMap(); String userRole = (String)
+			 * sessionMap.get(Login.SESSION_KEY_USER_ROLE); String
+			 * userIdTransefer = (String)
+			 * sessionMap.get(Login.SESSION_KEY_USER_ID);
+			 * if(userRole.equals(UserRole.ADMIN)) isAdmin = true; else isAdmin
+			 * = false; userId = Long.parseLong(userIdTransefer);
+			 */
+			if (isAdmin) {
+				user = new ArrayList<User>(userService.getAllUsers());
+			}
 			loggedUser = userService.getUserById(userId);
 
 		} catch (Exception ea) {
@@ -188,13 +193,13 @@ public class OrderItemBean implements Serializable {
 
 	private String searchUsername(Long userId) {
 		if (userId == null)
-			return "";
+			return null;
 		for (User search : user) {
 			if (search.getId().equals(userId)) {
 				return search.getUsername();
 			}
 		}
-		return "";
+		return null;
 	}
 
 	private String searchItemName(Long itemId) {
@@ -217,7 +222,8 @@ public class OrderItemBean implements Serializable {
 		if (errorMessage == null) {
 			ordItem.setSelected(false);
 			ordItem.setToAdd(false);
-			ordItem.setUsername(searchUsername(ordItem.getUserId()));
+			if (isAdmin)
+				ordItem.setUsername(searchUsername(ordItem.getUserId()));
 			ordItem.setItemName(searchItemName(ordItem.getItemId()));
 			ordItem.saveHistory();
 		}
@@ -233,7 +239,8 @@ public class OrderItemBean implements Serializable {
 		if (errorMessage == null) {
 			ordItem.setSelected(false);
 			ordItem.setToAdd(false);
-			ordItem.setUsername(searchUsername(ordItem.getUserId()));
+			if (isAdmin)
+				ordItem.setUsername(searchUsername(ordItem.getUserId()));
 			ordItem.setItemName(searchItemName(ordItem.getItemId()));
 			ordItem.saveHistory();
 		}
