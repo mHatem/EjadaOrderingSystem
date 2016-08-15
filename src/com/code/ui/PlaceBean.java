@@ -31,8 +31,17 @@ public class PlaceBean implements Serializable {
 	private List<Place> places;
 	private String userName;
 	private UIComponent addButton;
-	private boolean flagDeleteUsedPlace;
+	private boolean flagDeleteUsedPlace = false;
+	private boolean msgAddPlaceNameNotUsed =false;
 	
+	public boolean isMsgAddPlaceNameNotUsed() {
+		return msgAddPlaceNameNotUsed;
+	}
+
+	public void setMsgAddPlaceNameNotUsed(boolean msgAddPlaceNameNotUsed) {
+		this.msgAddPlaceNameNotUsed = msgAddPlaceNameNotUsed;
+	}
+
 	public boolean isFlagDeleteUsedPlace() {
 		return flagDeleteUsedPlace;
 	}
@@ -44,7 +53,6 @@ public class PlaceBean implements Serializable {
 	public PlaceBean() {
 		
 		places = null;
-		//checkLoggedIn();
 		showAll();
 	}
 
@@ -62,12 +70,13 @@ public class PlaceBean implements Serializable {
 	
 	// insert
 	public String addPlace() {
+		msgAddPlaceNameNotUsed = false;
 		if (name == null || name.trim().equals(""))
 		{
 			FacesMessage message = new FacesMessage("Invalid add");
 			FacesContext context = FacesContext.getCurrentInstance();
+			msgAddPlaceNameNotUsed = true;
 			//context.addMessage(addButton.getClientId(context), message);
-
 		}
 		else
 		{	
@@ -76,10 +85,17 @@ public class PlaceBean implements Serializable {
 		insertedPlace.setPhoneNo(phoneNo);
 		PlaceService.insertPlace(insertedPlace);
 		places.add(insertedPlace);
+		msgAddPlaceNameNotUsed = false;
 		name = null;
 		phoneNo = null;}
 		return null;
 	}
+	
+	// Msg indecator : shown when the Admin add place without it's name
+	/*public Boolean msgWhenInvalidAddOccur()
+	{
+		return true;
+	}*/
 	
 	public UIComponent getaddButton() {
 		return addButton;
@@ -92,6 +108,9 @@ public class PlaceBean implements Serializable {
 	// show the list
 	public List<Place> showAll() {
 		places = PlaceService.retrievePlaces();
+		msgAddPlaceNameNotUsed=false;
+		name=null;
+		phoneNo=null;
 		return places;
 
 	}
@@ -99,12 +118,16 @@ public class PlaceBean implements Serializable {
 	public void resetAllInputText(){
 		name=null;
 		phoneNo=null;
+		msgAddPlaceNameNotUsed=false;
 	}
 	
 	
 	//search by name and phone 
 	public List<Place> searchPlace() {
 			places = PlaceService.finalSearch(name, phoneNo);
+			msgAddPlaceNameNotUsed=false;
+			name=null;
+			phoneNo=null;
 			return places;
 	}
 		
