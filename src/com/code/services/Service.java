@@ -8,7 +8,7 @@ import com.code.dal.orm.*;
 public class Service 
 {
 	
-	private static SessionFactory SF = new Configuration().configure().buildSessionFactory();
+	private static SessionFactory SF = SessionFactorySingleton.getSingleton().getSessionFactory();
 	 
 	public static List<PlacesItem> getItemsList(Long PlaceID)
 	{
