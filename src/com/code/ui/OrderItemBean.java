@@ -23,7 +23,7 @@ import com.code.ui.user.Login;
 @ViewScoped
 public class OrderItemBean implements Serializable {
 
-	private Long orderId = 1L;
+	private Long orderId;
 	private Order order;
 	private Place place;
 	private List<OrderItemView> items;
@@ -33,10 +33,10 @@ public class OrderItemBean implements Serializable {
 	private String errorMessage;
 	private Boolean isAdmin = false;
 	private User loggedUser;
-	private Long userId = 13L;
+	private Long userId;
 	private String searchParameterUsername;
 	private String searchParameterItemName;
-	private Boolean isOpened;
+	private Boolean isOpened = false;
 
 	public String getErrorMessage() {
 		return errorMessage;
@@ -83,13 +83,15 @@ public class OrderItemBean implements Serializable {
 
 	public void refresh() {
 		try {
-			/*
-			 * String orderIdString=((HttpServletRequest)
-			 * FacesContext.getCurrentInstance
-			 * ().getExternalContext().getRequest()).getParameter("ORDERID");
-			 * orderId = Long.parseLong(orderIdString);
-			 */
 
+			String orderIdString = ((HttpServletRequest) FacesContext
+					.getCurrentInstance().getExternalContext().getRequest())
+					.getParameter("ORDERID");
+			orderId = Long.parseLong(orderIdString);
+            if(orderId == null || orderId == -1)
+            {
+            	Logout();
+            }
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
@@ -104,22 +106,29 @@ public class OrderItemBean implements Serializable {
 			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
 			UserService userService = UserService.getSingleton();
 
-			/*
-			 * Map<String, Object>
-			 * sessionMap=FacesContext.getCurrentInstance().getExternalContext
-			 * ().getSessionMap(); String userRole = (String)
-			 * sessionMap.get(Login.SESSION_KEY_USER_ROLE); String
-			 * userIdTransefer = (String)
-			 * sessionMap.get(Login.SESSION_KEY_USER_ID);
-			 * if(userRole.equals(UserRole.ADMIN)) isAdmin = true; else isAdmin
-			 * = false; userId = Long.parseLong(userIdTransefer);
-			 */
+			Map<String, Object> sessionMap = FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap();
+			String userRole = (String) sessionMap
+					.get(Login.SESSION_KEY_USER_ROLE);
+			userId = (Long) sessionMap
+					.get(Login.SESSION_KEY_USER_ID);
+			if(userId == null || userRole == null)
+            {
+            	Logout();
+            }
+			if (userRole.equals(UserRole.ADMIN))
+				isAdmin = true;
+			else
+				isAdmin = false;
+			//userId = Long.parseLong(userIdTransefer);
+
 			if (isAdmin) {
 				user = new ArrayList<User>(userService.getAllUsers());
 			}
 			loggedUser = userService.getUserById(userId);
 
 		} catch (Exception ea) {
+			Logout();
 			return;
 		}
 
@@ -131,6 +140,18 @@ public class OrderItemBean implements Serializable {
 		orderItemService = OrderItemService.getSingleton();
 		refresh();
 
+	}
+	
+	public void Logout()
+	{
+		try{
+			Map<String, Object> sessionMap = FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap();
+			sessionMap.put(Login.SESSION_KEY_USER_ROLE, null);
+			sessionMap.put(Login.SESSION_KEY_USER_ID, null);
+			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+			}
+			catch(Exception ca){return;}
 	}
 
 	public String toggleSelection(OrderItemView selectedItem) {
