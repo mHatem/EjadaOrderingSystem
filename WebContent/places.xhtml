@@ -27,12 +27,8 @@
 					<h:outputText value="#{place.userName}"/>	
 					<h:outputText value=" :D "/>	
 				</div>
-				<div>
-				<h:panelGroup >
-					<h:panelGroup rendered="#{login.loggedIn}">
-							<h:commandLink value="Signout" action="#{place.signOut()}"/>
-					</h:panelGroup>
-				</h:panelGroup>
+				<div class="text-right">
+					<h:commandLink value="Signout" action="#{place.signOut()}"/>
 				</div>
 			</div>
 			
@@ -88,13 +84,13 @@
 			
 			<!-- Reset inputText -->
 			<div>
-			<h:commandButton value="ResetInput" 
+			<h:commandLink value="ResetInput" 
 								 class="btn btn-success" 
 								 action="#{place.resetAllInputText}" 
 								 style="font-family:Good Times" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
 					 render="palcesForm:placeNameId palcesForm:placePhoneId"/>
-			</h:commandButton>
+			</h:commandLink>
 			</div>
 			<h:outputScript rendered="#{place.flagDeleteUsedPlace}">
 				alert("this place is used already");
@@ -125,7 +121,7 @@
 				<!-- Items -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter">
 						<f:facet name="header">Items</f:facet>
-						<h:commandButton value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
+						<h:commandLink value="Items"  action="#{place.redirectToItems(row)}" class="btn btn-primary btn-xs" /> 
 				</h:column>
 				
 				

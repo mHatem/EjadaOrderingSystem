@@ -125,8 +125,13 @@ public class PlaceBean implements Serializable {
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
 		return "Items?faces-redirct=true&id="+placeId;
 	}
-	public void signOut(){
-		
+	private Map<String, Object> getSessionMap() {
+		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+	}
+	public String signOut(){
+		getSessionMap().put(Login.SESSION_KEY_USER_ID, null);
+		getSessionMap().put(Login.SESSION_KEY_USER_ROLE, null);
+		return "index?faces-redirect=true";
 	}
 	public String getName() {
 		return name;
