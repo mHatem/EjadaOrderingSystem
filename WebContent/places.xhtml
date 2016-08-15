@@ -54,9 +54,9 @@
 			<!-- insert -->
 			<div>
 				<h:commandLink id="add" value="add place" rendered="#{place.adminPlaces()}"
-				 	class="btn btn-primary" 
+				 	class="btn btn-primary btn-sm" 
 				 	 binding="#{place.addButton}" 	
-				 	action="#{place.addPlace}" style="font-family:Good Times" >
+				 	action="#{place.addPlace}" >
 				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId"/>
 				</h:commandLink>
     			<h:message for="add" />
@@ -65,7 +65,7 @@
 			<!-- search by nameAndPhone -->
 			<div>
 				<h:commandLink value="serachAll" 
-								 class="btn btn-primary" 
+								 class="btn btn-primary btn-sm" 
 								 action="#{place.searchPlace}" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
 					 render="palcesForm:placesTableId "/>
@@ -75,7 +75,7 @@
 			<!-- show all places -->
 			<div>
 			<h:commandLink value="ShowAllPlaces" 
-								 class="btn btn-primary" 
+								 class="btn btn-primary btn-sm" 
 								 action="#{place.showAll}">
 				<f:ajax execute="palcesForm:placeNameId"
 					 render="palcesForm:placesTableId"/>
@@ -85,9 +85,8 @@
 			<!-- Reset inputText -->
 			<div>
 			<h:commandLink value="ResetInput" 
-								 class="btn btn-success" 
-								 action="#{place.resetAllInputText}" 
-								 style="font-family:Good Times" >
+								 class="btn btn-success btn-sm" 
+								 action="#{place.resetAllInputText}">
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
 					 render="palcesForm:placeNameId palcesForm:placePhoneId"/>
 			</h:commandLink>
