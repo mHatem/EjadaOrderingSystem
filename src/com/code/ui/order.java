@@ -1,6 +1,7 @@
 package com.code.ui;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,16 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.metamodel.SetAttribute;
 
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 import com.code.dal.orm.Place;
+import com.code.dal.orm.User;
+import com.code.dal.orm.UserRole;
+import com.code.services.PlaceService;
+import com.code.services.UserService;
 import com.code.services.orderService;
 import com.code.ui.user.Login;
 
@@ -37,9 +43,22 @@ public class order implements Serializable {
 	private String SNAme;
 	private Long SID;
 	private String errorMsg;
+	private Collection <User> userList;
+	private List <Place> placeList;
+	
+	public void addItem(OrderView ord)
+	{
+		Long orderId = ord.getId();
+		try{
+		FacesContext.getCurrentInstance().getExternalContext().redirect("orderItem.jsf?ORDERID="+orderId);
+		return;
+		}catch(Exception ea){return;}
+	}
 
 	public order() {
 		displayAllOrders();
+		userList = UserService.getSingleton().getAllUsers();
+		placeList = PlaceService.retrievePlaces(); 
 	}
 
 	public void edit(OrderView o) {
@@ -80,6 +99,7 @@ public class order implements Serializable {
 		order.setDate(dat);
 		orderService.insert(order);
 		displayAllOrders();
+		
 
 	}
 
@@ -106,7 +126,8 @@ public class order implements Serializable {
 			errorMsg="cant delete this order it has open items";
 		}
 	}
-
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String getSNAme() {
 		return SNAme;
 	}
@@ -226,4 +247,20 @@ public class order implements Serializable {
 	public String getErrorMsg() {
 		return errorMsg;
 	}
+
+	public Collection <User> getUserList() {
+		return userList;
+	}
+
+	public List<Place> getPlaceList() {
+		return placeList;
+	}
+
+	public void setPlaceList(List <Place> placeList) {
+		this.placeList = placeList;
+	}
+
+
+
+
 }

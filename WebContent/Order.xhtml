@@ -23,14 +23,20 @@
 					id="firstRow">
 
 					<th><label for="Owner">Owner:</label></th>
-					<td class="col-md-3" style="width: inherit;"><h:inputText
-							type="Owner" class="form-control" id="Owner"
-							value="#{order.SUName}">
-						</h:inputText></td>
+					<td class="col-md-3" style="width: inherit;">
+						<h:selectOneMenu value="#{order.ownerID}" id="Owner" class="form-control" type="Owner">
+							<f:selectItem  itemValue="-1" itemLabel=""/>
+							<f:selectItems value="#{order.userList}" var="names" itemValue="#{names.id}" itemLabel="#{names.name}" />
+						</h:selectOneMenu>
+						</td>
 					<th><label for="pName">PlaceName:</label></th>
-					<td class="col-md-3" style="width: initial;"><h:inputText
-							type="PlaceName" class="form-control" id="pName"
-							value="#{order.SPName}"></h:inputText></td>
+					<td class="col-md-3" style="width: initial;">
+						<h:selectOneMenu value="#{order.placeID}" id="pName" class="form-control">
+							<f:selectItem  itemValue="" itemLabel=""/>
+							<f:selectItems value="#{order.placeList}" var="plac" itemValue="#{plac.id}" itemLabel="#{plac.name}"/>
+						</h:selectOneMenu>
+					
+					</td>
 
 				</tr>
 
@@ -77,7 +83,7 @@
 										<h:inputText value="#{order.name}" id="orderNAME" />
 										<h:selectOneMenu value="#{order.selectedPlace}">
 											<f:selectItems value="#{place.places}" var="plac"
-												itemValue="#{plac.name}" id="placeNAME" />
+												itemValue="#{plac.name}" />
 										</h:selectOneMenu>
 									</div>
 									<div class="modal-footer">
@@ -110,7 +116,10 @@
 
 									<f:facet name="header">OrderName</f:facet>
 									<h:outputText value="#{ord.name}" rendered="#{not ord.editable}" />
-									<h:inputText value="#{ord.name}" rendered="#{ord.editable}" />
+									<h:inputText value="#{ord.name}" rendered="#{ord.editable}" >
+												
+									</h:inputText>
+									
 								</h:column>
 								<h:column style="margin:25px">
 
@@ -139,6 +148,7 @@
 								<h:column>
 									<f:facet name="header">Add</f:facet>
 									<h:commandButton value="Add Items" class="btn btn-primary">
+									<f:ajax listener="#{order.addItem(ord)}" />
 									</h:commandButton>
 								</h:column>
 								<h:column>

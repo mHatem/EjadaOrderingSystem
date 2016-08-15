@@ -2,7 +2,9 @@ package com.code.dal.orm;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,10 +13,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.code.ui.order;
+import com.code.ui.user.Login;
 
-import weblogic.security.pk.IssuerDNSerialNumberSelector;
-
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "VW_ORDER")
 
@@ -41,7 +42,7 @@ public class OrderView implements Serializable{
 	private Date orderDate;
 	private Order order;
 	private boolean editable;
-
+	private static boolean activateList;
 	public OrderView() {
 		order = new Order();
 	}
@@ -138,6 +139,17 @@ public class OrderView implements Serializable{
 	public static void edit(OrderView o)
 	{
 		o.setEditable(!(o.isEditable()));
+		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		String userRole = (String) sessionMap.get(Login.SESSION_KEY_USER_ROLE);
+		
+		if (userRole.equals("ADMIN"))
+		{
+			setActivateList(true);
+		}
+		else 
+		{
+			setActivateList(false);
+		}
 	}
 	
 	@Transient
@@ -148,4 +160,13 @@ public class OrderView implements Serializable{
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 	}
+    @Transient
+	public boolean isActivateList() {
+		return activateList;
+	}
+
+	public static void setActivateList(boolean ActivateList) {
+		activateList = ActivateList;
+	}
+ 
 }
