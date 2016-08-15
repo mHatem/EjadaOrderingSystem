@@ -11,30 +11,50 @@
 	<h:outputStylesheet library="css" name="bootstrap.css" />
 </h:head>
 <body id="Page">
-	<h:form class="form-horizontal col-md-4" role="form">
-		<h:outputText value=" Place : #{OrderItem.place.name}" />
-		<h:outputText value=" Phone number :  #{OrderItem.place.phoneNo}" />
+<h:form>
+	<h:panelGrid id="grid" columns="1">
+		<h:panelGroup id="orderInfo">
+			<h:outputText value=" Place : #{OrderItem.place.name}" />
+			<h:outputText value=" Phone number :  #{OrderItem.place.phoneNo}" />
+			<br />
+			<h:outputText value="  State :  #{OrderItem.order.status}" />
+			<h:outputText value="  Date :  #{OrderItem.order.date}" />
+			<br />
+		</h:panelGroup>
 		<br />
-		<h:outputText value="  State :  #{OrderItem.order.status}" />
-		<h:outputText value="  Date :  #{OrderItem.order.date}" />
-		<br />
-	</h:form>
-	<br />
+         
+        <h:panelGroup id="operation">
+		
+			<h:outputText value="Item name: " />
+			<h:inputText value="#{OrderItem.searchParameterItemName}" />
 
-	<h:form id="formTable">
-		<h:panelGrid columnClasses="acent">
+			<br />
 
-			<h:commandButton value="Add order" action="#{OrderItem.appendOrder}">
-				<f:ajax render="@form" />
+			<h:outputText value="username: " />
+			<h:inputText value="#{OrderItem.searchParameterUsername}" />
+
+			<br />
+			<h:commandButton value="Filter data"
+				action="#{OrderItem.filterData()}">
+				<f:ajax execute="@form" render="@form" />
+			</h:commandButton>
+			<h:commandButton value="Preload " action="#{OrderItem.resetData()}">
+				<f:ajax execute="@form" render="@form" />
 			</h:commandButton>
 
+
+			<h:commandButton value="Add order" action="#{OrderItem.appendOrder}"
+				rendered="#{OrderItem.isOpened}">
+				<f:ajax render="@form" />
+			</h:commandButton>
+            <br/>  
 			<rich:dataScroller for="datatable" maxPages="5" fastStep="3" />
-			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable">
-				<rich:column>
+			<rich:dataTable value="#{OrderItem.items}" var="order" id="datatable" rows="10">
+				<rich:column style="margin:25px">
 					<h:outputText value="#{order.username}"
-						rendered="#{!order.selected}" />
+						rendered="#{!order.selected or  !OrderItem.isAdmin }" />
 					<h:selectOneMenu value="#{order.userIdToCheck}"
-						rendered="#{order.selected}">
+						rendered="#{order.selected and OrderItem.isAdmin }">
 						<f:selectItems value="#{OrderItem.user}" var="user"
 							itemLabel="#{user.username}" itemValue="#{user.id}" />
 					</h:selectOneMenu>
@@ -44,7 +64,7 @@
 				</rich:column>
 
 
-				<rich:column>
+				<rich:column style="margin:25px">
 					<h:outputText value="#{order.itemName}"
 						rendered="#{!order.selected}" />
 					<h:selectOneMenu value="#{order.itemIdToCheck}"
@@ -58,13 +78,13 @@
 						<h:outputText value="Item name" />
 					</f:facet>
 				</rich:column>
-				<rich:column>
+				<rich:column style="margin:25px">
 					<h:outputText value="#{order.price}" />
 					<f:facet name="header">
 						<h:outputText value="Item price" />
 					</f:facet>
 				</rich:column>
-				<rich:column>
+				<rich:column style="margin:25px">
 					<h:outputText value="#{order.count}" rendered="#{!order.selected}" />
 					<h:inputText value="#{order.countToCheck}"
 						onkeypress="if(event.which &lt; 48 || event.which > 57 ) if(event.which != 8) return false;"
@@ -76,15 +96,16 @@
 						<h:outputText value="Item count" />
 					</f:facet>
 				</rich:column>
-				<rich:column>
+				<rich:column style="margin:25px">
 					<h:outputText value="#{order.count * order.price}" />
 					<f:facet name="header">
 						<h:outputText value="Total cost" />
 					</f:facet>
 				</rich:column>
-				<rich:column>
-					<h:commandButton rendered="#{!order.selected }" value="update"
-						action="#{OrderItem.toggleSelection(order)}">
+				<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
+					<h:commandButton
+						rendered="#{!order.selected and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
+						value="update" action="#{OrderItem.toggleSelection(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 					<h:commandButton rendered="#{order.selected and ! order.toAdd }"
@@ -100,17 +121,20 @@
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 				</rich:column>
-				<rich:column>
-					<h:commandButton rendered="#{!order.toAdd}" value="Delete"
-						action="#{OrderItem.delete(order)}">
+				<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
+					<h:commandButton
+						rendered="#{!order.toAdd and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
+						value="Delete" action="#{OrderItem.delete(order)}">
 						<f:ajax render="@form" />
 					</h:commandButton>
 				</rich:column>
 			</rich:dataTable>
+			 <rich:dataScroller for="datatable" maxPages="5" fastStep="3"/>
 			<h:outputText value="#{OrderItem.errorMessage}" id="ErrorName"
 				style="color:red;" />
-		</h:panelGrid>
+		
+		</h:panelGroup>
+	</h:panelGrid>
 	</h:form>
-
 </body>
 </html>

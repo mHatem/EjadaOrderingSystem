@@ -2,6 +2,8 @@ package com.code.services;
 
 import java.util.List;
 
+import javax.persistence.NamedQuery;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ public class OrderItemService {
 	private SessionFactory sessionFactory = null;
 	private static OrderItemService orderItemService = null;
 
+	@SuppressWarnings("deprecation")
 	private OrderItemService() {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
@@ -28,6 +31,8 @@ public class OrderItemService {
 	public List<OrderItemView> getOrderListByOrderID(Long orderId) {
 		try {
 
+			if (orderId == null)
+				orderId = -1L;
 			Session session = sessionFactory.openSession();
 			Query query = session.getNamedQuery("OrderItemByOrder");
 			query.setLong("OrderId", orderId);
@@ -38,10 +43,25 @@ public class OrderItemService {
 			return null;
 		}
 	}
-
+	
+	public List<OrderItemView> getAllOrderItem()
+	{
+		try{
+		Session session = sessionFactory.openSession();
+		Query query = session.getNamedQuery("AllOrderItem");
+		List<OrderItemView> result = (List<OrderItemView>) query.list();
+		session.close();
+		return result; 
+		}
+		catch(Exception ea){return null;}
+		
+	}
+ 
 	public List<OrderItemView> getOrderItemListByUserId(Long userId) {
 		try {
 
+			if (userId == null)
+				userId = -1L;
 			Session session = sessionFactory.openSession();
 			Query query = session.getNamedQuery("OrderItemByUser");
 			query.setLong("UserId", userId);
@@ -67,7 +87,8 @@ public class OrderItemService {
 
 	public Order getOrderByOrderID(Long orderId) {
 		try {
-
+			if (orderId == null)
+				orderId = -1L;
 			Session session = sessionFactory.openSession();
 			Order order = (Order) session.get(Order.class, orderId);
 			session.close();
@@ -96,7 +117,8 @@ public class OrderItemService {
 			Order ord = getOrderByOrderID(ordItemView.getOrderId());
 			if (ord == null)
 				return "Error . Please refresh the page to retrieve updated data";
-			if (ord.getStatus().toLowerCase().trim().equals(OrderStatusEnum.OPENED.getCode()) || ord.getStatus().toLowerCase().trim().equals(OrderStatusEnum.CANCELED.getCode()) ) {
+			if (ord.getStatus().toLowerCase().trim()
+					.equals(OrderStatusEnum.OPENED.getCode())) {
 				OrderItem ordItem = new OrderItem();
 				ordItem.setId(ordItemView.getId());
 				Session session = sessionFactory.openSession();
@@ -119,7 +141,8 @@ public class OrderItemService {
 			Order ord = getOrderByOrderID(ordItemView.getOrderId());
 			if (ord == null)
 				return "Error . Please refresh the page to retrieve updated data";
-			if (ord.getStatus().toLowerCase().trim().equals(OrderStatusEnum.OPENED.getCode())) {
+			if (ord.getStatus().toLowerCase().trim()
+					.equals(OrderStatusEnum.OPENED.getCode())) {
 				OrderItem ordItem = new OrderItem();
 				ordItem.setCount(ordItemView.getCount());
 				ordItem.setItem(ordItemView.getItemId());
@@ -139,6 +162,29 @@ public class OrderItemService {
 		}
 	}
 
+	public List<OrderItemView> getOrderedItemsFiltered(Long orderId,
+			String itemName, String username) {
+		if (orderId == null)
+			orderId = -1L;
+		if (itemName == null || itemName.equals("") )
+			itemName = "-1";
+		if (username == null || username.equals(""))
+			username = "-1";
+		try {
+
+			Session session = sessionFactory.openSession();
+			Query query = session.getNamedQuery("FilterOrderItemView");
+			query.setLong("OrderId", orderId).setString("Username", username)
+					.setString("ItemName", itemName);
+			List<OrderItemView> result = (List<OrderItemView>) query.list();
+			session.close();
+			return result;
+
+		} catch (Exception ea) {
+			return null;
+		}
+	}
+
 	public String orderItemUpdateManually(OrderItemView ordItemView) {
 		try {
 			if (ordItemView == null)
@@ -146,7 +192,8 @@ public class OrderItemService {
 			Order ord = getOrderByOrderID(ordItemView.getOrderId());
 			if (ord == null)
 				return "Error . Please refresh the page to retrieve updated data";
-			if (ord.getStatus().toLowerCase().trim().equals(OrderStatusEnum.OPENED.getCode())) {
+			if (ord.getStatus().toLowerCase().trim()
+					.equals(OrderStatusEnum.OPENED.getCode())) {
 				OrderItem ordItem = new OrderItem();
 				ordItem.setCount(ordItemView.getCount());
 				ordItem.setItem(ordItemView.getItemId());
