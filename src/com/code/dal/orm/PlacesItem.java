@@ -7,19 +7,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "PLACE_ITEM")
-@NamedQuery(name="getItems",query="from PlacesItem pt where pt.placeId =?")
+@NamedQueries({ @NamedQuery(name = "getItems", query = "from PlacesItem pt where pt.placeId =?"),
+	@NamedQuery(name = "getOpenOrders", query = "Select distinct o.status from Order o , OrderItem oi , PlacesItem pt "
+			+ "where oi.order=o.id and pt.id=oi.item and pt.id=?") })
 public class PlacesItem {
-
 	private Long id;
 	private Long placeId;
 	private String name;
 	private String description;
 	private Float price;
+	private boolean updateButtonClicked;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -33,7 +37,7 @@ public class PlacesItem {
 		this.id = id;
 	}
 
-	@Column(name="place_id")
+	@Column(name = "place_id")
 	public Long getPlaceId() {
 		return placeId;
 	}
@@ -51,7 +55,6 @@ public class PlacesItem {
 		this.name = name;
 	}
 
-	@Lob
 	@Column(name = "DESCRIPTION")
 	public String getDescription() {
 		return description;
@@ -69,4 +72,14 @@ public class PlacesItem {
 	public void setPrice(Float price) {
 		this.price = price;
 	}
+
+	@Transient
+	public boolean isUpdateButtonClicked() {
+		return updateButtonClicked;
+	}
+
+	public void setUpdateButtonClicked(boolean updateButtonClicked) {
+		this.updateButtonClicked = updateButtonClicked;
+	}
+
 }
