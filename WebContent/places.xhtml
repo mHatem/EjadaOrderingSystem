@@ -53,7 +53,7 @@
 			
 			<!-- insert -->
 			<div>
-				<h:commandLink id="add" value="add place"
+				<h:commandLink id="add" value="add place" rendered="#{place.adminPlaces()}"
 				 	class="btn btn-primary" 
 				 	 binding="#{place.addButton}" 	
 				 	action="#{place.addPlace}" style="font-family:Good Times" >
