@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "PLACE_ITEM")
@@ -18,8 +19,10 @@ import javax.persistence.Transient;
 			+ "where pi.id = oi.item and oi.order = o.id and pi.id = ?"
 			
 			)
+	// TODO: added by amr, please review
+	,@NamedQuery(name = "PlaceItem.all", query = "from PlacesItem pt")
 })
-public class PlacesItem {
+public class PlacesItem implements Serializable{
 	private Long id;
 	private Long placeId;
 	private String name;

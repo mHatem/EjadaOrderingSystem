@@ -1,10 +1,7 @@
 package com.code.ui.user;
 
 import com.code.dal.orm.*;
-import com.code.services.OrderItemService;
-import com.code.services.PlaceService;
-import com.code.services.UserService;
-import com.code.services.orderService;
+import com.code.services.*;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -13,7 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -220,7 +216,10 @@ public class Login implements Serializable {
 
 	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
-		placeItems = new ArrayList<PlacesItem>(); // TODO from database
+
+		// TODO from database
+		// placeItems = new ArrayList<PlacesItem>();
+		placeItems = Service.getAllPlaceItems();
 
 		orders = updateOrders();
 		orderItemViews = updateOrderItemViews();
@@ -232,9 +231,13 @@ public class Login implements Serializable {
 		Long userId = getUserIdFromSessionMap();
 		String userRole = getUserRoleFromSessionMap();
 		// TODO Don't filter by user id if admin is logged in
-		if (userRole.equals(UserRole.ADMIN))
-			orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
-		else
+		if (userRole.equals(UserRole.ADMIN)) {
+//			if (selectedPlaceItemId == null) {
+//				orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
+//			} else {
+				orderItemViews = OrderItemService.getSingleton().getOrderItemByPlaceIdOrPlaceItemId(selectedPlaceId, selectedPlaceItemId);
+//			}
+		} else
 			orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
 
 		return orderItemViews;
