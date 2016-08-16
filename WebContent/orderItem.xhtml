@@ -49,7 +49,7 @@
 				<div class="container col-lg-12">
 				<rich:dataTable value="#{OrderItem.items}" var="order"
 					id="datatable" rows="15" width="500px"
-					styleClass="table table-bordered">
+					styleClass="table table-striped table-bordered dt-responsive nowrap">
 					<rich:column style="margin:25px">
 						<h:outputText value="#{order.username}"
 							rendered="#{!order.selected or  !OrderItem.isAdmin }" />
