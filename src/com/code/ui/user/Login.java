@@ -158,8 +158,7 @@ public class Login implements Serializable {
 	public void filterAction() {
 		updateListsAndTables();
 
-		orders = updateOrders();
-		orderItemViews = updateOrderItemViews();
+		updateTables();
 	}
 
 	public String resetFilterAction() {
@@ -225,32 +224,30 @@ public class Login implements Serializable {
 
 	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
-
-		// TODO from database
-		// placeItems = new ArrayList<PlacesItem>();
+		
 		if (selectedPlaceId != null) {
 			placeItems = Service.getItemsList(selectedPlaceId);
 		} else {
 			placeItems = Service.getAllPlaceItems();
 		}
 
-		orders = updateOrders();
-		orderItemViews = updateOrderItemViews();
+		updateTables();
 	}
 
-	private Collection<OrderItemView> updateOrderItemViews() {
-		Collection<OrderItemView> orderItemViews = null;
-
+	private void updateTables() {
 		Long userId = getUserIdFromSessionMap();
 		String userRole = getUserRoleFromSessionMap();
 
-		// TODO Don't filter by user id if admin is logged in
+		// Don't filter by user id if admin is logged in
 		if (userRole.equals(UserRole.ADMIN))
 			userId = null;
 
-		orderItemViews = OrderItemService.getSingleton().getOrderItemByUserIdOrPlaceIdOrPlaceItemId(userId, selectedPlaceId, selectedPlaceItemId);
-
-		return orderItemViews;
+		orders = orderService.find(null, null, null, null, selectedPlaceId, userId);
+		orderItemViews = OrderItemService.getSingleton().getOrderItemByUserIdOrPlaceIdOrPlaceItemId(
+			userId,
+			selectedPlaceId,
+			selectedPlaceItemId
+		);
 	}
 
 	private void updateLoggedUser(User user) {
@@ -283,18 +280,6 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
-	}
-
-	private Collection<OrderView> updateOrders() {
-		Collection<OrderView> orderViews;
-		Long userId = getUserIdFromSessionMap();
-		String userRole = getUserRoleFromSessionMap();
-		// Don't filter by user id if admin is logged in
-		if (userRole.equals(UserRole.ADMIN))
-			userId = null;
-
-		orderViews = orderService.find(null, null, null, null, selectedPlaceId, userId);
-		return orderViews;
 	}
 
 	private Map<String, Object> getSessionMap() {
@@ -368,7 +353,6 @@ public class Login implements Serializable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 
 		return null;
