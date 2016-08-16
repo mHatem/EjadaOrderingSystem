@@ -5,21 +5,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "PLACE_ITEM")
-@NamedQuery(name="getItems",query="from PlacesItem pt where pt.placeId =?")
-public class PlacesItem {
-
+@NamedQueries({ @NamedQuery(name = "getItems", query = "from PlacesItem pt where pt.placeId =?"),
+	@NamedQuery(name = "getOpenOrders", query = "Select distinct o.status from Order o , OrderItem oi , PlacesItem pi "
+			+ "where pi.id = oi.item and oi.order = o.id and pi.id = ?"
+			
+			)
+	// TODO: added by amr, please review
+	,@NamedQuery(name = "PlaceItem.all", query = "from PlacesItem pt")
+})
+public class PlacesItem implements Serializable{
 	private Long id;
 	private Long placeId;
 	private String name;
 	private String description;
 	private Float price;
+	private boolean updateButtonClicked;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence_generator")
@@ -33,7 +42,7 @@ public class PlacesItem {
 		this.id = id;
 	}
 
-	@Column(name="place_id")
+	@Column(name = "place_id")
 	public Long getPlaceId() {
 		return placeId;
 	}
@@ -51,7 +60,6 @@ public class PlacesItem {
 		this.name = name;
 	}
 
-	@Lob
 	@Column(name = "DESCRIPTION")
 	public String getDescription() {
 		return description;
@@ -69,4 +77,14 @@ public class PlacesItem {
 	public void setPrice(Float price) {
 		this.price = price;
 	}
+
+	@Transient
+	public boolean isUpdateButtonClicked() {
+		return updateButtonClicked;
+	}
+
+	public void setUpdateButtonClicked(boolean updateButtonClicked) {
+		this.updateButtonClicked = updateButtonClicked;
+	}
+
 }

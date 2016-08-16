@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 @SuppressWarnings("serial")
-@Entity(name = "ORDER_ITEMS")
+@Entity
+@Table(name = "ORDER_ITEMS")
 public class OrderItem implements Serializable {
 	private Long id;
 	private Long order;

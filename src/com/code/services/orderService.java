@@ -15,7 +15,7 @@ public class orderService {
 
 	public static List<OrderView> getALL() {
 		@SuppressWarnings("deprecation")
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("Order.all");
@@ -29,7 +29,7 @@ public class orderService {
 
 	public static void insert(Order r) {
 		@SuppressWarnings("deprecation")
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save(r);
@@ -40,7 +40,7 @@ public class orderService {
 
 	public static void delete(Order r) {
 		@SuppressWarnings("deprecation")
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.delete(r);
@@ -50,7 +50,7 @@ public class orderService {
 
 	public static List<OrderView> find(String userNAME, String placeNAME, String status, Long id, Long placeID,Long ownerID) {
 		@SuppressWarnings("deprecation")
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query query = session.getNamedQuery("search");
@@ -78,7 +78,7 @@ public class orderService {
 	
 	public static void update(Order o)
 	{
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.update(o);

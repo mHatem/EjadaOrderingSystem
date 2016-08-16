@@ -2,7 +2,6 @@ package com.code.ui;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +61,14 @@ public class OrderItemBean implements Serializable {
 		this.items = items;
 	}
 
+	public Boolean isInMenu(Long itemId) {
+		for (PlacesItem item : menu) {
+			if (item.getId() == itemId)
+				return true;
+		}
+		return false;
+	}
+
 	public String resetData() {
 		searchParameterItemName = null;
 		searchParameterUsername = null;
@@ -88,10 +95,9 @@ public class OrderItemBean implements Serializable {
 					.getCurrentInstance().getExternalContext().getRequest())
 					.getParameter("ORDERID");
 			orderId = Long.parseLong(orderIdString);
-            if(orderId == null || orderId == -1)
-            {
-            	Logout();
-            }
+			if (orderId == null || orderId == -1) {
+				Logout();
+			}
 			setItems(orderItemService.getOrderListByOrderID(orderId));
 			for (OrderItemView ord : items) {
 				ord.saveHistory();
@@ -110,17 +116,15 @@ public class OrderItemBean implements Serializable {
 					.getExternalContext().getSessionMap();
 			String userRole = (String) sessionMap
 					.get(Login.SESSION_KEY_USER_ROLE);
-			userId = (Long) sessionMap
-					.get(Login.SESSION_KEY_USER_ID);
-			if(userId == null || userRole == null)
-            {
-            	Logout();
-            }
+			userId = (Long) sessionMap.get(Login.SESSION_KEY_USER_ID);
+			if (userId == null || userRole == null) {
+				Logout();
+			}
 			if (userRole.equals(UserRole.ADMIN))
 				isAdmin = true;
 			else
 				isAdmin = false;
-			//userId = Long.parseLong(userIdTransefer);
+			// userId = Long.parseLong(userIdTransefer);
 
 			if (isAdmin) {
 				user = new ArrayList<User>(userService.getAllUsers());
@@ -141,17 +145,18 @@ public class OrderItemBean implements Serializable {
 		refresh();
 
 	}
-	
-	public void Logout()
-	{
-		try{
+
+	public void Logout() {
+		try {
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap();
 			sessionMap.put(Login.SESSION_KEY_USER_ROLE, null);
 			sessionMap.put(Login.SESSION_KEY_USER_ID, null);
-			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-			}
-			catch(Exception ca){return;}
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect("index.xhtml");
+		} catch (Exception ca) {
+			return;
+		}
 	}
 
 	public String toggleSelection(OrderItemView selectedItem) {
@@ -194,13 +199,14 @@ public class OrderItemBean implements Serializable {
 		newOrder.setUserId(userId);
 		newOrder.setUserIdToCheck(userId.toString());
 		newOrder.setUsername(loggedUser.getUsername());
-		if (menu.size() > 0 && menu.get(0).getId() != null) {
+		if (menu != null && menu.size() > 0 && menu.get(0).getId() != null) {
 			newOrder.setItemId(menu.get(0).getId());
 			newOrder.setItemIdToCheck(menu.get(0).getId().toString());
 			newOrder.setPrice(menu.get(0).getPrice());
+			items.add(newOrder);
+		} else {
+			errorMessage = "there is no Item to select from to add new order";
 		}
-
-		items.add(newOrder);
 		return null;
 	}
 
@@ -283,7 +289,11 @@ public class OrderItemBean implements Serializable {
 		try {
 			Long ItemId = Long.parseLong(selectedItem.getItemIdToCheck());
 			Integer count = Integer.parseInt(selectedItem.getCountToCheck());
-			if (ItemId == null || count == null || count == 0)
+			if (!isInMenu(ItemId)) {
+				errorMessage += "Item isn't in the place or refresh the page to update the data";
+				return false;
+			}
+			if (ItemId == null || ItemId == -1 || count == null || count <= 0)
 				return false;
 			else {
 				selectedItem.setCount(count);

@@ -2,7 +2,6 @@ package com.code.services;
 
 import java.util.List;
 
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,9 +13,9 @@ public class OrderItemService {
 	private SessionFactory sessionFactory = null;
 	private static OrderItemService orderItemService = null;
 
-
 	private OrderItemService() {
-		sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
+		sessionFactory = SessionFactorySingleton.getSingleton()
+				.getSessionFactory();
 	}
 
 	public static OrderItemService getSingleton() {
@@ -41,20 +40,20 @@ public class OrderItemService {
 			return null;
 		}
 	}
-	
-	public List<OrderItemView> getAllOrderItem()
-	{
-		try{
-		Session session = sessionFactory.openSession();
-		Query query = session.getNamedQuery("AllOrderItem");
-		List<OrderItemView> result = (List<OrderItemView>) query.list();
-		session.close();
-		return result; 
+
+	public List<OrderItemView> getAllOrderItem() {
+		try {
+			Session session = sessionFactory.openSession();
+			Query query = session.getNamedQuery("AllOrderItem");
+			List<OrderItemView> result = (List<OrderItemView>) query.list();
+			session.close();
+			return result;
+		} catch (Exception ea) {
+			return null;
 		}
-		catch(Exception ea){return null;}
-		
+
 	}
- 
+
 	public List<OrderItemView> getOrderItemListByUserId(Long userId) {
 		try {
 
@@ -150,18 +149,22 @@ public class OrderItemService {
 
 	public List<OrderItemView> getOrderedItemsFiltered(Long orderId,
 			String itemName, String username) {
+		String inputItem ;
+        String inputUser ;
 		if (orderId == null)
 			orderId = -1L;
-		if (itemName == null || itemName.equals("") )
-			itemName = "-1";
+		if (itemName == null || itemName.equals(""))
+			inputItem = "-1";
+		else inputItem = "%"+itemName+"%";
 		if (username == null || username.equals(""))
-			username = "-1";
+			inputUser = "-1";
+		else inputUser = "%"+username+"%";
 		try {
-
+			
 			Session session = sessionFactory.openSession();
 			Query query = session.getNamedQuery("FilterOrderItemView");
-			query.setLong("OrderId", orderId).setString("Username", username)
-					.setString("ItemName", itemName);
+			query.setLong("OrderId", orderId).setString("Username", inputUser)
+					.setString("ItemName", inputItem);
 			List<OrderItemView> result = (List<OrderItemView>) query.list();
 			session.close();
 			return result;
@@ -211,4 +214,28 @@ public class OrderItemService {
 		}
 	}
 
+	// TODO: added by amr, please review
+	public List<OrderItemView> getOrderItemByPlaceIdOrPlaceItemId(Long placeId,
+			Long placeItemId) {
+		if (placeId == null)
+			placeId = -1L;
+		if (placeItemId == null)
+			placeItemId = -1L;
+
+		Session session = SessionFactorySingleton.getSingleton()
+				.getSessionFactory().openSession();
+		session.beginTransaction();
+
+		Query query = session
+				.getNamedQuery("OrderItemView.byPlaceIdOrPlaceItemId");
+		query.setLong("placeId", placeId);
+		query.setLong("placeItemId", placeItemId);
+
+		List<OrderItemView> list = (List<OrderItemView>) query.list();
+
+		session.getTransaction().commit();
+		session.close();
+
+		return list;
+	}
 }

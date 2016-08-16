@@ -104,18 +104,18 @@
 				<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
 					<h:commandButton
 						rendered="#{!order.selected and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
-						value="update" action="#{OrderItem.toggleSelection(order)}">
+						value="#{msgs.edit}" action="#{OrderItem.toggleSelection(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 					<h:commandButton rendered="#{order.selected and ! order.toAdd }"
-						value="save" action="#{OrderItem.save(order)}">
+						value="#{msgs.save}" action="#{OrderItem.save(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
-					<h:commandButton rendered="#{order.toAdd}" value="add"
+					<h:commandButton rendered="#{order.toAdd}" value="#{msgs.add}"
 						action="#{OrderItem.add(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
-					<h:commandButton rendered="#{order.selected}" value="cancel"
+					<h:commandButton rendered="#{order.selected}" value="#{msgs.cancel}"
 						action="#{OrderItem.toggleSelection(order)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
@@ -123,7 +123,7 @@
 				<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
 					<h:commandButton
 						rendered="#{!order.toAdd and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
-						value="Delete" action="#{OrderItem.delete(order)}">
+						value="#{msgs.delete}" action="#{OrderItem.delete(order)}">
 						<f:ajax render="@form" />
 					</h:commandButton>
 				</rich:column>
@@ -139,7 +139,7 @@
 		
 		</h:panelGroup>
 	</h:panelGrid>
-	<h:commandButton value="Logout" action="#{OrderItem.Logout()}">
+	<h:commandButton value="#{msgs.sign_out}" action="#{OrderItem.Logout()}">
 	<f:ajax/>
     </h:commandButton>
 	</h:form>
