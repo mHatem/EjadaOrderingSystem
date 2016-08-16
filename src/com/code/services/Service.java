@@ -84,4 +84,17 @@ public class Service
 		   priceTo=100F;
 	   }
    }*/
+
+	// TODO: added by amr, please review
+	public static List<PlacesItem> getAllPlaceItems() {
+		Session session = SessionFactorySingleton.getSingleton().getSessionFactory().openSession();
+		session.beginTransaction();
+
+		Query query = session.getNamedQuery("PlaceItem.all");
+		List<PlacesItem> list = (List<PlacesItem>) query.list();
+
+			session.getTransaction().commit();
+		session.close();
+		return list;
+	}
 }

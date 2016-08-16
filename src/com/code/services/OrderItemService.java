@@ -211,4 +211,25 @@ public class OrderItemService {
 		}
 	}
 
+	// TODO: added by amr, please review
+	public List<OrderItemView> getOrderItemByPlaceIdOrPlaceItemId(Long placeId, Long placeItemId){
+	  if(placeId == null)
+	    placeId = -1L;
+	  if(placeItemId == null)
+	    placeItemId = -1L;
+
+	  Session session = SessionFactorySingleton.getSingleton().getSessionFactory().openSession();
+	  session.beginTransaction();
+
+	  Query query = session.getNamedQuery("OrderItemView.byPlaceIdOrPlaceItemId");
+	  query.setLong("placeId", placeId);
+	  query.setLong("placeItemId", placeItemId);
+
+	  List<OrderItemView> list = (List<OrderItemView>) query.list();
+
+	  session.getTransaction().commit();
+	  session.close();
+
+	  return list;
+	}
 }

@@ -280,7 +280,7 @@
 												<!--TODO-->
 												<h:outputLabel for="item_combobox" value="Item:"/>
 												<h:selectOneMenu id="item_combobox"
-												                 value="{login.selectedItemId}"
+												                 value="#{login.selectedPlaceItemId}"
 												                 styleClass="form-control dropdown">
 													<f:selectItem itemValue="#{null}"
 													              itemLabel="Select an item"/>
@@ -295,7 +295,8 @@
 											<h:commandLink styleClass="btn btn-primary"
 											               value="Filter"
 											               action="#{login.filterAction}">
-												<f:ajax execute="filter_orders_form" render="orders_table"/>
+												<f:ajax execute="filter_orders_form"
+												        render="orders_table orderitems_table"/>
 											</h:commandLink>
 											<h:commandLink styleClass="btn"
 											               value="Reset"
