@@ -174,13 +174,17 @@ public class Login implements Serializable {
 
 	public String loginButton() {
 		signingUp = false;
-		password = null;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
 	public String signupButton() {
 		signingUp = true;
-		password = null;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
