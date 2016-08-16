@@ -153,11 +153,13 @@ public class PlaceBean implements Serializable {
 	public void redirectToItems(Place place)
 	{	
 		Long placeId=place.getId();
-		try
-		{
-		FacesContext.getCurrentInstance().getExternalContext().redirect("Items.jsf?id="+placeId);
-		}
-		catch (Exception ex){return;}
+		//FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("placeId", placeId);
+		try{
+			FacesContext.getCurrentInstance().getExternalContext().redirect("Items.jsf?id="+placeId);
+			return;
+			}catch(Exception ea){return;}
+
+//		return "Items?faces-redirct=true&id="+placeId;
 	}
 	private Map<String, Object> getSessionMap() {
 		return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();

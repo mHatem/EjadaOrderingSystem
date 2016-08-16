@@ -11,10 +11,7 @@
 		<param-value>org.jboss.el.ExpressionFactoryImpl</param-value>
 	</context-param>
 
-	<context-param>
-		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
-		<param-value>false</param-value>
-	</context-param>
+
 
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
