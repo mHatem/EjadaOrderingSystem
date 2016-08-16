@@ -25,6 +25,7 @@ public class Login implements Serializable {
 	private String phoneNo;
 
 	private String invalidPasswordMessage;
+	private String invalidPhoneNoMessage;
 	private String unmatchedPasswordMessage;
 	private String usernameFieldMessage;
 
@@ -79,6 +80,13 @@ public class Login implements Serializable {
 	}
 
 	public String signupAction() {
+		clearAllFieldsErrorMessages();
+
+		if (!isValidPhoneNumber(phoneNo)) {
+			invalidPhoneNoMessage = "Invalid phone number.";
+			return null;
+		}
+
 		if (!password.equals(passwordConfirm))
 			return null;
 
@@ -123,6 +131,9 @@ public class Login implements Serializable {
 		} else if (password != null && !password.equals(passwordConfirm)) {
 			unmatchedPasswordMessage = "Passwords do not match";
 			return null;
+		} else if (!isValidPhoneNumber(phoneNo)) {
+			invalidPhoneNoMessage = "Invalid phone number.";
+			return null;
 		}
 
 		Long userId = getUserIdFromSessionMap();
@@ -151,6 +162,15 @@ public class Login implements Serializable {
 
 		editing = false;
 		return null;
+	}
+
+	private boolean isValidPhoneNumber(String phoneNo) {
+		for (int i = 0; i < phoneNo.length(); i++) {
+			char c = phoneNo.charAt(i);
+			if (!(c == ' ' || c == '-' || (c >= '0' && c <= '9')))
+				return false;
+		}
+		return true;
 	}
 
 	public void filterAction() {
@@ -215,6 +235,7 @@ public class Login implements Serializable {
 	private void clearAllFieldsErrorMessages() {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
+		invalidPhoneNoMessage = null;
 		unmatchedPasswordMessage = null;
 		alertMessage = null;
 	}
@@ -541,5 +562,13 @@ public class Login implements Serializable {
 
 	public void setAlertMessage(String alertMessage) {
 		this.alertMessage = alertMessage;
+	}
+
+	public String getInvalidPhoneNoMessage() {
+		return invalidPhoneNoMessage;
+	}
+
+	public void setInvalidPhoneNoMessage(String invalidPhoneNoMessage) {
+		this.invalidPhoneNoMessage = invalidPhoneNoMessage;
 	}
 }
