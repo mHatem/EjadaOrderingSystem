@@ -10,9 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ManagedBean
 @ViewScoped
@@ -37,8 +35,8 @@ public class Login implements Serializable {
 
 	private String alertMessage = null;
 
-	private Collection<Place> places;
-	private Collection<PlacesItem> placeItems;
+	private List<Place> places;
+	private List<PlacesItem> placeItems;
 	private Long selectedPlaceId;
 	private Long selectedPlaceItemId;
 
@@ -157,7 +155,6 @@ public class Login implements Serializable {
 
 	public void filterAction() {
 		updateListsAndTables();
-
 		updateTables();
 	}
 
@@ -224,12 +221,24 @@ public class Login implements Serializable {
 
 	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
+		Collections.sort(places, new Comparator<Place>() {
+			@Override
+			public int compare(Place o1, Place o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 		
 		if (selectedPlaceId != null) {
 			placeItems = Service.getItemsList(selectedPlaceId);
 		} else {
 			placeItems = Service.getAllPlaceItems();
 		}
+		Collections.sort(placeItems, new Comparator<PlacesItem>() {
+			@Override
+			public int compare(PlacesItem o1, PlacesItem o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 
 		updateTables();
 	}
@@ -461,11 +470,11 @@ public class Login implements Serializable {
 		this.editing = editing;
 	}
 
-	public Collection<Place> getPlaces() {
+	public List<Place> getPlaces() {
 		return places;
 	}
 
-	public void setPlaces(Collection<Place> places) {
+	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
 
@@ -477,11 +486,11 @@ public class Login implements Serializable {
 		this.selectedPlaceId = selectedPlaceId;
 	}
 
-	public Collection<PlacesItem> getPlaceItems() {
+	public List<PlacesItem> getPlaceItems() {
 		return placeItems;
 	}
 
-	public void setPlaceItems(Collection<PlacesItem> placeItems) {
+	public void setPlaceItems(List<PlacesItem> placeItems) {
 		this.placeItems = placeItems;
 	}
 
