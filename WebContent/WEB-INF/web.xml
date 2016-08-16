@@ -57,4 +57,9 @@
 		<extension>doc</extension>
 		<mime-type>application/msword</mime-type>
 	</mime-mapping>
+
+	<context-param>
+		<param-name>org.richfaces.skin</param-name>
+		<param-value>plain</param-value>
+	</context-param>
 </web-app>

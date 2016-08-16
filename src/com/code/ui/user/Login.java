@@ -60,8 +60,10 @@ public class Login implements Serializable {
 	public String loginAction() {
 		clearAllFieldsErrorMessages();
 
-		if (password == null || password.length() == 0)
+		if (password == null || password.length() == 0) {
+			updateLoggedUser(null);
 			return null;
+		}
 
 		User user = UserService.getSingleton().authenticateUser(username, password);
 		updateLoggedUser(user);
@@ -342,6 +344,7 @@ public class Login implements Serializable {
 
 		if (!isAdmin()) {
 			alertMessage = "Action not allowed";
+			System.err.println(alertMessage);
 			return null;
 		}
 
@@ -516,7 +519,8 @@ public class Login implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return getUserRoleFromSessionMap().equals(UserRole.ADMIN);
+		String userRole = getUserRoleFromSessionMap();
+		return userRole != null && userRole.equals(UserRole.ADMIN);
 	}
 
 	public Collection<OrderItemView> getOrderItemViews() {
