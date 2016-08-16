@@ -1,12 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-<script type="text/javascript">
+	<script type="text/javascript">
 function preSearch()
 {
 document.getElementById("frm:iName").value="";
@@ -15,57 +12,109 @@ document.getElementById("frm:to").value="";
 }
 </script>
 	<title>Items Page</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />		
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<h:outputStylesheet library="css" name="bootstrap.css" />
 </h:head>
 
-<body>
-<h3>Place:<h:outputText></h:outputText></h3>
-	<h:form  id="frm" role="form">
-	<table cellspacing="10">
-	<tr>
-	<td>Item Name </td>
-	<td><h:inputText id="iName"></h:inputText></td>
-	</tr>
-	<tr>
-	<td>Price Range From </td>
-	<td><h:inputText id="from"></h:inputText></td>
-	<td>To</td>
-	<td><h:inputText id="to"></h:inputText></td>
-	</tr>
-	</table>
-	<h:commandLink style="margin-right:50px" id="btnsearch"
-    value="Search"
-    styleClass="btn btn-primary">
-    <i class="glyphicon glyphicon-search"></i>
-</h:commandLink>
-	<h:commandLink id="btnpresearch"
-    value="PreSearch"
-    styleClass="btn btn-primary" onclick="preSearch();">
-    <i class="glyphicon glyphicon-flash"></i>
-</h:commandLink>
-<h:dataTable value ="#{item.itemList}" var ="i" styleClass="table">
+<h:body id="bdy">
+	<h3>
+		Place:
+		<h:outputText></h:outputText>
+	</h3>
+	<h:form id="frm" role="form">
+		<table cellspacing="10">
+			<tr>
+				<td>Item Name</td>
+				<td>
+					<h:inputText id="iName"></h:inputText>
+				</td>
+			</tr>
+			<tr>
+				<td>Price Range From</td>
+				<td>
+					<h:inputText id="from"></h:inputText>
+				</td>
+				<td>To</td>
+				<td>
+					<h:inputText id="to"></h:inputText>
+				</td>
+			</tr>
+		</table>
+		<h:commandLink style="margin-right:50px" id="btnsearch" value="Search" styleClass="btn btn-primary">
+			
+		</h:commandLink>
+		<h:commandLink id="btnpresearch" value="PreSearch" styleClass="btn btn-primary" onclick="preSearch();">
+			
+		</h:commandLink>
+		<h:commandLink  value="Add" styleClass="btn btn-primary" >
+			<f:ajax render="frm:addTable"></f:ajax>
+		</h:commandLink>
+<h:panelGroup id="Table">
+		<h:dataTable id="dt" value="#{item.itemList}" var="i" styleClass="table">
+			<h:column id="itemName">
+				<f:facet name="header">Item Name</f:facet>
+				<h:panelGroup id="Name">
+				<h:outputText value="#{i.name}" rendered="#{!i.updateButtonClicked}"></h:outputText>
+				
+				<h:inputText  value="#{i.name}" rendered="#{i.updateButtonClicked}"></h:inputText>
+				</h:panelGroup>
+			</h:column>
+			<h:column id="itemDesc">
+				<f:facet name="header">Item Description</f:facet>
+			<h:panelGroup id="Desc">
+			<h:outputText value="#{i.description}" rendered="#{not i.updateButtonClicked}"></h:outputText>	
+			<h:inputText  value="#{i.description}" rendered="#{i.updateButtonClicked}"></h:inputText>
+			</h:panelGroup>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Item Price</f:facet>
+			<h:panelGroup id="price">	
+			<h:outputText value="#{i.price}" rendered="#{!i.updateButtonClicked}"></h:outputText>
+			<h:inputText id="itemPrice" value="#{i.price}" rendered="#{i.updateButtonClicked}"></h:inputText>
+			</h:panelGroup>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Delete</f:facet>
+				<h:commandLink action="#{item.Delete(i)}" style="margin-right:50px" id="btndelete" value="Delete">
+				</h:commandLink>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Update/Save</f:facet>
+				<h:panelGroup id="button">
+				<h:commandButton rendered="#{not i.updateButtonClicked}" action="#{item.Update(i)}" style="margin-right:50px" id="btnupdate" value="Update">
+					<f:ajax execute="@this"  render="Name Desc price button" />
+				</h:commandButton>
+				<h:commandButton rendered="#{i.updateButtonClicked}" action="#{item.Save(i)}" style="margin-right:50px" id="btnsave" value="Save">
+					<f:ajax execute="Name Desc price" render="Name Desc price button" />
+				</h:commandButton>
+				</h:panelGroup>
+			</h:column>
+		</h:dataTable>
+</h:panelGroup>
+<h:panelGroup id="addTable">
+	<h:dataTable rendered="#{item.addButtonClicked}">
 	<h:column>
-	<f:facet name="header">Item Name</f:facet>
-	#{i.name}
+	<h:panelGroup id="newName">
+	<h:inputText value="#{item.itemNameUpdate}"></h:inputText>
+	</h:panelGroup>
 	</h:column>
 	<h:column>
-	<f:facet name="header">Item Description</f:facet>
-	#{i.description}
+	<h:panelGroup id="newDescription">
+	<h:inputText value="#{item.description}"></h:inputText>
+	</h:panelGroup>
 	</h:column>
 	<h:column>
-	<f:facet name="header">Item Price</f:facet>
-	#{i.price}
+	<h:panelGroup id="newPrice">
+	<h:inputText value="#{item.price}"></h:inputText>
+	</h:panelGroup>
 	</h:column>
 	<h:column>
-	<f:facet name="header">Delete</f:facet>
-	<h:commandLink style="margin-right:50px" id="btnsearch"
-    value="Delete">
-    <i class="glyphicon glyphicon-remove-circle"></i>
-</h:commandLink>
+	<h:commandButton value="Save" action="#{item.save}"></h:commandButton>
 	</h:column>
-</h:dataTable>
+	</h:dataTable>
+</h:panelGroup>
+		<h:outputText value="Cannot Delete This Item as this item exists in order which is open" style="color:red;font-weight:bold;font-family:Arial" rendered="#{not item.deleteflag}"></h:outputText>
 	</h:form>
-</body>
+</h:body>
 </html>
