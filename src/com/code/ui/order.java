@@ -9,14 +9,12 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.metamodel.SetAttribute;
 
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.Order;
 import com.code.dal.orm.OrderView;
 import com.code.dal.orm.Place;
 import com.code.dal.orm.User;
-import com.code.dal.orm.UserRole;
 import com.code.services.PlaceService;
 import com.code.services.UserService;
 import com.code.services.orderService;
