@@ -10,6 +10,7 @@ document.getElementById("frm:iName").value="";
 document.getElementById("frm:from").value="";
 document.getElementById("frm:to").value="";
 }
+function c
 </script>
 	<title>Items Page</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -23,88 +24,119 @@ document.getElementById("frm:to").value="";
 		<h:outputText></h:outputText>
 	</h3>
 	<h:form id="frm" role="form">
-		<table cellspacing="10">
+		<table width ="100%">
 			<tr>
-				<td>Item Name</td>
+			 	<td>
+			 		<table>
+						<tr>
+							<th width="15%">Item Name</th>
+							<td width="35%">
+								<h:inputText value="#{item.itemName}" id="iName"></h:inputText>
+							</td>
+						</tr>
+						<tr>
+							<th width="15%">Price Range From</th>
+							<td width="35%">
+								<h:inputText value="#{item.priceFrom}" id="from"></h:inputText>
+							</td>
+							<th width="15%">To</th>
+							<td width="35%">
+								<h:inputText value="#{item.priceTo}" id="to"></h:inputText>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<h:commandLink action="#{item.search}" style="margin-right:50px" id="btnsearch" value="Search" styleClass="btn btn-primary"/>
+								<h:commandLink id="btnpresearch" value="PreSearch" style="margin-right:50px" styleClass="btn btn-primary" onclick="preSearch();">
+								</h:commandLink>
+								<h:commandLink  action="#{item.Add}" value="Add" styleClass="btn btn-primary" rendered="#{item.isItemAdmin()}" >
+									<f:ajax render="frm:addTable"></f:ajax>
+								</h:commandLink>
+							</td>
+						</tr> 	
+			 		</table>
+				 </td>
+			</tr>
+			<tr>
 				<td>
-					<h:inputText value="#{item.itemName}" id="iName"></h:inputText>
+					<h:panelGroup id="Table">
+						<h:dataTable id="dt" value="#{item.itemList}" var="i" styleClass="table">
+							<h:column id="itemName">
+								<f:facet name="header">Item Name</f:facet>
+								<h:outputText value="#{i.name}" rendered="#{!i.updateButtonClicked}"></h:outputText>
+								<h:inputText  value="#{i.name}" rendered="#{i.updateButtonClicked}"></h:inputText>
+							</h:column>
+							<h:column id="itemDesc">
+								<f:facet name="header">Item Description</f:facet>
+								<h:outputText value="#{i.description}" rendered="#{not i.updateButtonClicked}"></h:outputText>	
+								<h:inputText  value="#{i.description}" rendered="#{i.updateButtonClicked}"></h:inputText>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Item Price</f:facet>
+								<h:outputText value="#{i.price}" rendered="#{!i.updateButtonClicked}"></h:outputText>
+								<h:inputText id="itemPrice" value="#{i.price}" rendered="#{i.updateButtonClicked}"></h:inputText>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Delete</f:facet>
+								<h:commandLink action="#{item.Delete(i)}" style="margin-right:50px" id="btndelete" value="Delete">
+								<f:ajax render="frm:Table"/>
+								</h:commandLink>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Update/Save</f:facet>
+								<h:commandButton rendered="#{not i.updateButtonClicked}" action="#{item.Update(i)}" style="margin-right:50px" id="btnupdate" value="Update">
+									<f:ajax render="frm:Table" />
+								</h:commandButton>
+								<h:commandButton rendered="#{i.updateButtonClicked}" action="#{item.Save(i)}" style="margin-right:50px" id="btnsave" value="Save">
+									<f:ajax execute="frm:Table" render="frm:Table" />
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:panelGroup>
 				</td>
 			</tr>
 			<tr>
-				<td>Price Range From</td>
 				<td>
-					<h:inputText value="#{item.priceFrom}" id="from"></h:inputText>
+					<h:panelGroup id="addTable">
+						<h:panelGroup rendered="#{item.addButtonClicked}">
+							<table >
+								<tr>
+									<th width="15%">item name
+									</th>
+									<td width="35%">
+										<h:inputText value="#{item.itemNameUpdate}"/>
+									</td>
+									<th width="15%">item description
+									</th>
+									<td width="35%">
+										<h:inputText value="#{item.description}"/>
+									</td>
+								</tr>
+								<tr>
+									<th width="15%">item price
+									</th>	
+									<td>
+										<h:inputText value="#{item.price}"/>
+									</td>
+									<td>
+										<h:commandButton action="#{item.save}" value="Save">
+											<f:ajax execute ="addTable" render="frm:Table frm:addTable"/>
+										</h:commandButton>
+									</td>
+								</tr>
+							</table>
+						</h:panelGroup>
+					</h:panelGroup>
 				</td>
-				<td>To</td>
+			</tr>
+			<tr>
 				<td>
-					<h:inputText value="#{item.priceTo}" id="to"></h:inputText>
+					<h:panelGroup id="errorMsg">
+						<h:outputText value="Cannot Delete This Item as this item exists in order which is open" style="color:red;font-weight:bold;font-family:Arial" rendered="#{not item.deleteflag}"></h:outputText>
+					</h:panelGroup>
 				</td>
 			</tr>
 		</table>
-		<h:commandLink action="#{item.search}" style="margin-right:50px" id="btnsearch" value="Search" styleClass="btn btn-primary">
-			
-		</h:commandLink>
-		<h:commandLink id="btnpresearch" value="PreSearch" styleClass="btn btn-primary" onclick="preSearch();">
-			
-		</h:commandLink>
-		<h:commandLink  action="#{item.Add}" value="Add" styleClass="btn btn-primary" >
-			<f:ajax render="frm:addTable"></f:ajax>
-		</h:commandLink>
-<h:panelGroup id="Table">
-		<h:dataTable id="dt" value="#{item.itemList}" var="i" styleClass="table">
-			<h:column id="itemName">
-				<f:facet name="header">Item Name</f:facet>
-				<h:panelGroup id="Name">
-				<h:outputText value="#{i.name}" rendered="#{!i.updateButtonClicked}"></h:outputText>
-				
-				<h:inputText  value="#{i.name}" rendered="#{i.updateButtonClicked}"></h:inputText>
-				</h:panelGroup>
-			</h:column>
-			<h:column id="itemDesc">
-				<f:facet name="header">Item Description</f:facet>
-			<h:panelGroup id="Desc">
-			<h:outputText value="#{i.description}" rendered="#{not i.updateButtonClicked}"></h:outputText>	
-			<h:inputText  value="#{i.description}" rendered="#{i.updateButtonClicked}"></h:inputText>
-			</h:panelGroup>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Item Price</f:facet>
-			<h:panelGroup id="price">	
-			<h:outputText value="#{i.price}" rendered="#{!i.updateButtonClicked}"></h:outputText>
-			<h:inputText id="itemPrice" value="#{i.price}" rendered="#{i.updateButtonClicked}"></h:inputText>
-			</h:panelGroup>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Delete</f:facet>
-				<h:commandLink action="#{item.Delete(i)}" style="margin-right:50px" id="btndelete" value="Delete">
-				</h:commandLink>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Update/Save</f:facet>
-				<h:panelGroup id="button">
-				<h:commandButton rendered="#{not i.updateButtonClicked}" action="#{item.Update(i)}" style="margin-right:50px" id="btnupdate" value="Update">
-					<f:ajax render="Name Desc price button" />
-				</h:commandButton>
-				<h:commandButton rendered="#{i.updateButtonClicked}" action="#{item.Save(i)}" style="margin-right:50px" id="btnsave" value="Save">
-					<f:ajax execute="Name Desc price" render="Name Desc price button" />
-				</h:commandButton>
-				</h:panelGroup>
-			</h:column>
-		</h:dataTable>
-</h:panelGroup>
-<h:panelGroup id="addTable">
-<h:panelGroup rendered="#{item.addButtonClicked}">
-<table >
-<tr>
-<td><h:inputText value="#{item.itemNameUpdate}"></h:inputText></td>
-<td><h:inputText value="#{item.description}"></h:inputText></td>
-<td><h:inputText value="#{item.price}"></h:inputText></td>
-<td><h:commandButton action="#{item.save}" value="Save"><f:ajax execute ="addTable" render="frm:Table"/></h:commandButton></td>
-</tr>
-</table>
-</h:panelGroup>
-</h:panelGroup>
-		<h:outputText value="Cannot Delete This Item as this item exists in order which is open" style="color:red;font-weight:bold;font-family:Arial" rendered="#{not item.deleteflag}"></h:outputText>
 	</h:form>
 </h:body>
 </html>
