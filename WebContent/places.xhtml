@@ -43,14 +43,17 @@
 			<!-- input text > insert name and phone -->
 			<div>
 				<h:outputLabel value="PlaceName: " style="color: white"/>
-				<h:inputText id="placeNameId" value="#{place.name}" 
-					 styleClass="form-control"/>
-					
+				
+					<h:inputText id="placeNameId" value="#{place.name}" 
+						 styleClass="form-control"/>
+				
 			</div>
 			
 			<div>	
 				<h:outputLabel value="PlacePhone" style="color: white"/>
-				<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
+				
+					<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
+				
 			</div>
 			
 			<!-- All Buttons -->
@@ -104,14 +107,35 @@
 				alert("this place is used already");
 			</h:outputScript>
 			<div>
+			
+			
+			<!-- msg: Invalid Addition -->
 			<h:panelGroup id="msg">
     					<h:outputLabel  value="Invalid Add : u must add the place name" style="color:white" rendered="#{place.isMsgAddPlaceNameNotUsed()}"/>
     			</h:panelGroup>
 			</div>
+			
+			<!-- search by Items inputText -->
+			<div>
+				<h:outputLabel value="ItemName: " style="color: white"/>
+				
+					<h:inputText id="placeItemId" value="#{place.placeItem}" 
+						 styleClass="form-control"/>
+				
+			</div>
+			
+			<!-- SearchByItem Button -->
+			<h:commandLink value="SearchByItem" 
+								 class="btn btn-success btn-sm" 
+								action="#{place.searchByItems}">
+				<f:ajax execute="palcesForm:placeItemId"
+					 render="palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg palcesForm:placeItemId palcesForm:placesTableId"/>
+			</h:commandLink>
+						
 			<!-- the table  -->
 			<h:dataTable id="placesTableId" value="#{place.places}" var="row"
 				captionStyle="font-size: 0.95em; font-style:italic"
-				style="width: 250px;color: white">
+				style="width: 500px;color: white">
 
 				<f:facet name="caption">places</f:facet>
 				
