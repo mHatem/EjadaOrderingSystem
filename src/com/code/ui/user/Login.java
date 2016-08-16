@@ -156,6 +156,8 @@ public class Login implements Serializable {
 	}
 
 	public void filterAction() {
+		updateListsAndTables();
+
 		orders = updateOrders();
 		orderItemViews = updateOrderItemViews();
 	}
@@ -219,7 +221,11 @@ public class Login implements Serializable {
 
 		// TODO from database
 		// placeItems = new ArrayList<PlacesItem>();
-		placeItems = Service.getAllPlaceItems();
+		if (selectedPlaceId != null) {
+			placeItems = Service.getItemsList(selectedPlaceId);
+		} else {
+			placeItems = Service.getAllPlaceItems();
+		}
 
 		orders = updateOrders();
 		orderItemViews = updateOrderItemViews();
@@ -235,7 +241,7 @@ public class Login implements Serializable {
 //			if (selectedPlaceItemId == null) {
 //				orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
 //			} else {
-				orderItemViews = OrderItemService.getSingleton().getOrderItemByPlaceIdOrPlaceItemId(selectedPlaceId, selectedPlaceItemId);
+			orderItemViews = OrderItemService.getSingleton().getOrderItemByPlaceIdOrPlaceItemId(selectedPlaceId, selectedPlaceItemId);
 //			}
 		} else
 			orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
