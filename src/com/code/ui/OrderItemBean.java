@@ -282,7 +282,7 @@ public class OrderItemBean implements Serializable {
 		try {
 			Long ItemId = Long.parseLong(selectedItem.getItemIdToCheck());
 			Integer count = Integer.parseInt(selectedItem.getCountToCheck());
-			if (ItemId == null || count == null || count == 0)
+			if (ItemId == null || ItemId == -1  || count == null || count <= 0)
 				return false;
 			else {
 				selectedItem.setCount(count);
