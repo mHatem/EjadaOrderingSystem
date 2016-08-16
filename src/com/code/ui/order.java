@@ -32,7 +32,7 @@ public class order implements Serializable {
 	private long ownerID;
 
 	private String status;
-	private long placeID;
+	private Long placeID;
 	private Date date;
 	private float totalPrice;
 	private List<OrderView> orders;
@@ -160,11 +160,11 @@ public class order implements Serializable {
 		this.ownerID = ownerID;
 	}
 
-	public long getPlaceID() {
+	public Long getPlaceID() {
 		return placeID;
 	}
 
-	public void setPlaceID(long placeID) {
+	public void setPlaceID(Long placeID) {
 		this.placeID = placeID;
 	}
 
