@@ -74,6 +74,25 @@ public class PlaceService implements Serializable {
 		session.close();
 		return place;
 	}
+
+public static List<Place> SearchItems(String sandwitch) {
+		
+		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query query = session.getNamedQuery("placeItem");
+		if (sandwitch == null || sandwitch.trim().equals("")) {
+			sandwitch = "-1";
+		}
+		query.setString("itemName", sandwitch);
+		
+		@SuppressWarnings("unchecked")
+		List<Place> place = (List<Place>) query.list();
+		session.getTransaction().commit();
+		session.close();
+		return place;
+	}
+	
 	public static void deletePlace(Place place){
 		SessionFactory sessionFactory = SessionFactorySingleton.getSingleton().getSessionFactory();
 		Session session = sessionFactory.openSession();

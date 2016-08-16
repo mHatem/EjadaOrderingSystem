@@ -93,12 +93,6 @@ public class PlaceBean implements Serializable {
 		return null;
 	}
 	
-	// Msg indecator : shown when the Admin add place without it's name
-	/*public Boolean msgWhenInvalidAddOccur()
-	{
-		return true;
-	}*/
-	
 	public UIComponent getaddButton() {
 		return addButton;
 	}
@@ -132,7 +126,16 @@ public class PlaceBean implements Serializable {
 			phoneNo=null;
 			return places;
 	}
-		
+	
+	// search by Items
+	public List<Place> searchByItems()
+	{
+		places = PlaceService.SearchItems(placeItem);
+		msgAddPlaceNameNotUsed=false;
+		name=null;
+		phoneNo=null;
+		return places;
+	}
 	public void deletePlace(Place deletedPlace) {
 		flagDeleteUsedPlace = false;
 		try {
