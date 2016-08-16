@@ -90,10 +90,9 @@ public class Service
 	   Session S=SF.openSession();
 	   S.beginTransaction();
 	   Query Q=S.getNamedQuery("getAllItems");
-	   List<PlacesItem>PI=(List<PlacesItem>)Q.list();
+	   List<PlacesItem> PI=(List<PlacesItem>)Q.list();
 	   S.getTransaction().commit();
 	   S.close();
 	   return PI;
    }
-	   
 }
