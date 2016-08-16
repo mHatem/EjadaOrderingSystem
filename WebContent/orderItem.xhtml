@@ -35,14 +35,14 @@
 
 				<br />
 				<h:commandButton value="Filter data"
-					action="#{OrderItem.filterData()}">
+					action="#{OrderItem.filterData()}" class="btn btn-primary">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton>
-				<h:commandButton value="Preload " action="#{OrderItem.resetData()}">
+				<h:commandButton value="Preload " action="#{OrderItem.resetData()}" class="btn btn-primary">
 					<f:ajax execute="@form" render="@form" />
 				</h:commandButton>
 				<h:commandButton value="Add order" action="#{OrderItem.appendOrder}"
-					rendered="#{OrderItem.isOpened}">
+					rendered="#{OrderItem.isOpened}" class="btn btn-primary">
 					<f:ajax render="@form" />
 				</h:commandButton>
 				<br />
@@ -103,27 +103,27 @@
 					<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
 						<h:commandButton
 							rendered="#{!order.selected and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
-							value="#{msgs.edit}" action="#{OrderItem.toggleSelection(order)}">
+							value="#{msgs.edit}" action="#{OrderItem.toggleSelection(order)}" class="btn btn-primary">
 							<f:ajax execute="@form" render="@form" />
 						</h:commandButton>
 						<h:commandButton rendered="#{order.selected and ! order.toAdd }"
-							value="#{msgs.save}" action="#{OrderItem.save(order)}">
+							value="#{msgs.save}" action="#{OrderItem.save(order)}" class="btn btn-danger">
 							<f:ajax execute="@form" render="@form" />
 						</h:commandButton>
 						<h:commandButton rendered="#{order.toAdd}" value="#{msgs.add}"
-							action="#{OrderItem.add(order)}">
+							action="#{OrderItem.add(order)}" class="btn btn-primary">
 							<f:ajax execute="@form" render="@form" />
 						</h:commandButton>
 						<h:commandButton rendered="#{order.selected}"
 							value="#{msgs.cancel}"
-							action="#{OrderItem.toggleSelection(order)}">
+							action="#{OrderItem.toggleSelection(order)}" class="btn btn-warning">
 							<f:ajax execute="@form" render="@form" />
 						</h:commandButton>
 					</rich:column>
 					<rich:column rendered="#{OrderItem.isOpened}" style="margin:25px">
 						<h:commandButton
 							rendered="#{!order.toAdd and (OrderItem.isAdmin or order.userId == OrderItem.loggedUser.id)}"
-							value="#{msgs.delete}" action="#{OrderItem.delete(order)}">
+							value="#{msgs.delete}" action="#{OrderItem.delete(order)}"   class="btn btn-danger">
 							<f:ajax render="@form" />
 						</h:commandButton>
 					</rich:column>
@@ -139,7 +139,7 @@
 			</h:panelGroup>
 		</h:panelGrid>
 		<h:commandButton value="#{msgs.sign_out}"
-			action="#{OrderItem.Logout()}">
+			class="btn btn-primary" action="#{OrderItem.Logout()}">
 			<f:ajax />
 		</h:commandButton>
 	</h:form>
