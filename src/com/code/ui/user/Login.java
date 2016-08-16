@@ -228,6 +228,12 @@ public class Login implements Serializable {
 			}
 		});
 
+		updatePlaceItemsMenu();
+
+		updateTables();
+	}
+
+	public void updatePlaceItemsMenu() {
 		if (selectedPlaceId != null) {
 			placeItems = Service.getItemsList(selectedPlaceId);
 		} else {
@@ -239,8 +245,6 @@ public class Login implements Serializable {
 				return o1.getName().compareToIgnoreCase(o2.getName());
 			}
 		});
-
-		updateTables();
 	}
 
 	private void updateTables() {

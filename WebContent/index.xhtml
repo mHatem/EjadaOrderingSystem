@@ -2,9 +2,11 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:rich="http://richfaces.org/rich"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
 <h:head>
 	<h:panelGroup id="pageTitle">
 		<title>#{login.pageTitle}</title>
@@ -288,6 +290,9 @@
 													               var="place"
 													               itemLabel="#{place.name}"
 													               itemValue="#{place.id}"/>
+													<a4j:ajax event="change"
+													          listener="#{login.updatePlaceItemsMenu}"
+													          render="item_combobox"/>
 												</h:selectOneMenu>
 
 												<h:outputLabel for="item_combobox" value="Item:"/>
@@ -357,7 +362,7 @@
 											</h:column>
 											<f:facet name="footer">
 												<rich:dataScroller for="orders_datatable" maxPages="10"
-												renderIfSinglePage="false"/>
+												                   renderIfSinglePage="false"/>
 											</f:facet>
 										</rich:dataTable>
 									</div>
