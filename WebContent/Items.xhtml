@@ -10,6 +10,7 @@ document.getElementById("frm:iName").value="";
 document.getElementById("frm:from").value="";
 document.getElementById("frm:to").value="";
 }
+function c
 </script>
 	<title>Items Page</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -46,9 +47,9 @@ document.getElementById("frm:to").value="";
 						<tr>
 							<td colspan="3">
 								<h:commandLink action="#{item.search}" style="margin-right:50px" id="btnsearch" value="Search" styleClass="btn btn-primary"/>
-								<h:commandLink id="btnpresearch" value="PreSearch" styleClass="btn btn-primary" onclick="preSearch();">
+								<h:commandLink id="btnpresearch" value="PreSearch" style="margin-right:50px" styleClass="btn btn-primary" onclick="preSearch();">
 								</h:commandLink>
-								<h:commandLink  action="#{item.Add}" value="Add" styleClass="btn btn-primary" >
+								<h:commandLink  action="#{item.Add}" value="Add" styleClass="btn btn-primary" rendered="#{item.isItemAdmin()}" >
 									<f:ajax render="frm:addTable"></f:ajax>
 								</h:commandLink>
 							</td>
@@ -78,6 +79,7 @@ document.getElementById("frm:to").value="";
 							<h:column>
 								<f:facet name="header">Delete</f:facet>
 								<h:commandLink action="#{item.Delete(i)}" style="margin-right:50px" id="btndelete" value="Delete">
+								<f:ajax render="frm:Table"/>
 								</h:commandLink>
 							</h:column>
 							<h:column>
