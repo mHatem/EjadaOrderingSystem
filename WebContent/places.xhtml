@@ -41,18 +41,18 @@
 			
 			
 			<!-- input text > insert name and phone -->
-			<div>
+			<div >
 				<h:outputLabel value="PlaceName: " style="color: white"/>
 				
 					<h:inputText id="placeNameId" value="#{place.name}" 
-						 styleClass="form-control"/>
+						 styleClass="form-control" style="width: 250px"/>
 				
 			</div>
 			
 			<div>	
 				<h:outputLabel value="PlacePhone" style="color: white"/>
 				
-					<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" />
+					<h:inputText id="placePhoneId" value="#{place.phoneNo}" styleClass="form-control" style="width: 250px"/>
 				
 			</div>
 			
@@ -67,12 +67,8 @@
 				<f:ajax execute="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId" render="palcesForm:placesTableId palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
 				</h:commandLink>
     			
-    			
-
     			<h:message for="add" />
     			
-			
-			
 			<!-- search by nameAndPhone -->
 			
 				<h:commandLink value="serachAll" 
@@ -120,7 +116,7 @@
 				<h:outputLabel value="ItemName: " style="color: white"/>
 				
 					<h:inputText id="placeItemId" value="#{place.placeItem}" 
-						 styleClass="form-control"/>
+						 styleClass="form-control" style="width: 250px"/>
 				
 			</div>
 			
