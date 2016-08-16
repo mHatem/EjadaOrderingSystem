@@ -85,6 +85,7 @@ public class OrderItemBean implements Serializable {
 					.toLowerCase();
 		items = orderItemService.getOrderedItemsFiltered(orderId,
 				searchParameterItemName, searchParameterUsername);
+		errorMessage = null;
 		return null;
 	}
 
