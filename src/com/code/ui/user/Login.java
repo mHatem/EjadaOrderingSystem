@@ -43,8 +43,6 @@ public class Login implements Serializable {
 	private Collection<OrderView> orders;
 	private Collection<OrderItemView> orderItemViews;
 
-	private boolean admin = false;
-
 	public Login() {
 	}
 
@@ -227,7 +225,7 @@ public class Login implements Serializable {
 				return o1.getName().compareToIgnoreCase(o2.getName());
 			}
 		});
-		
+
 		if (selectedPlaceId != null) {
 			placeItems = Service.getItemsList(selectedPlaceId);
 		} else {
@@ -267,8 +265,6 @@ public class Login implements Serializable {
 
 		putUserIdIntoSessionMap(userId);
 		putUserRoleIntoSessionMap(userRole);
-
-		admin = (userRole != null && userRole.equals(UserRole.ADMIN));
 	}
 
 	public String getPageTitle() {
@@ -328,7 +324,6 @@ public class Login implements Serializable {
 	private void resetAll() {
 		editing = false;
 		signingUp = false;
-		admin = false;
 		clearAllFieldsErrorMessages();
 		resetFilters();
 		resetDataFields();
@@ -344,6 +339,11 @@ public class Login implements Serializable {
 
 	public String deleteOrder(OrderView orderView) {
 		alertMessage = null;
+
+		if (!isAdmin()) {
+			alertMessage = "Action not allowed";
+			return null;
+		}
 
 		Long orderId = orderView.getId();
 		List list = orderService.find(null, null, null, orderId, null, null);
@@ -369,6 +369,11 @@ public class Login implements Serializable {
 
 	public String deleteOrderItemView(OrderItemView orderItemView) {
 		alertMessage = null;
+
+		if (!isAdmin()) {
+			alertMessage = "Action not allowed";
+			return null;
+		}
 
 		Long orderItemId = orderItemView.getId();
 		String result = OrderItemService.getSingleton().orderItemDeleteManually(orderItemView);
@@ -511,11 +516,7 @@ public class Login implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+		return getUserRoleFromSessionMap().equals(UserRole.ADMIN);
 	}
 
 	public Collection<OrderItemView> getOrderItemViews() {
