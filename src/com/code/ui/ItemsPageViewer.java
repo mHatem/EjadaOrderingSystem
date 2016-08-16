@@ -2,14 +2,14 @@ package com.code.ui;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.servlet.http.*;
-import javax.servlet.*;
-import javax.faces.bean.*;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
+import javax.servlet.http.HttpServletRequest;
 
-import com.code.dal.orm.*;
+import com.code.dal.orm.PlacesItem;
 import com.code.services.Service;
+@SuppressWarnings("serial")
 @ManagedBean (name="item")
 @ViewScoped
 public class ItemsPageViewer implements Serializable
