@@ -210,6 +210,9 @@ public class Login implements Serializable {
 
 	public String editCancelButton() {
 		editing = false;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
@@ -240,15 +243,12 @@ public class Login implements Serializable {
 
 		Long userId = getUserIdFromSessionMap();
 		String userRole = getUserRoleFromSessionMap();
+
 		// TODO Don't filter by user id if admin is logged in
-		if (userRole.equals(UserRole.ADMIN)) {
-//			if (selectedPlaceItemId == null) {
-//				orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
-//			} else {
-			orderItemViews = OrderItemService.getSingleton().getOrderItemByPlaceIdOrPlaceItemId(selectedPlaceId, selectedPlaceItemId);
-//			}
-		} else
-			orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
+		if (userRole.equals(UserRole.ADMIN))
+			userId = null;
+
+		orderItemViews = OrderItemService.getSingleton().getOrderItemByUserIdOrPlaceIdOrPlaceItemId(userId, selectedPlaceId, selectedPlaceItemId);
 
 		return orderItemViews;
 	}
