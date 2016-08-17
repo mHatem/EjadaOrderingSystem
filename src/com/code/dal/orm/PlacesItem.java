@@ -18,7 +18,7 @@ import javax.persistence.Transient;
 	@NamedQuery(name = "getOpenOrders", query = "Select distinct o.status from Order o , OrderItem oi , PlacesItem pt "
 			+ "where oi.order=o.id and pt.id=oi.item and pt.id=?"),
 			@NamedQuery(name="getAllItems",query="from PlacesItem"),
-			@NamedQuery(name="SearchItems",query="Select i from PlacesItem i where (name like :itemName or name='-1') and ((price >= :priceFrom or price=-1) and (price <= :priceTo or price=-1)) and placeId = :placeID")})
+			@NamedQuery(name="SearchItems",query="Select i from PlacesItem i where (lower(i.name) like :itemName or :itemName ='-1') and ((price >= :priceFrom or :priceFrom=-1) and (price <= :priceTo or :priceTo=-1)) and (placeId = :placeID)")})
 public class PlacesItem {
 	private Long id;
 	private Long placeId;

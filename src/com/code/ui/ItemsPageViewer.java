@@ -27,6 +27,7 @@ public class ItemsPageViewer implements Serializable
 	private boolean addButtonClicked=false;
 	private boolean updateButtonClicked=false;
 	private boolean saveButtonClicked=false;
+	private boolean searchFlag=true;
 	private String itemNameUpdate;
 	private String Description;
 	private Float price;
@@ -85,6 +86,12 @@ public class ItemsPageViewer implements Serializable
 	}
 	public void save()
 	{
+		if(itemNameUpdate == null || Description == null || price == null)
+		{
+			
+		}
+		else
+		{
 		Service.Add(itemNameUpdate,Description,price,placeID);
 		PlacesItem placeItem=new PlacesItem();
 		placeItem.setName(itemNameUpdate);
@@ -92,6 +99,7 @@ public class ItemsPageViewer implements Serializable
 		placeItem.setPrice(price);
 		placeItem.setPlaceId(placeID);;
 		itemList.add(placeItem);
+		}
 		setAddButtonClicked(false);
 	}
 	public void search()
@@ -209,5 +217,11 @@ Map<String, Object> sessionMap=FacesContext.getCurrentInstance().getExternalCont
 	}
 	public void setAddButtonClicked(boolean addButtonClicked) {
 		this.addButtonClicked = addButtonClicked;
+	}
+	public boolean isSearchFlag() {
+		return searchFlag;
+	}
+	public void setSearchFlag(boolean searchFlag) {
+		this.searchFlag = searchFlag;
 	}
 	}
