@@ -128,13 +128,24 @@ public class Login implements Serializable {
 			(passwordConfirm == null || passwordConfirm.length() == 0)) {
 			// No password change
 			password = null;
-		} else if (password != null && !password.equals(passwordConfirm)) {
-			unmatchedPasswordMessage = "Passwords do not match";
-			return null;
-		} else if (!isValidPhoneNumber(phoneNo)) {
-			invalidPhoneNoMessage = "Invalid phone number.";
-			return null;
 		}
+
+		boolean validationSucceeded = true;
+
+		// Validate identical passwords
+		if (password != null && !password.equals(passwordConfirm)) {
+			unmatchedPasswordMessage = "Passwords do not match";
+			validationSucceeded = false;
+		}
+
+		// Validate phone number
+		if (!isValidPhoneNumber(phoneNo)) {
+			invalidPhoneNoMessage = "Invalid phone number.";
+			validationSucceeded = false;
+		}
+
+		if (!validationSucceeded)
+			return null;
 
 		Long userId = getUserIdFromSessionMap();
 
@@ -167,7 +178,7 @@ public class Login implements Serializable {
 	private boolean isValidPhoneNumber(String phoneNo) {
 		for (int i = 0; i < phoneNo.length(); i++) {
 			char c = phoneNo.charAt(i);
-			if (!(c == ' ' || c == '-' || (c >= '0' && c <= '9')))
+			if (!((c >= '0' && c <= '9') || c == '+' || c == ' ' || c == '-' || c == '(' || c == ')'))
 				return false;
 		}
 		return true;
