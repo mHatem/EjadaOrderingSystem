@@ -21,7 +21,7 @@
 			<h:panelGroup>
 					<div class="container" style="padding-top: 50px">
 						<div>
-							<h:link value="Home" outcome="index" styleClass="btn" style="color:white"/>
+							<h:link value="Home" outcome="index"  style="color:white"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -173,7 +173,7 @@
 				<!-- delete -->
 				<h:column headerClass="columnHeader" footerClass="columnFooter" rendered="#{place.adminPlaces()}">
 						<f:facet name="header">delete</f:facet>
-						<h:commandLink value="delete" action="#{place.deletePlace(row)}" class="btn btn-info btn-xs" /> 
+						<h:commandLink value="delete" action="#{place.deletePlace(row)}" onclick="if (! confirm('Really delete this?') ) { return false;}; return true; " class="btn btn-info btn-xs" /> 
 				</h:column>
 				
 				<!-- Update -->
