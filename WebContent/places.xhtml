@@ -21,7 +21,7 @@
 			<h:panelGroup>
 					<div class="container" style="padding-top: 50px">
 						<div>
-							<h:link value="Home" outcome="index" styleClass="btn"/>
+							<h:link value="Home" outcome="index" styleClass="btn" style="color:white"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -41,7 +41,7 @@
 					<h:outputText value=" :D "/>	
 				</div>
 				<div class="text-right">
-					<h:commandLink value="Signout" action="#{place.signOut()}"/>
+					<h:commandLink value="Signout" action="#{place.signOut()}" style="color:white"/>
 				</div>
 			</div>
 			
@@ -83,7 +83,7 @@
     			
 			<!-- search by nameAndPhone -->
 			
-				<h:commandLink value="serachAll" 
+				<h:commandLink value="serach" 
 								 class="btn btn-primary btn-sm" 
 								 action="#{place.searchPlace}" >
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
@@ -93,7 +93,7 @@
 			
 			<!-- show all places -->
 			
-			<h:commandLink value="ShowAllPlaces" 
+			<h:commandLink value="Show-All-Places" 
 								 class="btn btn-primary btn-sm" 
 								 action="#{place.showAll}">
 				<f:ajax execute="palcesForm:placeNameId"
@@ -107,7 +107,7 @@
 								 class="btn btn-success btn-sm" 
 								 action="#{place.resetAllInputText}">
 				<f:ajax execute="palcesForm:placeNameId palcesForm:placePhoneId"
-					 render="palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg"/>
+					 render="palcesForm:placeNameId palcesForm:placePhoneId palcesForm:msg palcesForm:placeItemId"/>
 			</h:commandLink>
 			
 			</div>
