@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.code.OrderStatusEnum;
 import com.code.dal.orm.*;
 import com.code.services.OrderItemService;
+import com.code.services.Service;
 import com.code.services.UserService;
 import com.code.ui.user.Login;
 
@@ -110,7 +111,7 @@ public class OrderItemBean implements Serializable {
 			else
 				isOpened = false;
 			setPlace(orderItemService.getPlaceByPlaceID(order.getPlaceID()));
-			setMenu(orderItemService.getMenuListByOrderID(place.getId()));
+			setMenu(Service.getItemsList(place.getId()));
 			UserService userService = UserService.getSingleton();
 
 			Map<String, Object> sessionMap = FacesContext.getCurrentInstance()

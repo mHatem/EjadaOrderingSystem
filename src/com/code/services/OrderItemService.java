@@ -202,17 +202,6 @@ public class OrderItemService {
 		}
 	}
 
-	public List<PlacesItem> getMenuListByOrderID(Long PlaceId) {
-		try {
-			Session session = sessionFactory.openSession();
-			String hql = "from com.code.dal.orm.PlacesItem AS PI where PI.placeId = :ID  ";
-			List<PlacesItem> result = session.createQuery(hql)
-					.setParameter("ID", PlaceId).list();
-			return result;
-		} catch (Exception ea) {
-			return null;
-		}
-	}
 
 	// TODO: added by amr, please review
 	public List<OrderItemView> getOrderItemByUserIdOrPlaceIdOrPlaceItemId(Long userId,
