@@ -29,9 +29,9 @@
 
 				<h:panelGroup id="header_signout_form">
 					<h:panelGroup rendered="#{login.loggedIn}" class="text-right col-lg-4">
-						<p>
+						<p style="color:white">
 							#{msgs.you_are_logged_as} <strong>@#{login.loggedUser.username}</strong> |
-							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}">
+							<h:commandLink value="#{msgs.sign_out}" action="#{login.signoutAction}" style="color:white">
 								<f:ajax render="pageTitle login_form welcome logged_in_content header_signout_form sidebar"/>
 							</h:commandLink>
 						</p>
@@ -46,10 +46,10 @@
 				<h:panelGroup rendered="#{login.loggedIn}">
 					<div class="container" style="padding-top: 50px">
 						<div class="bar">
-							<h:link value="Orders" outcome="Order" styleClass="btn"/>
+							<h:link value="Orders" outcome="Order" styleClass="btn" style="color:white"/>
 						</div>
 						<div class="bar">
-							<h:link value="Places" outcome="places" styleClass="btn"/>
+							<h:link value="Places" outcome="places" styleClass="btn" style="color:white"/>
 						</div>
 					</div>
 				</h:panelGroup>
