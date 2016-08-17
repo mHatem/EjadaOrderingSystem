@@ -10,9 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ManagedBean
 @ViewScoped
@@ -27,6 +25,7 @@ public class Login implements Serializable {
 	private String phoneNo;
 
 	private String invalidPasswordMessage;
+	private String invalidPhoneNoMessage;
 	private String unmatchedPasswordMessage;
 	private String usernameFieldMessage;
 
@@ -37,15 +36,13 @@ public class Login implements Serializable {
 
 	private String alertMessage = null;
 
-	private Collection<Place> places;
-	private Collection<PlacesItem> placeItems;
+	private List<Place> places;
+	private List<PlacesItem> placeItems;
 	private Long selectedPlaceId;
 	private Long selectedPlaceItemId;
 
 	private Collection<OrderView> orders;
 	private Collection<OrderItemView> orderItemViews;
-
-	private boolean admin = false;
 
 	public Login() {
 	}
@@ -64,8 +61,10 @@ public class Login implements Serializable {
 	public String loginAction() {
 		clearAllFieldsErrorMessages();
 
-		if (password == null || password.length() == 0)
+		if (password == null || password.length() == 0) {
+			updateLoggedUser(null);
 			return null;
+		}
 
 		User user = UserService.getSingleton().authenticateUser(username, password);
 		updateLoggedUser(user);
@@ -81,6 +80,13 @@ public class Login implements Serializable {
 	}
 
 	public String signupAction() {
+		clearAllFieldsErrorMessages();
+
+		if (!isValidPhoneNumber(phoneNo)) {
+			invalidPhoneNoMessage = "Invalid phone number.";
+			return null;
+		}
+
 		if (!password.equals(passwordConfirm))
 			return null;
 
@@ -125,6 +131,9 @@ public class Login implements Serializable {
 		} else if (password != null && !password.equals(passwordConfirm)) {
 			unmatchedPasswordMessage = "Passwords do not match";
 			return null;
+		} else if (!isValidPhoneNumber(phoneNo)) {
+			invalidPhoneNoMessage = "Invalid phone number.";
+			return null;
 		}
 
 		Long userId = getUserIdFromSessionMap();
@@ -155,11 +164,18 @@ public class Login implements Serializable {
 		return null;
 	}
 
+	private boolean isValidPhoneNumber(String phoneNo) {
+		for (int i = 0; i < phoneNo.length(); i++) {
+			char c = phoneNo.charAt(i);
+			if (!(c == ' ' || c == '-' || (c >= '0' && c <= '9')))
+				return false;
+		}
+		return true;
+	}
+
 	public void filterAction() {
 		updateListsAndTables();
-
-		orders = updateOrders();
-		orderItemViews = updateOrderItemViews();
+		updateTables();
 	}
 
 	public String resetFilterAction() {
@@ -174,13 +190,17 @@ public class Login implements Serializable {
 
 	public String loginButton() {
 		signingUp = false;
-		password = null;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
 	public String signupButton() {
 		signingUp = true;
-		password = null;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
@@ -206,47 +226,62 @@ public class Login implements Serializable {
 
 	public String editCancelButton() {
 		editing = false;
+
+		resetDataFields();
+		clearAllFieldsErrorMessages();
 		return null;
 	}
 
 	private void clearAllFieldsErrorMessages() {
 		usernameFieldMessage = null;
 		invalidPasswordMessage = null;
+		invalidPhoneNoMessage = null;
 		unmatchedPasswordMessage = null;
 		alertMessage = null;
 	}
 
 	private void updateListsAndTables() {
 		places = PlaceService.retrievePlaces();
+		Collections.sort(places, new Comparator<Place>() {
+			@Override
+			public int compare(Place o1, Place o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 
-		// TODO from database
-		// placeItems = new ArrayList<PlacesItem>();
+		updatePlaceItemsMenu();
+
+		updateTables();
+	}
+
+	public void updatePlaceItemsMenu() {
 		if (selectedPlaceId != null) {
 			placeItems = Service.getItemsList(selectedPlaceId);
 		} else {
 			placeItems = Service.getAllPlaceItems();
 		}
-
-		orders = updateOrders();
-		orderItemViews = updateOrderItemViews();
+		Collections.sort(placeItems, new Comparator<PlacesItem>() {
+			@Override
+			public int compare(PlacesItem o1, PlacesItem o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
 	}
 
-	private Collection<OrderItemView> updateOrderItemViews() {
-		Collection<OrderItemView> orderItemViews = null;
-
+	private void updateTables() {
 		Long userId = getUserIdFromSessionMap();
 		String userRole = getUserRoleFromSessionMap();
-		// TODO Don't filter by user id if admin is logged in
-		if (userRole.equals(UserRole.ADMIN)) {
-//			if (selectedPlaceItemId == null) {
-//				orderItemViews = OrderItemService.getSingleton().getAllOrderItem();
-//			} else {
-			orderItemViews = OrderItemService.getSingleton().getOrderItemByPlaceIdOrPlaceItemId(selectedPlaceId, selectedPlaceItemId);
-//			}
-		} else
-			orderItemViews = OrderItemService.getSingleton().getOrderItemListByUserId(userId);
 
-		return orderItemViews;
+		// Don't filter by user id if admin is logged in
+		if (userRole.equals(UserRole.ADMIN))
+			userId = null;
+
+		orders = orderService.find(null, null, null, null, selectedPlaceId, userId);
+		orderItemViews = OrderItemService.getSingleton().getOrderItemByUserIdOrPlaceIdOrPlaceItemId(
+			userId,
+			selectedPlaceId,
+			selectedPlaceItemId
+		);
 	}
 
 	private void updateLoggedUser(User user) {
@@ -257,8 +292,6 @@ public class Login implements Serializable {
 
 		putUserIdIntoSessionMap(userId);
 		putUserRoleIntoSessionMap(userRole);
-
-		admin = (userRole != null && userRole.equals(UserRole.ADMIN));
 	}
 
 	public String getPageTitle() {
@@ -279,18 +312,6 @@ public class Login implements Serializable {
 			String.class
 		);
 		return title;
-	}
-
-	private Collection<OrderView> updateOrders() {
-		Collection<OrderView> orderViews;
-		Long userId = getUserIdFromSessionMap();
-		String userRole = getUserRoleFromSessionMap();
-		// Don't filter by user id if admin is logged in
-		if (userRole.equals(UserRole.ADMIN))
-			userId = null;
-
-		orderViews = orderService.find(null, null, null, null, selectedPlaceId, userId);
-		return orderViews;
 	}
 
 	private Map<String, Object> getSessionMap() {
@@ -330,7 +351,6 @@ public class Login implements Serializable {
 	private void resetAll() {
 		editing = false;
 		signingUp = false;
-		admin = false;
 		clearAllFieldsErrorMessages();
 		resetFilters();
 		resetDataFields();
@@ -346,6 +366,12 @@ public class Login implements Serializable {
 
 	public String deleteOrder(OrderView orderView) {
 		alertMessage = null;
+
+		if (!isAdmin()) {
+			alertMessage = "Action not allowed";
+			System.err.println(alertMessage);
+			return null;
+		}
 
 		Long orderId = orderView.getId();
 		List list = orderService.find(null, null, null, orderId, null, null);
@@ -364,7 +390,6 @@ public class Login implements Serializable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 
 		return null;
@@ -372,6 +397,11 @@ public class Login implements Serializable {
 
 	public String deleteOrderItemView(OrderItemView orderItemView) {
 		alertMessage = null;
+
+		if (!isAdmin()) {
+			alertMessage = "Action not allowed";
+			return null;
+		}
 
 		Long orderItemId = orderItemView.getId();
 		String result = OrderItemService.getSingleton().orderItemDeleteManually(orderItemView);
@@ -473,11 +503,11 @@ public class Login implements Serializable {
 		this.editing = editing;
 	}
 
-	public Collection<Place> getPlaces() {
+	public List<Place> getPlaces() {
 		return places;
 	}
 
-	public void setPlaces(Collection<Place> places) {
+	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
 
@@ -489,11 +519,11 @@ public class Login implements Serializable {
 		this.selectedPlaceId = selectedPlaceId;
 	}
 
-	public Collection<PlacesItem> getPlaceItems() {
+	public List<PlacesItem> getPlaceItems() {
 		return placeItems;
 	}
 
-	public void setPlaceItems(Collection<PlacesItem> placeItems) {
+	public void setPlaceItems(List<PlacesItem> placeItems) {
 		this.placeItems = placeItems;
 	}
 
@@ -514,11 +544,8 @@ public class Login implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+		String userRole = getUserRoleFromSessionMap();
+		return userRole != null && userRole.equals(UserRole.ADMIN);
 	}
 
 	public Collection<OrderItemView> getOrderItemViews() {
@@ -535,5 +562,13 @@ public class Login implements Serializable {
 
 	public void setAlertMessage(String alertMessage) {
 		this.alertMessage = alertMessage;
+	}
+
+	public String getInvalidPhoneNoMessage() {
+		return invalidPhoneNoMessage;
+	}
+
+	public void setInvalidPhoneNoMessage(String invalidPhoneNoMessage) {
+		this.invalidPhoneNoMessage = invalidPhoneNoMessage;
 	}
 }

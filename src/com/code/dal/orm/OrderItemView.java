@@ -10,7 +10,7 @@ import javax.persistence.*;
 		@NamedQuery(name = "OrderItemByUser", query = "from com.code.dal.orm.OrderItemView AS OIV where ( OIV.userId = :UserId or :UserId = -1) "),
 		@NamedQuery(name = "FilterOrderItemView", query = "from com.code.dal.orm.OrderItemView AS OIV where ( :OrderId = -1 or OIV.orderId = :OrderId) and ( :Username = '-1' or lower(OIV.username) LIKE :Username)and ( :ItemName = '-1' or lower(OIV.itemName) LIKE :ItemName)"),
 		// TODO: added by amr, please review
-		@NamedQuery(name = "OrderItemView.byPlaceIdOrPlaceItemId", query = "from com.code.dal.orm.OrderItemView AS OIV where (:placeItemId = -1 OR OIV.itemId = :placeItemId) AND (:placeId = -1 OR OIV.placeId = :placeId)"),
+		@NamedQuery(name = "OrderItemView.byUserIdOrPlaceIdOrPlaceItemId", query = "from com.code.dal.orm.OrderItemView AS OIV where (:userId = -1 OR OIV.userId = :userId) AND (:placeItemId = -1 OR OIV.itemId = :placeItemId) AND (:placeId = -1 OR OIV.placeId = :placeId)"),
 		@NamedQuery(name = "AllOrderItem", query = "from com.code.dal.orm.OrderItemView ")})
 @Entity(name = "VW_ORDER_ITEM")
 public class OrderItemView implements Serializable {

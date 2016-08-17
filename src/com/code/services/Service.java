@@ -8,7 +8,7 @@ import com.code.dal.orm.*;
 public class Service 
 {
 	
-	private static SessionFactory SF = SessionFactorySingleton.getSingleton().getSessionFactory();
+	private static SessionFactory SF = new Configuration().configure().buildSessionFactory();
 	 
 	public static List<PlacesItem> getItemsList(Long PlaceID)
 	{
@@ -58,7 +58,7 @@ public class Service
 		   System.out.println(ex.toString());
 	   }
    }
-   public static void Add(String itemName,String itemDescription,Float price)
+   public static void Add(String itemName,String itemDescription,Float price,Long placeID)
    {
 			Session S=SF.openSession();
 			S.beginTransaction();
@@ -66,35 +66,33 @@ public class Service
 			placeItem.setName(itemName);
 			placeItem.setDescription(itemDescription);
 			placeItem.setPrice(price);
+			placeItem.setPlaceId(placeID);
+			S.save(placeItem);
 			S.getTransaction().commit();
 			S.close();
    }
-   /*public static List<PlacesItem> Search(String itemName,Float priceFrom,Float priceTo)
+   public static List<PlacesItem> Search(String itemName,Float priceFrom,Float priceTo,Long placeID)
    {
-	   if(itemName== null)
-	   {
-		   itemName="-1";
-	   }
-	   if(priceFrom==null)
-	   {
-		   priceFrom=0F;
-	   }
-	   if(priceTo==null)
-	   {
-		   priceTo=100F;
-	   }
-   }*/
-
-	// TODO: added by amr, please review
-	public static List<PlacesItem> getAllPlaceItems() {
-		Session session = SessionFactorySingleton.getSingleton().getSessionFactory().openSession();
-		session.beginTransaction();
-
-		Query query = session.getNamedQuery("PlaceItem.all");
-		List<PlacesItem> list = (List<PlacesItem>) query.list();
-
-			session.getTransaction().commit();
-		session.close();
-		return list;
-	}
+	   Session S=SF.openSession();
+	   S.beginTransaction();
+	   Query Q=S.getNamedQuery("SearchItems");
+	   Q.setParameter("itemName",itemName);
+	   Q.setParameter("priceFrom",priceFrom);
+	   Q.setParameter("priceTo",priceTo);
+	   Q.setParameter("placeID", placeID);
+	   List<PlacesItem> PI =(List<PlacesItem>)Q.list();
+	   S.getTransaction().commit();
+	   S.close();
+	   return PI;
+   }
+   public static List<PlacesItem> getAllPlaceItems()
+   {
+	   Session S=SF.openSession();
+	   S.beginTransaction();
+	   Query Q=S.getNamedQuery("getAllItems");
+	   List<PlacesItem> PI=(List<PlacesItem>)Q.list();
+	   S.getTransaction().commit();
+	   S.close();
+	   return PI;
+   }
 }

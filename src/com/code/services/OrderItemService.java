@@ -215,8 +215,11 @@ public class OrderItemService {
 	}
 
 	// TODO: added by amr, please review
-	public List<OrderItemView> getOrderItemByPlaceIdOrPlaceItemId(Long placeId,
-			Long placeItemId) {
+	public List<OrderItemView> getOrderItemByUserIdOrPlaceIdOrPlaceItemId(Long userId,
+	                                                                      Long placeId,
+	                                                                      Long placeItemId) {
+		if (userId == null)
+			userId = -1L;
 		if (placeId == null)
 			placeId = -1L;
 		if (placeItemId == null)
@@ -227,7 +230,8 @@ public class OrderItemService {
 		session.beginTransaction();
 
 		Query query = session
-				.getNamedQuery("OrderItemView.byPlaceIdOrPlaceItemId");
+				.getNamedQuery("OrderItemView.byUserIdOrPlaceIdOrPlaceItemId");
+		query.setLong("userId", userId);
 		query.setLong("placeId", placeId);
 		query.setLong("placeItemId", placeItemId);
 

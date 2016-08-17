@@ -2,8 +2,11 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
 <h:head>
 	<h:panelGroup id="pageTitle">
 		<title>#{login.pageTitle}</title>
@@ -156,6 +159,7 @@
 										             required="true"
 										             requiredMessage="Required"/>
 										<h:message for="phone_no" styleClass="alert-warning"/>
+										<h:outputText value="#{login.invalidPhoneNoMessage}" styleClass="alert-warning"/>
 									</div>
 								</div>
 								<div class="col-lg-12 form-group center-block">
@@ -250,6 +254,7 @@
 											             required="true"
 											             requiredMessage="Required"/>
 											<h:message for="edit_phone_no" styleClass="alert-warning"/>
+											<h:outputText value="#{login.invalidPhoneNoMessage}" styleClass="alert-warning" />
 										</div>
 									</div>
 									<div class="col-lg-12 form-group center-block">
@@ -287,9 +292,11 @@
 													               var="place"
 													               itemLabel="#{place.name}"
 													               itemValue="#{place.id}"/>
+													<a4j:ajax event="change"
+													          listener="#{login.updatePlaceItemsMenu}"
+													          render="item_combobox"/>
 												</h:selectOneMenu>
 
-												<!--TODO-->
 												<h:outputLabel for="item_combobox" value="Item:"/>
 												<h:selectOneMenu id="item_combobox"
 												                 value="#{login.selectedPlaceItemId}"
@@ -323,10 +330,10 @@
 								<h:panelGroup id="orders_table">
 									<div class="container col-lg-12">
 										<h2>Orders</h2>
-										<h:dataTable id="orders_datatable"
-										             value="#{login.orders}"
-										             var="order"
-										             styleClass="table table-bordered">
+										<rich:dataTable id="orders_datatable"
+										                value="#{login.orders}"
+										                var="order"
+										                styleClass="table table-bordered">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
 												#{order.id}
@@ -355,7 +362,11 @@
 													<f:ajax render="orders_datatable formId:alert_script"/>
 												</h:commandLink>
 											</h:column>
-										</h:dataTable>
+											<f:facet name="footer">
+												<rich:dataScroller for="orders_datatable" maxPages="10"
+												                   renderIfSinglePage="false"/>
+											</f:facet>
+										</rich:dataTable>
 									</div>
 								</h:panelGroup>
 
@@ -363,10 +374,12 @@
 								<h:panelGroup id="orderitems_table">
 									<div class="container col-lg-12">
 										<h2>Order Items</h2>
-										<h:dataTable id="orderitems_datetable"
-										             value="#{login.orderItemViews}"
-										             var="order_item"
-										             styleClass="table table-bordered">
+										<rich:dataTable id="orderitems_datetable"
+										                value="#{login.orderItemViews}"
+										                var="order_item"
+										                rows="10"
+										                styleClass="table table-bordered"
+										                headerClass="columnHeader">
 											<h:column>
 												<f:facet name="header">ID</f:facet>
 												#{order_item.id}
@@ -406,7 +419,13 @@
 													<f:ajax render="orderitems_datetable formId:alert_script"/>
 												</h:commandLink>
 											</h:column>
-										</h:dataTable>
+											<f:facet name="footer">
+												<rich:dataScroller for="orderitems_datetable" maxPages="10"
+												                   renderIfSinglePage="false"
+
+												/>
+											</f:facet>
+										</rich:dataTable>
 									</div>
 								</h:panelGroup>
 
